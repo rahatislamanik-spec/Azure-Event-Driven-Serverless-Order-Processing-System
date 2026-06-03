@@ -1,39 +1,83 @@
 # Azure Event-Driven Serverless Order Processing System
 
-A production-oriented Microsoft Azure project demonstrating event-driven architecture, serverless computing, asynchronous queue-based processing, fan-out design, automated email confirmation, database logging, and centralized observability.
+## Overview
 
-## Project Status
+This project is a collaborative George Brown College Work Integrated Learning (WIL) project that demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure.
 
-Build starting / proposal approved stage. This repository is being developed as a George Brown College Work Integrated Project.
+The solution leverages serverless computing, asynchronous messaging, queue-based workflows, automated email notifications, centralized logging, and cloud observability to simulate a production-oriented order processing environment.
 
-## Project Objective
+---
 
-The goal of this project is to build a serverless order processing system where a customer submits a laptop order from a web app and receives a fast response while backend processing happens asynchronously.
+## Project Objectives
 
-The system uses Azure Static Web Apps, Azure Functions, Azure Storage Queues, Azure Table Storage, Azure Communication Services Email, and Azure Monitor with Application Insights.
+* Build a cloud-native order processing application
+* Implement event-driven architecture patterns
+* Utilize Azure Functions for serverless processing
+* Implement asynchronous messaging using Azure Storage Queues
+* Store order data in Azure Table Storage
+* Send automated customer confirmation emails
+* Monitor application health using Azure Monitor and Application Insights
+* Demonstrate collaborative GitHub development workflows
 
-## High-Level Flow
-
-1. Customer submits an order through the frontend web app.
-2. `submit_order` HTTP-trigger Azure Function validates the basic input.
-3. Valid orders are placed into the `orders-incoming` Azure Storage Queue.
-4. `validate_order` queue-trigger Azure Function performs business validation.
-5. Invalid orders are routed to `orders-invalid`.
-6. Valid orders are fanned out into `orders-to-email` and `orders-to-log`.
-7. `send_confirmation_email` sends an email using Azure Communication Services.
-8. `log_to_table` saves the confirmed order into Azure Table Storage.
-9. Application Insights collects logs, metrics, traces, and errors.
+---
 
 ## Azure Services Used
 
-| Service | Purpose |
-|---|---|
-| Azure Static Web Apps | Hosts the frontend order form |
-| Azure Functions | Serverless backend processing |
-| Azure Storage Queues | Durable asynchronous message processing |
-| Azure Table Storage | NoSQL order record storage |
-| Azure Communication Services Email | Customer confirmation email |
-| Azure Monitor / Application Insights | Logs, traces, metrics, alerts, and observability |
+| Service                      | Purpose                   |
+| ---------------------------- | ------------------------- |
+| Azure Static Web Apps        | Frontend hosting          |
+| Azure Functions              | Serverless compute        |
+| Azure Storage Queues         | Asynchronous processing   |
+| Azure Table Storage          | Order persistence         |
+| Azure Communication Services | Email notifications       |
+| Azure Monitor                | Monitoring and alerting   |
+| Application Insights         | Logging and observability |
+
+---
+
+## High-Level Architecture
+
+Customer
+
+↓
+
+Azure Static Web App
+
+↓
+
+submit_order Function
+
+↓
+
+orders-incoming Queue
+
+↓
+
+validate_order Function
+
+↓
+
+Fan-Out Processing
+
+├── orders-to-email Queue
+
+├── orders-to-log Queue
+
+└── orders-invalid Queue
+
+↓
+
+Azure Communication Services Email
+
+↓
+
+Azure Table Storage
+
+↓
+
+Application Insights
+
+---
 
 ## Repository Structure
 
@@ -41,6 +85,10 @@ The system uses Azure Static Web Apps, Azure Functions, Azure Storage Queues, Az
 .
 ├── architecture/
 ├── documentation/
+│   ├── deployment-guide.md
+│   ├── professor-approval-summary.md
+│   ├── meeting-notes/
+│   └── team-planning/
 ├── frontend/
 ├── functions/
 │   ├── submit_order/
@@ -48,19 +96,92 @@ The system uses Azure Static Web Apps, Azure Functions, Azure Storage Queues, Az
 │   ├── send_confirmation_email/
 │   └── log_to_table/
 ├── sample-data/
+├── evidence/
 ├── screenshots/
 ├── host.json
-├── local.settings.example.json
 ├── requirements.txt
 └── README.md
 ```
 
-## Important Technical Note
+---
 
-`orders-invalid` is implemented as a custom invalid-orders queue. Azure Storage Queues support poison-message behavior, but they do not provide the same built-in Dead-Letter Queue feature as Azure Service Bus.
+## Development Workflow
 
-## Author
+This project follows a collaborative GitHub workflow:
 
-Md Rahat Islam Anik  
-GitHub: rahatislamanik-spec  
-Portfolio: rahatislamanik-spec.github.io/IT-Portfolio-Rahat-Islam-Anik
+```text
+Issue
+↓
+Development Branch
+↓
+Commit
+↓
+Push
+↓
+Pull Request
+↓
+Review
+↓
+Merge into Main
+```
+
+Primary branches:
+
+* main
+* rahat-dev
+
+Additional team branches will be created as development progresses.
+
+---
+
+## Project Team
+
+### Team Lead
+
+* Hikmat
+
+### Team Members
+
+* Md Rahat Islam Anik (Repository Owner)
+* Yatish
+* Devansh
+* Puneet
+* Ashdeep
+
+---
+
+## Repository Ownership
+
+This repository is hosted and maintained under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for project coordination, source control management, pull request reviews, and collaborative development.
+
+All architecture, code, documentation, testing, and deployment activities are performed collaboratively by the project team.
+
+---
+
+## Project Status
+
+Current Status: Planning and Development Phase
+
+Completed:
+
+* Repository creation
+* Architecture design
+* Documentation structure
+* Team planning
+* GitHub Issues creation
+* Branching strategy implementation
+
+In Progress:
+
+* Frontend development
+* Azure infrastructure implementation
+
+---
+
+## GitHub Repository
+
+Repository:
+https://github.com/rahatislamanik-spec/azure-event-driven-serverless-order-processing-system
+
+Repository Owner:
+Md Rahat Islam Anik
