@@ -1,0 +1,9 @@
+{
+  "firstName": "Rahat",
+  "lastName": "Islam",
+  "email": "customer@example.com",
+  "phone": "647-000-0000",
+  "address": "Toronto, Ontario",
+  "productId": "LAPTOP-001",
+  "quantity": 1
+}

@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "ACS_CONNECTION_STRING": "replace-with-acs-connection-string",
+    "ACS_SENDER_ADDRESS": "DoNotReply@yourdomain.com",
+    "ORDERS_TABLE_NAME": "Orders"
+  }
+}
