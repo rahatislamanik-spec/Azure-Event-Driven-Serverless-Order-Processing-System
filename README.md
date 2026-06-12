@@ -1,4 +1,5 @@
 # Azure Event-Driven Serverless Order Processing System
+> **Status:** Active Development
 
 ## Overview
 
@@ -250,7 +251,6 @@ All major updates, architecture changes, implementation milestones, testing evid
 This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
 
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
 
 
 
