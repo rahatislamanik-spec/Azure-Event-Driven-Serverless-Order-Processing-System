@@ -1,9 +1,9 @@
 # Azure Event-Driven Serverless Order Processing System
-> **Status:** Active Development
+> **Status:** Architecture Complete
 
 ## Overview
 
-This project is a collaborative George Brown College Work Integrated Learning (WIL) project that demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure.
+This project demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure — built collaboratively by a 5-person development team, with Md Rahat Islam Anik serving as repository owner.
 
 The solution leverages serverless computing, asynchronous messaging, queue-based workflows, automated email notifications, centralized logging, and cloud observability to simulate a production-oriented order processing environment.
 
@@ -87,7 +87,7 @@ Application Insights
 ├── architecture/
 ├── documentation/
 │   ├── deployment-guide.md
-│   ├── professor-approval-summary.md
+│   ├── stakeholder-approval-summary.md
 │   ├── meeting-notes/
 │   └── team-planning/
 ├── frontend/
@@ -182,7 +182,7 @@ In Progress:
 ## GitHub Repository
 
 Repository:
-https://github.com/rahatislamanik-spec/azure-event-driven-serverless-order-processing-system
+https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System
 
 Repository Owner:
 Md Rahat Islam Anik
@@ -190,7 +190,7 @@ Md Rahat Islam Anik
 
 ## Project Team
 
-This project is being developed as a collaborative George Brown College Work Integrated Learning (WIL) project focused on Azure serverless computing, event-driven architecture, cloud-native application development, and observability.
+This project was developed collaboratively, focused on Azure serverless computing, event-driven architecture, cloud-native application development, and observability.
 
 ### Project Timeline
 
@@ -198,7 +198,7 @@ This project is being developed as a collaborative George Brown College Work Int
 
 The project is currently in the Planning & Architecture phase. The team is finalizing requirements, infrastructure design, development responsibilities, and implementation strategy before moving into full-scale development.
 
-Development will be completed in multiple phases throughout the Summer 2026 semester. The repository will be updated regularly with architecture diagrams, documentation, implementation progress, testing evidence, deployment artifacts, and project milestones.
+Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
 ### Project Status
 
