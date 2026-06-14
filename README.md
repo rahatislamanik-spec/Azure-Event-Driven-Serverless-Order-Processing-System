@@ -220,6 +220,7 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 ### Team Lead
 
 * Hikmatullah Shinwari — Team Lead
+* Md Rahat Islam Anik — GitHub Repository Owner & Team Member
 
 ### Team Members
 
@@ -229,16 +230,6 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 * Ashdeep Singh Grewal — Team Member
 * Puneet Singh — Team Member
 
-### Academic Information
-
-| Name                     | Student ID | George Brown Email                                                                      |
-| ------------------------ | ---------- | --------------------------------------------------------------------------------------- |
-| Hikmatullah Shinwari     | 101635231  | [hikmatullah.shinwari@georgebrown.ca](mailto:hikmatullah.shinwari@georgebrown.ca)       |
-| Md Rahat Islam Anik      | 101635860  | [mdrahatislam.anik@georgebrown.ca](mailto:mdrahatislam.anik@georgebrown.ca)             |
-| Yatish Yashwant Vispute  | 101539987  | [yatishyashwant.vispute@georgebrown.ca](mailto:yatishyashwant.vispute@georgebrown.ca)   |
-| Devansh Mehulkumar Bhatt | 101610044  | [devanshmehulkumar.bhatt@georgebrown.ca](mailto:devanshmehulkumar.bhatt@georgebrown.ca) |
-| Ashdeep Singh Grewal     | 101517826  | [ashdeepsingh.grewal@georgebrown.ca](mailto:ashdeepsingh.grewal@georgebrown.ca)         |
-| Puneet Singh             | 101629857  | [101629857@georgebrown.ca](mailto:101629857@georgebrown.ca)                             |
 
 ### Team Collaboration
 
