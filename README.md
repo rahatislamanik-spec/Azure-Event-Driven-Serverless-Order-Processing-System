@@ -1,5 +1,6 @@
 # Azure Event-Driven Serverless Order Processing System
 > **Status:** Architecture Complete
+> **Last Updated:** June 2026
 
 ## Overview
 
