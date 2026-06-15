@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Event-Driven Serverless Order Processing System — Architecture Overview</title>
+<style>
+  :root {
+    --azure-blue: #0078D4;
+    --azure-dark: #1a3c6e;
+    --azure-light: #eef6fc;
+    --accent-gold: #C19A2E;
+    --text-dark: #1f2933;
+    --text-muted: #5a6470;
+    --border-soft: #dbe7f3;
+    --bg-page: #f4f8fb;
+    --green: #1a7a3c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  header.page-header {
+    background: linear-gradient(135deg, var(--azure-dark) 0%, var(--azure-blue) 100%);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+
+  header.page-header h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  header.page-header p.subtitle {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #d6e8fb;
+    font-weight: 400;
+  }
+
+  header.page-header .badges {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: -24px auto 60px;
+    padding: 0 20px;
+  }
+
+  section.card {
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 71, 161, 0.06);
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+
+  section.card h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: var(--azure-dark);
+    border-bottom: 3px solid var(--azure-light);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  section.card h2 .icon {
+    font-size: 1.3rem;
+  }
+
+  section.card h3 {
+    color: var(--azure-blue);
+    font-size: 1.1rem;
+    margin-top: 24px;
+    margin-bottom: 10px;
+  }
+
+  p { color: var(--text-dark); }
+  .muted { color: var(--text-muted); }
+
+  /* Status grid */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .status-item {
+    background: var(--azure-light);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--azure-blue);
+  }
+
+  .status-item strong {
+    display: block;
+    color: var(--azure-dark);
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+
+  .status-item span {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .status-item.in-progress { border-left-color: var(--accent-gold); }
+  .status-item.done { border-left-color: var(--green); }
+
+  /* Team table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.92rem;
+  }
+
+  table th {
+    background: var(--azure-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+  }
+
+  table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  table tr:nth-child(even) td {
+    background: #f8fbfe;
+  }
+
+  .role-tag {
+    display: inline-block;
+    background: var(--azure-light);
+    color: var(--azure-dark);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .role-tag.lead {
+    background: #fff4d6;
+    color: #8a6500;
+  }
+
+  /* Feedback box */
+  .feedback-box {
+    background: var(--azure-light);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-top: 14px;
+    border-left: 4px solid var(--azure-blue);
+  }
+
+  .feedback-quote {
+    font-style: italic;
+    color: var(--azure-dark);
+    border-left: 3px solid var(--accent-gold);
+    padding-left: 14px;
+    margin: 14px 0;
+  }
+
+  .resolution-tag {
+    display: inline-block;
+    background: #e6f4ea;
+    color: var(--green);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* Diagram sections */
+  .diagram-frame {
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fafcfe;
+    margin-top: 14px;
+  }
+
+  .diagram-frame img {
+    width: 100%;
+    display: block;
+  }
+
+  .diagram-placeholder {
+    border: 2px dashed var(--border-soft);
+    border-radius: 10px;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    background: #fafcfe;
+    margin-top: 14px;
+    font-size: 0.95rem;
+  }
+
+  .diagram-caption {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .highlight-note {
+    background: #fff8e6;
+    border: 1px solid #f0d9a6;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #6b4f00;
+  }
+
+  /* Resource inventory table */
+  .resource-table th:nth-child(1) { width: 22%; }
+  .resource-table th:nth-child(2) { width: 30%; }
+
+  code {
+    background: var(--azure-light);
+    color: var(--azure-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* Roadmap */
+  .roadmap {
+    margin-top: 18px;
+    position: relative;
+  }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
+  .phase-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .phase-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--azure-blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .phase-circle.current {
+    background: var(--accent-gold);
+  }
+
+  .phase-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border-soft);
+    margin: 4px 0;
+  }
+
+  .phase-content {
+    padding-bottom: 28px;
+  }
+
+  .phase-content h3 {
+    margin-top: 0;
+    margin-bottom: 4px;
+  }
+
+  .phase-status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .phase-status.done { background: #e6f4ea; color: var(--green); }
+  .phase-status.current { background: #fff4d6; color: #8a6500; }
+  .phase-status.upcoming { background: #eef2f6; color: var(--text-muted); }
+
+  .phase-content ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .phase-content ul li {
+    margin-bottom: 3px;
+  }
+
+  /* Issues list */
+  .issues-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .issue-item {
+    background: var(--azure-light);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .issue-number {
+    background: var(--azure-blue);
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Workflow grid */
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .workflow-item {
+    text-align: center;
+    background: var(--azure-light);
+    border-radius: 10px;
+    padding: 16px 10px;
+    font-size: 0.88rem;
+    color: var(--azure-dark);
+    font-weight: 600;
+  }
+
+  .workflow-item .emoji {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    header.page-header h1 { font-size: 1.4rem; }
+    section.card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>Azure Event-Driven Serverless Order Processing System</h1>
+  <p class="subtitle">Architecture &amp; Project Overview — George Brown College, Work Integrated Learning Project</p>
+  <div class="badges">
+    <span class="badge">Cloud Computing &amp; Network Administration</span>
+    <span class="badge">May 2026 – August 2026</span>
+    <span class="badge">Phase 1 — Architecture Finalization</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. PROJECT SUMMARY -->
+  <section class="card">
+    <h2><span class="icon">📋</span> Project Summary</h2>
+    <p>
+      This project implements an <strong>event-driven, serverless order processing system</strong> on
+      Microsoft Azure. The system simulates a real-world e-commerce scenario: a customer submits a laptop
+      order through a web frontend, receives an immediate confirmation response, and the backend
+      asynchronously validates the order, sends a confirmation email, and logs the order to a database —
+      all without a continuously running server.
+    </p>
+    <p>
+      The architecture demonstrates core cloud-native principles including <strong>serverless compute</strong>,
+      <strong>asynchronous message-driven processing</strong>, <strong>decoupled services</strong>,
+      <strong>scalability</strong>, and <strong>end-to-end observability</strong>.
+    </p>
+  </section>
+
+  <!-- 2. PROJECT STATUS -->
+  <section class="card">
+    <h2><span class="icon">📊</span> Project Status</h2>
+    <p class="muted">Current phase: <strong>Architecture finalization and implementation preparation.</strong>
+      Azure resource deployment has not yet begun — this is the next major phase.</p>
+    <div class="status-grid">
+      <div class="status-item done">
+        <strong>✅ Repository Setup</strong>
+        <span>Created, organized, README and documentation in place</span>
+      </div>
+      <div class="status-item done">
+        <strong>✅ GitHub Workflow</strong>
+        <span>Branching strategy, PR workflow tested, issues created</span>
+      </div>
+      <div class="status-item done">
+        <strong>✅ Logical Flow Diagram</strong>
+        <span>Created and approved by Professor Ali</span>
+      </div>
+      <div class="status-item in-progress">
+        <strong>🟡 Infrastructure Diagram</strong>
+        <span>Submitted — refinement in progress based on feedback</span>
+      </div>
+      <div class="status-item">
+        <strong>⏳ Azure Resource Deployment</strong>
+        <span>Not started — next major phase</span>
+      </div>
+      <div class="status-item">
+        <strong>⏳ Application Development</strong>
+        <span>Not started — pending resource deployment</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. TEAM -->
+  <section class="card">
+    <h2><span class="icon">👥</span> Team Information</h2>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hikmatullah Shinwari</td><td><span class="role-tag lead">Team Lead</span></td></tr>
+        <tr><td>Md Rahat Islam Anik</td><td><span class="role-tag">Repository Owner / Team Member</span></td></tr>
+        <tr><td>Yatish Yashwant Vispute</td><td><span class="role-tag">Team Member</span></td></tr>
+        <tr><td>Devansh Mehulkumar Bhatt</td><td><span class="role-tag">Team Member</span></td></tr>
+        <tr><td>Ashdeep Singh Grewal</td><td><span class="role-tag">Team Member</span></td></tr>
+        <tr><td>Puneet Singh</td><td><span class="role-tag">Team Member</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. PROFESSOR FEEDBACK -->
+  <section class="card">
+    <h2><span class="icon">🎓</span> Professor Feedback Summary</h2>
+    <div class="feedback-box">
+      <p><strong>Reviewer:</strong> Professor Ali Ziyaei</p>
+      <p>The initial review of the logical flow and data path was <strong>positive</strong> — the professor
+      confirmed the team is on the right track and that the overall data flow makes sense.</p>
+      <p>Following submission of the infrastructure diagram, the latest feedback was:</p>
+      <div class="feedback-quote">
+        "Sounds good, but I could not find the Key Vault or some of the other mentioned resources in your diagram."
+      </div>
+      <p><strong>Interpretation:</strong> The architecture and design are <strong>accepted overall</strong>.
+      The requested improvement is about <strong>visual clarity and resource visibility</strong> —
+      specifically ensuring Azure Key Vault and all mentioned services are easy to locate in the
+      infrastructure diagram.</p>
+      <span class="resolution-tag">✅ Addressed in the updated Infrastructure Diagram below — Key Vault is now shown in a dedicated, clearly labeled Security Layer</span>
+    </div>
+  </section>
+
+  <!-- 5. LOGICAL FLOW DIAGRAM -->
+  <section class="card">
+    <h2><span class="icon">🔄</span> Logical Flow Diagram</h2>
+    <p>
+      The logical flow diagram illustrates how an order moves through the system from submission to
+      completion — covering the request path, the validation and fan-out step, and the two parallel
+      processing branches (email confirmation and database logging).
+    </p>
+    <div class="diagram-placeholder">
+      📌 Diagram placeholder — insert <code>architecture/logical-flow-diagram.png</code><br>
+      <span style="font-size:0.85rem;">(Approved by Professor Ali in initial review)</span>
+    </div>
+    <h3>Approved Flow</h3>
+    <p class="muted">
+      Customer → Azure Static Web App → <code>submit_order</code> Function →
+      <code>orders-incoming</code> Queue → <code>validate_order</code> Function
+    </p>
+    <p class="muted">
+      <strong>Valid order:</strong> → <code>orders-to-email</code> Queue → <code>send_confirmation_email</code>
+      Function → Azure Communication Services Email
+      &nbsp;|&nbsp; → <code>orders-to-log</code> Queue → <code>log_to_table</code> Function → Azure Table Storage
+    </p>
+    <p class="muted">
+      <strong>Invalid order:</strong> → <code>orders-invalid</code> Queue
+    </p>
+    <p class="muted">
+      <strong>Monitoring:</strong> All functions emit logs, traces, and telemetry to Application Insights,
+      Azure Monitor, and Log Analytics Workspace.
+    </p>
+  </section>
+
+  <!-- 6. ARCHITECTURE DIAGRAM (CONCEPTUAL) -->
+  <section class="card">
+    <h2><span class="icon">🏗️</span> Architecture Diagram</h2>
+    <p>
+      The architecture diagram below presents the seven functional layers of the system —
+      presentation, application, messaging, data, communication, security, and observability —
+      showing how each Azure service fits into the overall design.
+    </p>
+    <div class="diagram-frame">
+      <img src="infrastructure-diagram-detailed.png" alt="Event-Driven Serverless Order Processing System - Layered Architecture Diagram">
+    </div>
+    <p class="diagram-caption">Figure 1 — Layered architecture view showing the Presentation, Application,
+      Messaging, Data, Communication, Security, and Observability layers, with Azure Key Vault
+      highlighted as part of a dedicated Security Layer.</p>
+  </section>
+
+  <!-- 7. INFRASTRUCTURE DIAGRAM -->
+  <section class="card">
+    <h2><span class="icon">☁️</span> Infrastructure Diagram</h2>
+    <p>
+      The infrastructure diagram shows the actual Azure resources to be deployed, their placement within
+      the resource group and region, and the relationships between them. This diagram directly addresses
+      Professor Ali's feedback by clearly surfacing every resource — including Azure Key Vault — within
+      the deployment boundary.
+    </p>
+    <div class="diagram-frame">
+      <img src="infrastructure-diagram.png" alt="Event-Driven Serverless Order Processing System - Azure Infrastructure Diagram">
+    </div>
+    <p class="diagram-caption">Figure 2 — Infrastructure diagram showing the
+      <code>rg-order-processing-dev</code> resource group in the <strong>Canada Central</strong> region,
+      with all Azure resources, the Security Layer (Azure Key Vault), and the Observability Layer
+      explicitly placed and labeled.</p>
+    <div class="highlight-note">
+      🔑 <strong>Key Vault Visibility:</strong> Azure Key Vault is shown in its own clearly labeled
+      <strong>Security Layer</strong> on the right-hand side of the diagram, with dashed access/dependency
+      lines connecting it to the Function App, Storage Queues, Table Storage, and Communication Services —
+      directly resolving the professor's feedback about resource visibility.
+    </div>
+    <h3>Infrastructure Includes</h3>
+    <ul style="color: var(--text-muted); font-size: 0.92rem;">
+      <li>Azure Region: <strong>Canada Central</strong></li>
+      <li>Resource Group: <code>rg-order-processing-dev</code></li>
+      <li>Virtual Network (network boundary)</li>
+      <li>Azure Static Web App (Presentation Layer)</li>
+      <li>Azure Function App with four functions (Application Layer)</li>
+      <li>Azure Storage Account with four Storage Queues (Messaging Layer)</li>
+      <li>Azure Table Storage — Orders Table (Data Layer)</li>
+      <li>Azure Communication Services — Email (Communication Layer)</li>
+      <li>Azure Key Vault (Security Layer)</li>
+      <li>Application Insights, Azure Monitor, Log Analytics Workspace (Observability Layer)</li>
+    </ul>
+  </section>
+
+  <!-- 8. RESOURCE INVENTORY -->
+  <section class="card">
+    <h2><span class="icon">📦</span> Azure Resource Inventory</h2>
+    <table class="resource-table">
+      <thead>
+        <tr><th>Resource Type</th><th>Planned Name</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Resource Group</td><td><code>rg-order-processing-dev</code></td><td>Container for all Azure resources</td></tr>
+        <tr><td>Region</td><td>Canada Central</td><td>Primary deployment region</td></tr>
+        <tr><td>Virtual Network</td><td><code>vnet-order-processing-dev</code></td><td>Network boundary</td></tr>
+        <tr><td>Static Web App</td><td><code>st-order-store-dev</code></td><td>Customer order frontend</td></tr>
+        <tr><td>Function App</td><td><code>func-order-processing-dev</code></td><td>Serverless backend functions</td></tr>
+        <tr><td>Storage Account</td><td><code>storderstoragedev</code></td><td>Hosts queues and table storage</td></tr>
+        <tr><td>Queue</td><td><code>orders-incoming</code></td><td>Holds incoming order messages</td></tr>
+        <tr><td>Queue</td><td><code>orders-to-email</code></td><td>Holds email work items</td></tr>
+        <tr><td>Queue</td><td><code>orders-to-log</code></td><td>Holds logging work items</td></tr>
+        <tr><td>Queue</td><td><code>orders-invalid</code></td><td>Holds invalid or rejected orders</td></tr>
+        <tr><td>Table Storage</td><td><code>Orders</code></td><td>Stores order records</td></tr>
+        <tr><td>Communication Services</td><td><code>acs-order-email-dev</code></td><td>Sends confirmation emails</td></tr>
+        <tr><td>Key Vault</td><td><code>kv-order-processing-dev</code></td><td>Stores secrets and configuration</td></tr>
+        <tr><td>Application Insights</td><td><code>appi-order-processing-dev</code></td><td>Captures app telemetry</td></tr>
+        <tr><td>Azure Monitor</td><td>Azure Monitor</td><td>Metrics, alerts, dashboards</td></tr>
+        <tr><td>Log Analytics Workspace</td><td><code>law-order-processing-dev</code></td><td>Centralized logs and diagnostics</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 9. KEY DESIGN DECISIONS -->
+  <section class="card">
+    <h2><span class="icon">💡</span> Key Design Decisions</h2>
+    <p>
+      The project uses an <strong>event-driven serverless architecture</strong> to demonstrate asynchronous
+      cloud processing, decoupled services, scalability, and observability, while keeping the system
+      cost-effective and simple to operate.
+    </p>
+    <h3>Why this approach</h3>
+    <p class="muted">
+      The customer's web frontend receives a fast response immediately after order submission, while all
+      backend processing — validation, email confirmation, and database logging — happens asynchronously
+      through Azure Storage Queues and serverless Azure Functions. This decouples each step so that a
+      failure or delay in one component (e.g. email delivery) does not affect the others (e.g. order logging).
+    </p>
+    <h3>Scope discipline</h3>
+    <p class="muted">
+      The project intentionally uses only the Azure services required to demonstrate these principles:
+      Azure Static Web Apps, Azure Functions, Azure Storage Account (Queues &amp; Table Storage),
+      Azure Communication Services Email, Azure Key Vault, Application Insights, Azure Monitor, Log
+      Analytics Workspace, Virtual Network, and a single Resource Group in Canada Central. Additional
+      enterprise services (such as AKS, API Management, Service Bus, Front Door, Sentinel, or Defender for
+      Cloud) are deliberately excluded to avoid over-engineering, and may be noted separately as future
+      enhancements if time allows.
+    </p>
+  </section>
+
+  <!-- 10. IMPLEMENTATION ROADMAP -->
+  <section class="card">
+    <h2><span class="icon">🗺️</span> Implementation Roadmap</h2>
+    <div class="roadmap">
+
+      <div class="phase">
+        <div class="phase-marker">
+          <div class="phase-circle">1</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <span class="phase-status done">Completed</span>
+          <h3>Phase 1 — Planning and Architecture</h3>
+          <ul>
+            <li>GitHub repository setup</li>
+            <li>Team documentation</li>
+            <li>Logical flow diagram</li>
+            <li>Infrastructure diagram</li>
+            <li>Professor feedback review</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-marker">
+          <div class="phase-circle current">2</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <span class="phase-status current">Next Up</span>
+          <h3>Phase 2 — Azure Resource Deployment</h3>
+          <ul>
+            <li>Resource group</li>
+            <li>Storage account</li>
+            <li>Storage queues</li>
+            <li>Table storage</li>
+            <li>Function App</li>
+            <li>Application Insights</li>
+            <li>Key Vault</li>
+            <li>Communication Services</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-marker">
+          <div class="phase-circle">3</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <span class="phase-status upcoming">Upcoming</span>
+          <h3>Phase 3 — Application Development</h3>
+          <ul>
+            <li>Frontend order form</li>
+            <li><code>submit_order</code> function</li>
+            <li><code>validate_order</code> function</li>
+            <li><code>send_confirmation_email</code> function</li>
+            <li><code>log_to_table</code> function</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-marker">
+          <div class="phase-circle">4</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <span class="phase-status upcoming">Upcoming</span>
+          <h3>Phase 4 — Integration and Testing</h3>
+          <ul>
+            <li>End-to-end order submission</li>
+            <li>Queue validation</li>
+            <li>Email confirmation</li>
+            <li>Table logging</li>
+            <li>Error handling</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-marker">
+          <div class="phase-circle">5</div>
+        </div>
+        <div class="phase-content">
+          <span class="phase-status upcoming">Upcoming</span>
+          <h3>Phase 5 — Evidence and Final Delivery</h3>
+          <ul>
+            <li>Screenshots</li>
+            <li>Logs</li>
+            <li>GitHub commits</li>
+            <li>Documentation</li>
+            <li>Final presentation</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 11. GITHUB WORKFLOW -->
+  <section class="card">
+    <h2><span class="icon">🔧</span> GitHub Project Workflow</h2>
+    <p>The team follows a professional GitHub workflow to track progress and produce evidence for final evaluation.</p>
+    <div class="workflow-grid">
+      <div class="workflow-item"><span class="emoji">📝</span>GitHub Issues</div>
+      <div class="workflow-item"><span class="emoji">🌿</span>Feature Branches</div>
+      <div class="workflow-item"><span class="emoji">🔀</span>Pull Requests</div>
+      <div class="workflow-item"><span class="emoji">📖</span>README Docs</div>
+      <div class="workflow-item"><span class="emoji">📁</span>Evidence Folders</div>
+      <div class="workflow-item"><span class="emoji">🗂️</span>Architecture Folders</div>
+      <div class="workflow-item"><span class="emoji">📅</span>Weekly Updates</div>
+    </div>
+
+    <h3>Open Issues</h3>
+    <div class="issues-list">
+      <div class="issue-item"><span class="issue-number">#1</span> Build Laptop Store Frontend</div>
+      <div class="issue-item"><span class="issue-number">#2</span> Build <code>submit_order</code> Azure Function</div>
+      <div class="issue-item"><span class="issue-number">#3</span> Build <code>validate_order</code> Queue Trigger</div>
+      <div class="issue-item"><span class="issue-number">#4</span> Configure Azure Storage Queues</div>
+      <div class="issue-item"><span class="issue-number">#5</span> Implement Azure Communication Services Email</div>
+      <div class="issue-item"><span class="issue-number">#6</span> Implement Azure Table Storage Logging</div>
+      <div class="issue-item"><span class="issue-number">#7</span> Configure Application Insights Monitoring</div>
+      <div class="issue-item"><span class="issue-number">#8</span> Final Integration Testing and Evidence Collection</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Azure Event-Driven Serverless Order Processing System — George Brown College WIL Project (May 2026 – August 2026)<br>
+  Architecture finalization in progress · Azure resource deployment is the next major phase
+</footer>
+
+</body>
+</html>
