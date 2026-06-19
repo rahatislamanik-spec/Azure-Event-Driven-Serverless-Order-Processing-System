@@ -162,7 +162,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Planning and Development Phase
+Current Status: Phase 1 Complete — Azure Infrastructure Provisioned
 
 Completed:
 
@@ -172,11 +172,12 @@ Completed:
 * Team planning
 * GitHub Issues creation
 * Branching strategy implementation
+* Azure infrastructure provisioning (resource group, storage account, queues, table storage, virtual network, Function App, Key Vault, Application Insights, Log Analytics — see [project roadmap](roadmap/project-roadmap-build-plan.html) for full resource inventory)
 
 In Progress:
 
-* Frontend development
-* Azure infrastructure implementation
+* Frontend connection to deployed Function App (Phase 2)
+* Azure Functions implementation (Phases 3-5)
 
 ---
 
@@ -203,7 +204,7 @@ Development is being completed in multiple phases, with the repository updated r
 
 ### Project Status
 
-**Current Phase:** Planning & Architecture
+**Current Phase:** Phase 2 — Frontend Connection (Next)
 
 #### Progress Overview
 
@@ -212,11 +213,13 @@ Development is being completed in multiple phases, with the repository updated r
 * ✅ Initial GitHub repository established
 * ✅ Team collaboration workflow established
 * ✅ Initial planning documentation completed
-* ⏳ Infrastructure architecture design
-* ⏳ Azure resource deployment
-* ⏳ Frontend implementation
-* ⏳ Azure Functions implementation
-* ⏳ Testing and validation
+* ✅ Infrastructure architecture design
+* ✅ Azure resource deployment (Phase 1 complete — see [project roadmap](roadmap/project-roadmap-build-plan.html))
+* ⏳ Frontend implementation (Phase 2 — connecting to deployed Function App)
+* ⏳ Azure Functions implementation (Phases 3-5)
+* ⏳ Testing and validation (Phase 8)
+
+For live, phase-by-phase tracking of provisioned resources, blockers, and next steps, see the [project roadmap](roadmap/project-roadmap-build-plan.html).
 
 ### Team Lead
 
