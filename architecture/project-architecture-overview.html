@@ -464,6 +464,21 @@
     </div>
   </section>
 
+  <!-- 2.5. ROADMAP LINK -->
+  <section class="card" style="border-left: 4px solid var(--accent-gold); background: var(--azure-light);">
+    <h2><span class="icon">📍</span> Track Real-Time Project Progress</h2>
+    <p style="color: var(--text-muted); margin-bottom: 16px;">
+      This page documents the approved architecture and overall project structure. For live,
+      week-by-week tracking of phase status, provisioned resources, blockers, and next steps,
+      see the project roadmap — updated as work is completed.
+    </p>
+    <a href="../roadmap/project-roadmap-build-plan.html"
+       style="display:inline-block; background: var(--azure-blue); color:#fff; padding: 10px 20px;
+              border-radius: 8px; text-decoration:none; font-weight:600; font-size:0.95rem;">
+      View Project Roadmap →
+    </a>
+  </section>
+
   <!-- 3. TEAM -->
   <section class="card">
     <h2><span class="icon">👥</span> Team Information</h2>
@@ -480,6 +495,25 @@
         <tr><td>Puneet Singh</td><td><span class="role-tag">Team Member</span></td></tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- 4. PROFESSOR FEEDBACK -->
+  <section class="card">
+    <h2><span class="icon">🎓</span> Professor Feedback Summary</h2>
+    <div class="feedback-box">
+      <p><strong>Reviewer:</strong> Professor Ali Ziyaei</p>
+      <p>The initial review of the logical flow and data path was <strong>positive</strong> — the professor
+      confirmed the team is on the right track and that the overall data flow makes sense.</p>
+      <p>Following submission of the infrastructure diagram, the latest feedback was:</p>
+      <div class="feedback-quote">
+        "Sounds good, but I could not find the Key Vault or some of the other mentioned resources in your diagram."
+      </div>
+      <p><strong>Interpretation:</strong> The architecture and design are <strong>accepted overall</strong>.
+      The requested improvement is about <strong>visual clarity and resource visibility</strong> —
+      specifically ensuring Azure Key Vault and all mentioned services are easy to locate in the
+      infrastructure diagram.</p>
+      <span class="resolution-tag">✅ Addressed in the updated Infrastructure Diagram below — Key Vault is now shown in a dedicated, clearly labeled Security Layer</span>
+    </div>
   </section>
 
   <!-- 5. LOGICAL FLOW DIAGRAM -->

@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Event-Driven Serverless Order Processing System — Roadmap &amp; Build Plan</title>
+<style>
+  :root {
+    --azure-blue: #0078D4;
+    --azure-dark: #1a3c6e;
+    --azure-light: #eef6fc;
+    --accent-gold: #C19A2E;
+    --text-dark: #1f2933;
+    --text-muted: #5a6470;
+    --border-soft: #dbe7f3;
+    --bg-page: #f4f8fb;
+    --green: #1a7a3c;
+    --green-bg: #e6f4ea;
+    --gold-bg: #fff4d6;
+    --gold-text: #8a6500;
+    --gray-bg: #eef2f6;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  header.page-header {
+    background: linear-gradient(135deg, var(--azure-dark) 0%, var(--azure-blue) 100%);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+
+  header.page-header h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  header.page-header p.subtitle {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #d6e8fb;
+    font-weight: 400;
+  }
+
+  header.page-header .badges {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+
+  main {
+    max-width: 1150px;
+    margin: -24px auto 60px;
+    padding: 0 20px;
+  }
+
+  section.card {
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 71, 161, 0.06);
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+
+  section.card h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: var(--azure-dark);
+    border-bottom: 3px solid var(--azure-light);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  section.card h2 .icon { font-size: 1.3rem; }
+
+  section.card h3 {
+    color: var(--azure-blue);
+    font-size: 1.1rem;
+    margin-top: 22px;
+    margin-bottom: 10px;
+  }
+
+  p { color: var(--text-dark); }
+  .muted { color: var(--text-muted); }
+
+  code {
+    background: var(--azure-light);
+    color: var(--azure-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* Status pill */
+  .status-pill {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .status-done { background: var(--green-bg); color: var(--green); }
+  .status-progress { background: var(--gold-bg); color: var(--gold-text); }
+  .status-blocked { background: #fde2e2; color: #a82020; }
+  .status-upcoming { background: var(--gray-bg); color: var(--text-muted); }
+
+  /* Current status banner */
+  .current-status-banner {
+    background: var(--azure-light);
+    border: 1px solid var(--border-soft);
+    border-left: 5px solid var(--accent-gold);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .current-status-banner h3 { margin-top: 0; }
+  .current-status-banner .blocker {
+    background: #fde2e2;
+    color: #a82020;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+  /* Phase overview table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+  table th {
+    background: var(--azure-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+  }
+  table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
+  table tr:nth-child(even) td { background: #f8fbfe; }
+
+  /* Phase detail blocks */
+  .phase-block {
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    margin-top: 18px;
+    overflow: hidden;
+  }
+  .phase-block-header {
+    background: var(--azure-light);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .phase-block-header .phase-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--azure-dark);
+  }
+  .phase-block-body {
+    padding: 18px 20px;
+  }
+  .phase-meta {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .phase-meta strong { color: var(--text-dark); }
+
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .component-card {
+    background: #fafcfe;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .component-card .comp-name {
+    font-weight: 700;
+    color: var(--azure-dark);
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .component-card .comp-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .task-list {
+    margin: 10px 0 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .task-list li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f0f4f8;
+  }
+  .task-list li:last-child { border-bottom: none; }
+  .task-list li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--azure-blue);
+    font-size: 1rem;
+  }
+  .task-list li.done::before {
+    content: "✅";
+  }
+  .task-list li.done {
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  /* Timeline / Gantt */
+  .gantt {
+    margin-top: 16px;
+    overflow-x: auto;
+  }
+  .gantt table {
+    min-width: 760px;
+  }
+  .gantt-bar {
+    display: inline-block;
+    height: 18px;
+    border-radius: 4px;
+    background: var(--azure-blue);
+    position: relative;
+  }
+  .gantt-bar.blocked { background: repeating-linear-gradient(45deg, #fde2e2, #fde2e2 6px, #f8c6c6 6px, #f8c6c6 12px); }
+  .gantt-cell {
+    width: 12.5%;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .gantt-row-label {
+    font-weight: 600;
+    color: var(--azure-dark);
+    white-space: nowrap;
+  }
+
+  /* Weekly log */
+  .log-entry {
+    border-left: 3px solid var(--azure-blue);
+    padding: 10px 16px;
+    margin-bottom: 14px;
+    background: #fafcfe;
+    border-radius: 0 8px 8px 0;
+  }
+  .log-entry .log-date {
+    font-weight: 700;
+    color: var(--azure-dark);
+    font-size: 0.9rem;
+  }
+  .log-entry ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .log-entry .log-blocker {
+    color: #a82020;
+    font-weight: 600;
+  }
+
+  .empty-log {
+    border: 2px dashed var(--border-soft);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 14px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    header.page-header h1 { font-size: 1.4rem; }
+    section.card { padding: 20px; }
+    .gantt-cell { font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>Azure Event-Driven Serverless Order Processing System</h1>
+  <p class="subtitle">Roadmap &amp; Build Plan — George Brown College, Work Integrated Learning Project</p>
+  <div class="badges">
+    <span class="badge">Repository Owner: Md Rahat Islam Anik</span>
+    <span class="badge">May 2026 – August 2026</span>
+    <span class="badge">Updated Weekly</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- CURRENT STATUS -->
+  <section class="card">
+    <h2><span class="icon">📍</span> Current Status</h2>
+    <p class="muted">
+      This document is the single source of truth for the build. It is updated weekly with progress,
+      blockers, and next steps so anyone — teammates, the professor, or a future reviewer — can see
+      exactly what was built, when, and how.
+    </p>
+    <div class="current-status-banner">
+      <h3>We Are Here: Phase 1 Complete — Starting Phase 2 (Frontend Connection)</h3>
+      <p class="muted">
+        All Phase 1 infrastructure is provisioned and verified in the Azure Portal. The system's
+        full skeleton — storage, queues, table, networking, compute shell, and security vault — now
+        exists in <strong>East US</strong>. Next up: connect the frontend order form to the backend
+        and begin building the <code>submit_order</code> function.
+      </p>
+      <div class="blocker" style="background: var(--green-bg); color: var(--green);">
+        ✅ PHASE 1 COMPLETE: Resource Group, Storage Account, 4 Storage Queues, Orders table,
+        Virtual Network, Function App (Linux/Python 3.11/Consumption), and Key Vault all created
+        successfully in East US. Region decision (East US, approved by Professor Ali) is final.
+        Bonus: Application Insights and Log Analytics Workspace were auto-created alongside the
+        Function App — a head start on Phase 7.
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE OVERVIEW TABLE -->
+  <section class="card">
+    <h2><span class="icon">🗺️</span> Phase Overview</h2>
+    <p class="muted">High-level view of all 8 phases, their estimated duration, and current status.</p>
+    <table>
+      <thead>
+        <tr><th>Phase</th><th>Name</th><th>Est. Duration</th><th>Status</th><th>Depends On</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>Environment Setup</td><td>0.5 – 1 day</td><td><span class="status-pill status-done">Done</span></td><td>—</td></tr>
+        <tr><td>1</td><td>Azure Infrastructure Provisioning</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 0</td></tr>
+        <tr><td>2</td><td>Frontend Connection</td><td>1 – 2 days</td><td><span class="status-pill status-progress">Next Up</span></td><td>Phase 1</td></tr>
+        <tr><td>3</td><td>submit_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 1</td></tr>
+        <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 3</td></tr>
+        <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 4</td></tr>
+        <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 5</td></tr>
+        <tr><td>7</td><td>Monitoring &amp; Observability</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 6</td></tr>
+        <tr><td>8</td><td>End-to-End Testing &amp; Evidence</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 7</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top:10px; font-size:0.85rem;">
+      Total estimated active build time: <strong>~11–17 working days</strong> at 2–4 hours/day
+      (approx. 3–5 weeks accounting for non-build days, testing iteration, and documentation).
+    </p>
+  </section>
+
+  <!-- PHASE 0 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 0 — Environment Setup</span>
+      <span class="status-pill status-done">Done</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 0.5 – 1 day</span>
+        <span><strong>Owner:</strong> Rahat</span>
+        <span><strong>GitHub Issue:</strong> N/A (setup)</span>
+      </div>
+      <p class="muted">Get all local tooling installed and authenticated against the GBC Azure for Students subscription.</p>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li class="done">Install Homebrew</li>
+        <li class="done">Install Azure CLI (v2.87.0)</li>
+        <li class="done">Install Python 3.11 (required for Azure Functions runtime)</li>
+        <li class="done">Sign up for Azure for Students using GBC email</li>
+        <li class="done">Authenticate via <code>az login</code> under George Brown College tenant</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 1 — Azure Infrastructure Provisioning</span>
+      <span class="status-pill status-done">Done</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 2 – 3 days (completed in 1 working session)</span>
+        <span><strong>Owner:</strong> Rahat</span>
+        <span><strong>GitHub Issue:</strong> #4 (Storage Queues) + supporting infra</span>
+        <span><strong>Region:</strong> East US (approved by Professor Ali)</span>
+      </div>
+      <p class="muted">
+        Created every core Azure resource the system runs on. This phase established the
+        "skeleton" — Resource Group, networking, storage, compute shell, and security vault — that
+        all later application code deploys into. All resources verified in Azure Portal.
+      </p>
+      <h3>Components Built</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">📦 Resource Group</div>
+          <div class="comp-desc"><code>rg-order-processing-dev</code> — container for all resources. <strong>✅ Created.</strong></div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🌐 Virtual Network</div>
+          <div class="comp-desc"><code>vnet-order-processing-dev</code> — network boundary for the project. <strong>✅ Created.</strong></div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">💾 Storage Account</div>
+          <div class="comp-desc"><code>storderstoragedev</code> — hosts queues &amp; table storage. <strong>✅ Created in East US.</strong></div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📬 Storage Queues (×4)</div>
+          <div class="comp-desc"><code>orders-incoming</code>, <code>orders-to-email</code>, <code>orders-to-log</code>, <code>orders-invalid</code>. <strong>✅ All created.</strong></div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📊 Table Storage</div>
+          <div class="comp-desc"><code>Orders</code> table — stores confirmed order records. <strong>✅ Created.</strong></div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">⚡ Function App</div>
+          <div class="comp-desc"><code>func-order-processing-dev</code> — Linux, Python 3.11, Consumption plan. <strong>✅ Created.</strong> Empty shell — function code added in Phases 3–5.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🔑 Azure Key Vault</div>
+          <div class="comp-desc"><code>kv-orderproc-rahat</code> — stores connection strings &amp; secrets. <strong>✅ Created.</strong> Wired up fully in Phase 6.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📈 Application Insights (bonus)</div>
+          <div class="comp-desc">Auto-created alongside the Function App. Gets a head start on Phase 7.</div>
+        </div>
+      </div>
+
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li class="done">Create Resource Group (<code>rg-order-processing-dev</code>)</li>
+        <li class="done">Resolve region restriction — approved to proceed with East US</li>
+        <li class="done">Create Storage Account (<code>storderstoragedev</code>) in East US</li>
+        <li class="done">Create 4 Storage Queues</li>
+        <li class="done">Create <code>Orders</code> table in Table Storage</li>
+        <li class="done">Create Function App shell (Linux, Python 3.11, Consumption)</li>
+        <li class="done">Create Virtual Network</li>
+        <li class="done">Create Key Vault (<code>kv-orderproc-rahat</code> — empty shell, secrets added in Phase 6)</li>
+        <li class="done">Verify all resources visible in Azure Portal under the Resource Group</li>
+      </ul>
+
+      <h3>Documentation Follow-Up</h3>
+      <p class="muted">
+        Architecture and infrastructure diagrams to be updated to show <strong>East US</strong>
+        instead of Canada Central, per Professor Ali's note to keep diagrams current as resources
+        change. Evidence screenshots of each resource pending upload to <code>/evidence/phase1</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 2 — Frontend Connection</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 1 – 2 days</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> #1 (Build Laptop Store Frontend)</span>
+      </div>
+      <p class="muted">
+        Connect the already-built <code>frontend/index.html</code> order form to the backend by
+        wiring up the JavaScript <code>fetch()</code> call to POST order data as JSON.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">🖥️ Azure Static Web App</div>
+          <div class="comp-desc">Hosts <code>frontend/index.html</code> — free tier, global CDN.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🔗 fetch() Integration</div>
+          <div class="comp-desc">JavaScript POST request from the order form to the <code>submit_order</code> function URL.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🌍 CORS Configuration</div>
+          <div class="comp-desc">Allow the Static Web App's origin to call the Function App — required or the form silently fails.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Deploy <code>frontend/index.html</code> to Azure Static Web Apps</li>
+        <li>Add <code>fetch()</code> call wiring form fields → JSON payload</li>
+        <li>Configure CORS on the Function App to allow the Static Web App origin</li>
+        <li>Test form submission end-to-end with a placeholder/echo function</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 3 — submit_order Function</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 1 – 2 days</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> #2 (Build submit_order Azure Function)</span>
+      </div>
+      <p class="muted">
+        Build the HTTP-triggered entry point of the system. Receives the order, assigns an ID and
+        timestamp, drops it onto the <code>orders-incoming</code> queue, and immediately responds
+        "Order received" — the customer never waits for downstream processing.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">⚡ submit_order (HTTP Trigger)</div>
+          <div class="comp-desc">Python Azure Function — receives JSON, generates order ID + timestamp.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📬 orders-incoming Queue</div>
+          <div class="comp-desc">Order message is pushed here immediately after validation of structure.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Scaffold <code>submit_order</code> function locally with Azure Functions Core Tools</li>
+        <li>Implement order ID + timestamp generation</li>
+        <li>Implement push to <code>orders-incoming</code> queue</li>
+        <li>Return HTTP 200 "Order received" response</li>
+        <li>Test locally with Functions Core Tools emulator</li>
+        <li>Deploy to Function App and test via live URL</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 4 — validate_order Function</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 1 – 2 days</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> #3 (Build validate_order Queue Trigger Function)</span>
+      </div>
+      <p class="muted">
+        Queue-triggered function that checks order data integrity, then fans out valid orders to
+        two parallel queues, or routes invalid orders to the dead-letter queue.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">⚡ validate_order (Queue Trigger)</div>
+          <div class="comp-desc">Triggers automatically on new messages in <code>orders-incoming</code>.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">✅ Validation Logic</div>
+          <div class="comp-desc">Checks required fields, valid email format, quantity &gt; 0.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🔀 Fan-Out Pattern</div>
+          <div class="comp-desc">Valid orders copied to <code>orders-to-email</code> AND <code>orders-to-log</code> simultaneously.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">⚠️ orders-invalid Queue</div>
+          <div class="comp-desc">Dead-letter queue for malformed orders.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Scaffold <code>validate_order</code> function with Queue Trigger binding</li>
+        <li>Implement field validation rules</li>
+        <li>Implement fan-out to <code>orders-to-email</code> + <code>orders-to-log</code></li>
+        <li>Implement routing to <code>orders-invalid</code> on validation failure</li>
+        <li>Define a basic handler/monitor for <code>orders-invalid</code> (addresses earlier documentation gap)</li>
+        <li>Test valid and invalid order scenarios locally</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 5 — Parallel Processing Functions</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 2 – 3 days</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> #5 (ACS Email) + #6 (Table Storage Logging)</span>
+      </div>
+      <p class="muted">
+        The two final functions that run independently and in parallel — one sends the customer a
+        confirmation email, the other writes the order record to the database. This phase carries
+        the highest external-dependency risk due to ACS domain verification.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">📧 send_confirmation_email</div>
+          <div class="comp-desc">Queue-triggered function connecting to Azure Communication Services Email.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">✉️ Azure Communication Services</div>
+          <div class="comp-desc"><code>acs-order-email-dev</code> — requires domain verification (1–3 day Microsoft approval window). Start early.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🗄️ log_to_table</div>
+          <div class="comp-desc">Queue-triggered function writing order records to Table Storage.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Begin ACS domain verification as early as possible (highest external risk item)</li>
+        <li>Scaffold <code>send_confirmation_email</code> with Queue Trigger on <code>orders-to-email</code></li>
+        <li>Build HTML confirmation email template</li>
+        <li>Scaffold <code>log_to_table</code> with Queue Trigger on <code>orders-to-log</code></li>
+        <li>Write order record to <code>Orders</code> table</li>
+        <li>Test both functions trigger independently and in parallel</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 6 — Security &amp; Key Vault</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 1 day</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> Supporting task (security hardening)</span>
+      </div>
+      <p class="muted">
+        Move all secrets (storage connection strings, ACS keys) out of code and into Key Vault, and
+        configure Managed Identity so functions can access secrets without storing credentials.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">🔑 Key Vault Secrets</div>
+          <div class="comp-desc">Storage connection string, ACS connection string stored as secrets.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">🪪 Managed Identity</div>
+          <div class="comp-desc">Function App's system-assigned identity granted access to Key Vault.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Enable system-assigned Managed Identity on the Function App</li>
+        <li>Grant Key Vault access policy to the Function App identity</li>
+        <li>Move connection strings from <code>local.settings.json</code> into Key Vault secrets</li>
+        <li>Update Function App settings to reference Key Vault secrets</li>
+        <li>Verify functions still run correctly with secrets sourced from Key Vault</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 7 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 7 — Monitoring &amp; Observability</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 1 day</span>
+        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>GitHub Issue:</strong> #7 (Configure Monitoring and Application Insights)</span>
+      </div>
+      <p class="muted">
+        Wire up Application Insights and Log Analytics so every function execution is traced into a
+        single end-to-end Transaction Trace, from form submission to email sent.
+      </p>
+      <h3>Components to Build</h3>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="comp-name">📈 Application Insights</div>
+          <div class="comp-desc"><code>appi-order-processing-dev</code> — captures telemetry from all 4 functions.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📊 Azure Monitor</div>
+          <div class="comp-desc">Platform-level metrics, alerts, dashboards.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📚 Log Analytics Workspace</div>
+          <div class="comp-desc"><code>law-order-processing-dev</code> — centralized log storage and queries.</div>
+        </div>
+      </div>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Create Application Insights resource and link to Function App</li>
+        <li>Create Log Analytics Workspace and link to Application Insights</li>
+        <li>Verify each function logs execution traces</li>
+        <li>Confirm a full order flow produces a single Transaction Trace end-to-end</li>
+        <li>Set up basic alert (e.g., failed function execution)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 8 -->
+  <div class="phase-block">
+    <div class="phase-block-header">
+      <span class="phase-title">Phase 8 — End-to-End Testing &amp; Evidence Collection</span>
+      <span class="status-pill status-upcoming">Upcoming</span>
+    </div>
+    <div class="phase-block-body">
+      <div class="phase-meta">
+        <span><strong>Duration:</strong> 2 – 3 days</span>
+        <span><strong>Owner:</strong> Whole team</span>
+        <span><strong>GitHub Issue:</strong> #8 (Final Integration Testing and Evidence Collection)</span>
+      </div>
+      <p class="muted">
+        Full system test of every path — valid orders, invalid orders, queue processing, email
+        delivery, and database logging — followed by collecting all evidence (screenshots, logs,
+        traces) needed for final grading and the project delivery report (HTML #2).
+      </p>
+      <h3>Tasks</h3>
+      <ul class="task-list">
+        <li>Test valid order flow end-to-end (form → email → table record)</li>
+        <li>Test invalid order flow (missing fields, bad email, zero quantity → dead-letter queue)</li>
+        <li>Test queue processing under multiple simultaneous submissions</li>
+        <li>Capture Application Insights Transaction Trace screenshots</li>
+        <li>Capture Table Storage records, email delivery confirmation, queue states</li>
+        <li>Compile evidence into <code>/evidence</code> folder</li>
+        <li>Build Project Delivery Report (HTML #2)</li>
+        <li>Final documentation pass — update README, architecture diagrams if region changed</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <section class="card">
+    <h2><span class="icon">📅</span> Timeline (May – August 2026)</h2>
+    <p class="muted">Approximate phase placement across the project duration. Will shift based on weekly progress.</p>
+    <div class="gantt">
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>May (wk 3-4)</th>
+            <th>Jun (wk 1-2)</th>
+            <th>Jun (wk 3-4)</th>
+            <th>Jul (wk 1-2)</th>
+            <th>Jul (wk 3-4)</th>
+            <th>Aug (wk 1-2)</th>
+            <th>Aug (wk 3-4)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gantt-row-label">0. Environment Setup</td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">1. Infrastructure Provisioning</td>
+            <td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar blocked" style="width:100%;"></span></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:40%;"></span></td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">2. Frontend Connection</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:30%;"></span></td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">3. submit_order</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">4. validate_order</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:40%;"></span></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">5. Parallel Functions (Email/Log)</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:60%;"></span></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+            <td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">6. Security &amp; Key Vault</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:50%;"></span></td>
+            <td class="gantt-cell"></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">7. Monitoring</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:50%;"></span></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:30%;"></span></td>
+          </tr>
+          <tr>
+            <td class="gantt-row-label">8. Testing &amp; Evidence</td>
+            <td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td><td class="gantt-cell"></td>
+            <td class="gantt-cell"><span class="gantt-bar" style="width:100%;"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:10px; font-size:0.85rem;">
+      Striped/red bars indicate blocked time. This timeline assumes 2–4 hours/day of active work and
+      will be adjusted weekly based on actual progress.
+    </p>
+  </section>
+
+  <!-- WEEKLY UPDATE LOG -->
+  <section class="card">
+    <h2><span class="icon">📝</span> Weekly Update Log</h2>
+    <p class="muted">
+      Updated at the end of each work week. Each entry records what was completed, what's blocked,
+      and what's next — this is the accountability trail for the project.
+    </p>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Session 2 (June 18)</div>
+      <ul>
+        <li><strong>Phase 1 fully completed.</strong> Created all 4 Storage Queues (<code>orders-incoming</code>, <code>orders-to-email</code>, <code>orders-to-log</code>, <code>orders-invalid</code>)</li>
+        <li>Created <code>Orders</code> table in Table Storage</li>
+        <li>Created Virtual Network <code>vnet-order-processing-dev</code> (registered Microsoft.Network provider first)</li>
+        <li>Created Function App <code>func-order-processing-dev</code> (Linux, Python 3.11, Consumption plan) — registered Microsoft.Web provider first</li>
+        <li>Created Key Vault <code>kv-orderproc-rahat</code> (original name <code>kv-order-processing-dev</code> was globally taken)</li>
+        <li>Confirmed all 8 resources visible together in Resource Manager → All Resources view</li>
+        <li>Noted: Application Insights and a Log Analytics Workspace were auto-created alongside the Function App</li>
+        <li>Next: Begin Phase 2 (Frontend Connection) and Phase 3 (<code>submit_order</code> function)</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026</div>
+      <ul>
+        <li>Installed Azure CLI, Python 3.11, Azure Functions Core Tools (local environment ready)</li>
+        <li>Signed up for Azure for Students under GBC tenant, authenticated via <code>az login</code></li>
+        <li>Created Resource Group <code>rg-order-processing-dev</code> — succeeded</li>
+        <li>Storage Account creation in Canada Central and Canada East rejected by Azure policy (RequestDisallowedByAzure)</li>
+        <li>Created Storage Account <code>storderstoragedev</code> in East US — succeeded</li>
+        <li>Emailed Professor Ali Ziyaei to confirm region decision</li>
+        <li><strong>Resolution:</strong> Professor Ali approved proceeding with East US ("Fine with me"). Diagrams/docs to be updated to reflect East US.</li>
+      </ul>
+    </div>
+
+    <div class="empty-log">
+      Next weekly entry will be added here once work resumes.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Azure Event-Driven Serverless Order Processing System — George Brown College WIL Project (May 2026 – August 2026)<br>
+  This roadmap is updated weekly. Project Delivery Report (HTML #2) will be created at project completion.
+</footer>
+
+</body>
+</html>
