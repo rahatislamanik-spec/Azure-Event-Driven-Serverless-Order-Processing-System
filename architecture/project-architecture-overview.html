@@ -408,7 +408,7 @@
   <div class="badges">
     <span class="badge">Cloud Computing &amp; Network Administration</span>
     <span class="badge">May 2026 – August 2026</span>
-    <span class="badge">Phase 1 — Architecture Finalization</span>
+    <span class="badge">Phase 1 Complete — Phase 2 In Progress</span>
   </div>
 </header>
 
@@ -434,8 +434,9 @@
   <!-- 2. PROJECT STATUS -->
   <section class="card">
     <h2><span class="icon">📊</span> Project Status</h2>
-    <p class="muted">Current phase: <strong>Architecture finalization and implementation preparation.</strong>
-      Azure resource deployment has not yet begun — this is the next major phase.</p>
+    <p class="muted">Current phase: <strong>Phase 1 infrastructure complete, with Phase 2 application work in progress.</strong>
+      Core Azure resources have been provisioned in East US, and the initial <code>submit_order</code>
+      function has been built and tested locally.</p>
     <div class="status-grid">
       <div class="status-item done">
         <strong>✅ Repository Setup</strong>
@@ -454,12 +455,12 @@
         <span>Submitted — refinement in progress based on feedback</span>
       </div>
       <div class="status-item">
-        <strong>⏳ Azure Resource Deployment</strong>
-        <span>Not started — next major phase</span>
+        <strong>✅ Azure Resource Deployment</strong>
+        <span>Phase 1 complete, all 8 core resources provisioned in East US</span>
       </div>
-      <div class="status-item">
-        <strong>⏳ Application Development</strong>
-        <span>Not started — pending resource deployment</span>
+      <div class="status-item in-progress">
+        <strong>🟡 Application Development</strong>
+        <span>In progress, <code>submit_order</code> function built and tested locally</span>
       </div>
     </div>
   </section>
@@ -576,7 +577,7 @@
       <img src="infrastructure-diagram.png" alt="Event-Driven Serverless Order Processing System - Azure Infrastructure Diagram">
     </div>
     <p class="diagram-caption">Figure 2 — Infrastructure diagram showing the
-      <code>rg-order-processing-dev</code> resource group in the <strong>Canada Central</strong> region,
+      <code>rg-order-processing-dev</code> resource group in the <strong>East US</strong> region,
       with all Azure resources, the Security Layer (Azure Key Vault), and the Observability Layer
       explicitly placed and labeled.</p>
     <div class="highlight-note">
@@ -587,7 +588,7 @@
     </div>
     <h3>Infrastructure Includes</h3>
     <ul style="color: var(--text-muted); font-size: 0.92rem;">
-      <li>Azure Region: <strong>Canada Central</strong></li>
+      <li>Azure Region: <strong>East US</strong></li>
       <li>Resource Group: <code>rg-order-processing-dev</code></li>
       <li>Virtual Network (network boundary)</li>
       <li>Azure Static Web App (Presentation Layer)</li>
@@ -609,7 +610,7 @@
       </thead>
       <tbody>
         <tr><td>Resource Group</td><td><code>rg-order-processing-dev</code></td><td>Container for all Azure resources</td></tr>
-        <tr><td>Region</td><td>Canada Central</td><td>Primary deployment region</td></tr>
+        <tr><td>Region</td><td>East US</td><td>Primary deployment region</td></tr>
         <tr><td>Virtual Network</td><td><code>vnet-order-processing-dev</code></td><td>Network boundary</td></tr>
         <tr><td>Static Web App</td><td><code>st-order-store-dev</code></td><td>Customer order frontend</td></tr>
         <tr><td>Function App</td><td><code>func-order-processing-dev</code></td><td>Serverless backend functions</td></tr>
@@ -648,7 +649,7 @@
       The project intentionally uses only the Azure services required to demonstrate these principles:
       Azure Static Web Apps, Azure Functions, Azure Storage Account (Queues &amp; Table Storage),
       Azure Communication Services Email, Azure Key Vault, Application Insights, Azure Monitor, Log
-      Analytics Workspace, Virtual Network, and a single Resource Group in Canada Central. Additional
+      Analytics Workspace, Virtual Network, and a single Resource Group in East US. Additional
       enterprise services (such as AKS, API Management, Service Bus, Front Door, Sentinel, or Defender for
       Cloud) are deliberately excluded to avoid over-engineering, and may be noted separately as future
       enhancements if time allows.
@@ -680,39 +681,39 @@
 
       <div class="phase">
         <div class="phase-marker">
-          <div class="phase-circle current">2</div>
+          <div class="phase-circle">2</div>
           <div class="phase-line"></div>
         </div>
         <div class="phase-content">
-          <span class="phase-status current">Next Up</span>
+          <span class="phase-status done">Completed</span>
           <h3>Phase 2 — Azure Resource Deployment</h3>
           <ul>
-            <li>Resource group</li>
-            <li>Storage account</li>
-            <li>Storage queues</li>
-            <li>Table storage</li>
-            <li>Function App</li>
-            <li>Application Insights</li>
-            <li>Key Vault</li>
-            <li>Communication Services</li>
+            <li>✅ Resource group</li>
+            <li>✅ Storage account</li>
+            <li>✅ Storage queues</li>
+            <li>✅ Table storage</li>
+            <li>✅ Function App</li>
+            <li>✅ Application Insights</li>
+            <li>✅ Key Vault</li>
+            <li>⏳ Communication Services</li>
           </ul>
         </div>
       </div>
 
       <div class="phase">
         <div class="phase-marker">
-          <div class="phase-circle">3</div>
+          <div class="phase-circle current">3</div>
           <div class="phase-line"></div>
         </div>
         <div class="phase-content">
-          <span class="phase-status upcoming">Upcoming</span>
+          <span class="phase-status current">In Progress</span>
           <h3>Phase 3 — Application Development</h3>
           <ul>
-            <li>Frontend order form</li>
-            <li><code>submit_order</code> function</li>
-            <li><code>validate_order</code> function</li>
-            <li><code>send_confirmation_email</code> function</li>
-            <li><code>log_to_table</code> function</li>
+            <li>⏳ Frontend order form</li>
+            <li>🟡 <code>submit_order</code> function — built and tested locally, still being aligned to frontend field names</li>
+            <li>⏳ <code>validate_order</code> function</li>
+            <li>⏳ <code>send_confirmation_email</code> function</li>
+            <li>⏳ <code>log_to_table</code> function</li>
           </ul>
         </div>
       </div>
@@ -743,7 +744,7 @@
           <span class="phase-status upcoming">Upcoming</span>
           <h3>Phase 5 — Evidence and Final Delivery</h3>
           <ul>
-            <li>Screenshots</li>
+            <li>Phase 1 and early Phase 2 screenshots collected in the evidence folder on <code>rahat-dev</code></li>
             <li>Logs</li>
             <li>GitHub commits</li>
             <li>Documentation</li>
@@ -786,7 +787,7 @@
 
 <footer>
   Azure Event-Driven Serverless Order Processing System — George Brown College WIL Project (May 2026 – August 2026)<br>
-  Architecture finalization in progress · Azure resource deployment is the next major phase
+  Phase 1 infrastructure complete · Phase 2/3 application development in progress
 </footer>
 
 </body>

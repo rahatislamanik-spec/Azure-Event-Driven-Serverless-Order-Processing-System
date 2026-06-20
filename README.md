@@ -162,7 +162,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 1 Complete — Azure Infrastructure Provisioned
+Current Status: Phase 3 Complete — Phase 4 validation function work next
 
 Completed:
 
@@ -172,12 +172,13 @@ Completed:
 * Team planning
 * GitHub Issues creation
 * Branching strategy implementation
-* Azure infrastructure provisioning (resource group, storage account, queues, table storage, virtual network, Function App, Key Vault, Application Insights, Log Analytics — see [project roadmap](roadmap/project-roadmap-build-plan.html) for full resource inventory)
+* Phase 1 Azure infrastructure provisioning
+* Phase 2 frontend connection to live Function App endpoint
+* Phase 3 `submit_order` Function App deployment and browser/curl validation
 
 In Progress:
 
-* Frontend connection to deployed Function App (Phase 2)
-* Azure Functions implementation (Phases 3-5)
+* Phase 4 `validate_order` queue-triggered function planning and implementation
 
 ---
 
@@ -198,13 +199,13 @@ This project was developed collaboratively, focused on Azure serverless computin
 
 **Project Duration:** May 2026 – August 2026
 
-The project is currently in the Planning & Architecture phase. The team is finalizing requirements, infrastructure design, development responsibilities, and implementation strategy before moving into full-scale development.
+The project has completed infrastructure provisioning, frontend connection, and the first live Azure Function endpoint. The next major build step is the `validate_order` queue-triggered function.
 
 Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
 ### Project Status
 
-**Current Phase:** Phase 2 — Frontend Connection (Next)
+**Current Phase:** Phase 3 Complete — Starting Phase 4
 
 #### Progress Overview
 
@@ -214,12 +215,16 @@ Development is being completed in multiple phases, with the repository updated r
 * ✅ Team collaboration workflow established
 * ✅ Initial planning documentation completed
 * ✅ Infrastructure architecture design
-* ✅ Azure resource deployment (Phase 1 complete — see [project roadmap](roadmap/project-roadmap-build-plan.html))
-* ⏳ Frontend implementation (Phase 2 — connecting to deployed Function App)
-* ⏳ Azure Functions implementation (Phases 3-5)
-* ⏳ Testing and validation (Phase 8)
+* ✅ Azure resource deployment
+* ✅ Frontend implementation connected to live Function App endpoint
+* ✅ `submit_order` Azure Function implemented and verified
+* ⏳ `validate_order` queue-triggered function
+* ⏳ Testing and validation
 
-For live, phase-by-phase tracking of provisioned resources, blockers, and next steps, see the [project roadmap](roadmap/project-roadmap-build-plan.html).
+### Live Project Pages
+
+* [Project roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html)
+* [Architecture overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html)
 
 ### Team Lead
 
@@ -246,7 +251,6 @@ All major updates, architecture changes, implementation milestones, testing evid
 This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
 
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
 
 
 
