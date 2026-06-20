@@ -358,19 +358,16 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 1 Complete — Starting Phase 2 (Frontend Connection)</h3>
+      <h3>We Are Here: Phase 3 Complete — Starting Phase 4 (validate_order Function)</h3>
       <p class="muted">
-        All Phase 1 infrastructure is provisioned and verified in the Azure Portal. The system's
-        full skeleton — storage, queues, table, networking, compute shell, and security vault — now
-        exists in <strong>East US</strong>. Next up: connect the frontend order form to the backend
-        and begin building the <code>submit_order</code> function.
+        Phase 1 infrastructure is provisioned and verified in the Azure Portal. The frontend now posts
+        to the live Function App endpoint, and the <code>submit_order</code> HTTP trigger has been built,
+        deployed, and verified through both <code>curl</code> and the real browser form. Next up:
+        implement the <code>validate_order</code> queue-triggered function.
       </p>
       <div class="blocker" style="background: var(--green-bg); color: var(--green);">
-        ✅ PHASE 1 COMPLETE: Resource Group, Storage Account, 4 Storage Queues, Orders table,
-        Virtual Network, Function App (Linux/Python 3.11/Consumption), and Key Vault all created
-        successfully in East US. Region decision (East US, approved by Professor Ali) is final.
-        Bonus: Application Insights and Log Analytics Workspace were auto-created alongside the
-        Function App — a head start on Phase 7.
+        ✅ PHASE 3 COMPLETE: Frontend integration, CORS, anonymous HTTP trigger access, live Function App
+        deployment, queue write, and successful browser confirmation flow have all been verified.
       </div>
     </div>
   </section>
@@ -386,8 +383,8 @@
       <tbody>
         <tr><td>0</td><td>Environment Setup</td><td>0.5 – 1 day</td><td><span class="status-pill status-done">Done</span></td><td>—</td></tr>
         <tr><td>1</td><td>Azure Infrastructure Provisioning</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 0</td></tr>
-        <tr><td>2</td><td>Frontend Connection</td><td>1 – 2 days</td><td><span class="status-pill status-progress">Next Up</span></td><td>Phase 1</td></tr>
-        <tr><td>3</td><td>submit_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 1</td></tr>
+        <tr><td>2</td><td>Frontend Connection</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 1</td></tr>
+        <tr><td>3</td><td>submit_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 1</td></tr>
         <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 3</td></tr>
         <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 4</td></tr>
         <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 5</td></tr>
@@ -505,7 +502,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 2 — Frontend Connection</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -514,8 +511,9 @@
         <span><strong>GitHub Issue:</strong> #1 (Build Laptop Store Frontend)</span>
       </div>
       <p class="muted">
-        Connect the already-built <code>frontend/index.html</code> order form to the backend by
-        wiring up the JavaScript <code>fetch()</code> call to POST order data as JSON.
+        The <code>frontend/index.html</code> order form is connected to the live Function App endpoint.
+        Browser testing confirmed the form returns an "Order received" confirmation with a generated
+        order ID.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
@@ -525,19 +523,20 @@
         </div>
         <div class="component-card">
           <div class="comp-name">🔗 fetch() Integration</div>
-          <div class="comp-desc">JavaScript POST request from the order form to the <code>submit_order</code> function URL.</div>
+          <div class="comp-desc">JavaScript POST request from the order form to <code>https://func-order-processing-dev.azurewebsites.net/api/submit_order</code>.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">🌍 CORS Configuration</div>
-          <div class="comp-desc">Allow the Static Web App's origin to call the Function App — required or the form silently fails.</div>
+          <div class="comp-desc">Function App CORS configured with allowed origins set to <code>*</code> for project testing.</div>
         </div>
       </div>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Deploy <code>frontend/index.html</code> to Azure Static Web Apps</li>
-        <li>Add <code>fetch()</code> call wiring form fields → JSON payload</li>
-        <li>Configure CORS on the Function App to allow the Static Web App origin</li>
-        <li>Test form submission end-to-end with a placeholder/echo function</li>
+        <li class="done">Wire <code>frontend/app.js</code> <code>fetch()</code> call to the live Function App endpoint</li>
+        <li class="done">Map HTML field <code>address</code> to JSON key <code>deliveryAddress</code></li>
+        <li class="done">Map HTML field <code>productId</code> to JSON key <code>laptop</code></li>
+        <li class="done">Configure CORS on the Function App with allowed origins set to <code>*</code></li>
+        <li class="done">Submit a real browser test order through <code>frontend/index.html</code> and receive "Order received. Order ID: [uuid]"</li>
       </ul>
     </div>
   </div>
@@ -546,7 +545,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 3 — submit_order Function</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -555,29 +554,37 @@
         <span><strong>GitHub Issue:</strong> #2 (Build submit_order Azure Function)</span>
       </div>
       <p class="muted">
-        Build the HTTP-triggered entry point of the system. Receives the order, assigns an ID and
-        timestamp, drops it onto the <code>orders-incoming</code> queue, and immediately responds
-        "Order received" — the customer never waits for downstream processing.
+        The HTTP-triggered entry point is built with the Python V2 programming model and deployed live
+        to Azure. It validates the order payload, normalizes the frontend fields, writes the message to
+        the <code>orders-incoming</code> queue, and returns HTTP 202 Accepted with the generated order ID.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
         <div class="component-card">
           <div class="comp-name">⚡ submit_order (HTTP Trigger)</div>
-          <div class="comp-desc">Python Azure Function — receives JSON, generates order ID + timestamp.</div>
+          <div class="comp-desc">Python V2 HTTP trigger at <code>/api/submit_order</code>, POST method, anonymous access.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">📬 orders-incoming Queue</div>
-          <div class="comp-desc">Order message is pushed here immediately after validation of structure.</div>
+          <div class="comp-desc">Normalized order message is pushed here after required-field, email, and quantity validation.</div>
         </div>
       </div>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Scaffold <code>submit_order</code> function locally with Azure Functions Core Tools</li>
-        <li>Implement order ID + timestamp generation</li>
-        <li>Implement push to <code>orders-incoming</code> queue</li>
-        <li>Return HTTP 200 "Order received" response</li>
-        <li>Test locally with Functions Core Tools emulator</li>
-        <li>Deploy to Function App and test via live URL</li>
+        <li class="done">Build <code>function_app.py</code> using the Python V2 programming model</li>
+        <li class="done">Configure HTTP trigger route <code>/api/submit_order</code>, POST method, and <code>ANONYMOUS</code> auth level</li>
+        <li class="done">Validate required fields, basic email format, and positive integer quantity</li>
+        <li class="done">Derive <code>customerName</code> from <code>firstName</code> + <code>lastName</code>, and product from <code>laptop</code></li>
+        <li class="done">Generate UUID order ID and push normalized message to <code>orders-incoming</code></li>
+        <li class="done">Return HTTP 202 Accepted with <code>orderId</code> on success</li>
+        <li class="done">Deploy live to <code>func-order-processing-dev</code></li>
+        <li class="done">Verify with <code>curl</code> against the live Azure endpoint and through the browser form</li>
+      </ul>
+      <h3>Deployment Issues Resolved</h3>
+      <ul class="task-list">
+        <li class="done">Added missing <code>azure-storage-queue</code> dependency to <code>requirements.txt</code> after the Python worker failed to register the function</li>
+        <li class="done">Created a dedicated Python 3.11 virtual environment because the deployed Function App runtime requires Python 3.11</li>
+        <li class="done">Corrected initial FUNCTION-level authorization to <code>ANONYMOUS</code> for the public-facing HTTP endpoint</li>
       </ul>
     </div>
   </div>
@@ -877,6 +884,22 @@
     </p>
 
     <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Phase 2 and Phase 3 Completion</div>
+      <ul>
+        <li><strong>Phase 2 completed.</strong> Connected <code>frontend/app.js</code> to the live Function App endpoint at <code>https://func-order-processing-dev.azurewebsites.net/api/submit_order</code></li>
+        <li>Corrected frontend-to-backend field mapping: <code>address</code> → <code>deliveryAddress</code> and <code>productId</code> → <code>laptop</code></li>
+        <li>Configured CORS on the Function App with allowed origins set to <code>*</code> for project testing</li>
+        <li><strong>Phase 3 completed.</strong> Built and deployed the Python V2 <code>submit_order</code> HTTP trigger with anonymous POST access</li>
+        <li>Implemented required-field validation, basic email validation, positive quantity validation, UUID order ID generation, and queue write to <code>orders-incoming</code></li>
+        <li>Resolved deployment issue #1: added missing <code>azure-storage-queue</code> dependency after the function failed to register</li>
+        <li>Resolved deployment issue #2: created a Python 3.11 virtual environment to match the Azure Function App runtime</li>
+        <li>Resolved deployment issue #3: changed the HTTP trigger from FUNCTION-level auth to <code>ANONYMOUS</code> for the public-facing endpoint</li>
+        <li><strong>Verified:</strong> direct <code>curl</code> test and browser form submission both returned a successful "Order received" response with an order ID</li>
+        <li>Next: begin Phase 4 by implementing the <code>validate_order</code> queue-triggered function</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
       <div class="log-date">Week of June 15, 2026 — Session 2 (June 18)</div>
       <ul>
         <li><strong>Phase 1 fully completed.</strong> Created all 4 Storage Queues (<code>orders-incoming</code>, <code>orders-to-email</code>, <code>orders-to-log</code>, <code>orders-invalid</code>)</li>
@@ -904,7 +927,7 @@
     </div>
 
     <div class="empty-log">
-      Next weekly entry will be added here once work resumes.
+      Next weekly entry will track Phase 4 progress on the <code>validate_order</code> function.
     </div>
   </section>
 

@@ -160,7 +160,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Planning and Development Phase
+Current Status: Phase 3 Complete — Phase 4 validation function work next
 
 Completed:
 
@@ -170,11 +170,13 @@ Completed:
 * Team planning
 * GitHub Issues creation
 * Branching strategy implementation
+* Phase 1 Azure infrastructure provisioning
+* Phase 2 frontend connection to live Function App endpoint
+* Phase 3 `submit_order` Function App deployment and browser/curl validation
 
 In Progress:
 
-* Frontend development
-* Azure infrastructure implementation
+* Phase 4 `validate_order` queue-triggered function planning and implementation
 
 ---
 
@@ -195,13 +197,13 @@ This project is being developed as a collaborative George Brown College Work Int
 
 **Project Duration:** May 2026 – August 2026
 
-The project is currently in the Planning & Architecture phase. The team is finalizing requirements, infrastructure design, development responsibilities, and implementation strategy before moving into full-scale development.
+The project has completed infrastructure provisioning, frontend connection, and the first live Azure Function endpoint. The next major build step is the `validate_order` queue-triggered function.
 
 Development will be completed in multiple phases throughout the Summer 2026 semester. The repository will be updated regularly with architecture diagrams, documentation, implementation progress, testing evidence, deployment artifacts, and project milestones.
 
 ### Project Status
 
-**Current Phase:** Planning & Architecture
+**Current Phase:** Phase 3 Complete — Starting Phase 4
 
 #### Progress Overview
 
@@ -210,11 +212,17 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 * ✅ Initial GitHub repository established
 * ✅ Team collaboration workflow established
 * ✅ Initial planning documentation completed
-* ⏳ Infrastructure architecture design
-* ⏳ Azure resource deployment
-* ⏳ Frontend implementation
-* ⏳ Azure Functions implementation
+* ✅ Infrastructure architecture design
+* ✅ Azure resource deployment
+* ✅ Frontend implementation connected to live Function App endpoint
+* ✅ `submit_order` Azure Function implemented and verified
+* ⏳ `validate_order` queue-triggered function
 * ⏳ Testing and validation
+
+### Live Project Pages
+
+* [Project roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html)
+* [Architecture overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html)
 
 ### Team Lead
 
@@ -250,8 +258,6 @@ All major updates, architecture changes, implementation milestones, testing evid
 This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
 
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
-
 
 
 
