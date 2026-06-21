@@ -1,6 +1,6 @@
 # submit_order Function
 
-This folder contains the implemented `submit_order` Azure Function for the order processing workflow.
+This folder contains the combined Python V2 Azure Functions deployment package for the order processing workflow. The original entry point is `submit_order`, and the same `function_app.py` file now also contains `validate_order`, `log_to_table`, and `send_confirmation_email`.
 
 ## Purpose
 
@@ -16,6 +16,7 @@ This folder contains the implemented `submit_order` Azure Function for the order
 | Method | `POST` |
 | Authorization level | `ANONYMOUS` |
 | Queue output | `orders-incoming` |
+| Deployment model | Combined Function App package |
 
 ## Request Fields
 
@@ -72,8 +73,19 @@ curl -X POST http://localhost:7071/api/submit_order \
   }'
 ```
 
+## Combined Deployment Package
+
+Azure Functions publishes the current deployment directory as the complete Function App package. For this project, all four functions live together in `function_app.py` so a deployment does not accidentally replace previously deployed functions.
+
+The combined package includes:
+
+* `submit_order` — HTTP trigger that accepts the order and writes to `orders-incoming`
+* `validate_order` — Queue trigger that validates and fans out orders
+* `log_to_table` — Queue trigger that writes validated orders to Azure Table Storage
+* `send_confirmation_email` — Queue trigger that sends confirmation email through Azure Communication Services
+
 ## Deployment Notes
 
-The function has been deployed to the Azure Function App `func-order-processing-dev`. During deployment, the Python 3.11 runtime and `azure-storage-queue` dependency were required for the function to register and write messages to `orders-incoming`.
+The combined package has been deployed to the Azure Function App `func-order-processing-dev`. During deployment, the Python 3.11 runtime and the required Azure SDK dependencies were needed for the functions to register and process queue, table, and email operations.
 
-This folder documents the implemented `submit_order` function only. The `validate_order`, `send_confirmation_email`, and `log_to_table` functions remain future phases.
+`host.json` also includes queue `messageEncoding` configuration so Storage Queue trigger messages written as plain JSON can be processed correctly by the Function App runtime.

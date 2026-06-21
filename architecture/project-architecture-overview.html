@@ -434,9 +434,9 @@
   <!-- 2. PROJECT STATUS -->
   <section class="card">
     <h2><span class="icon">📊</span> Project Status</h2>
-    <p class="muted">Current phase: <strong>Phase 1 infrastructure complete, with Phase 2 application work in progress.</strong>
-      Core Azure resources have been provisioned in East US, and the initial <code>submit_order</code>
-      function has been built and tested locally.</p>
+    <p class="muted">Current phase: <strong>Phase 5 complete, with Phase 6 security hardening next.</strong>
+      The live pipeline now accepts orders, validates queue messages, fans out valid orders,
+      writes to Azure Table Storage, and sends confirmation email through Azure Communication Services.</p>
     <div class="status-grid">
       <div class="status-item done">
         <strong>✅ Repository Setup</strong>
@@ -458,9 +458,9 @@
         <strong>✅ Azure Resource Deployment</strong>
         <span>Phase 1 complete, all 8 core resources provisioned in East US</span>
       </div>
-      <div class="status-item in-progress">
-        <strong>🟡 Application Development</strong>
-        <span>In progress, <code>submit_order</code> function built and tested locally</span>
+      <div class="status-item done">
+        <strong>✅ Application Development</strong>
+        <span><code>submit_order</code>, <code>validate_order</code>, <code>log_to_table</code>, and <code>send_confirmation_email</code> deployed and verified live</span>
       </div>
     </div>
   </section>
@@ -706,14 +706,14 @@
           <div class="phase-line"></div>
         </div>
         <div class="phase-content">
-          <span class="phase-status current">In Progress</span>
+          <span class="phase-status done">Completed</span>
           <h3>Phase 3 — Application Development</h3>
           <ul>
-            <li>⏳ Frontend order form</li>
-            <li>🟡 <code>submit_order</code> function — built and tested locally, still being aligned to frontend field names</li>
-            <li>⏳ <code>validate_order</code> function</li>
-            <li>⏳ <code>send_confirmation_email</code> function</li>
-            <li>⏳ <code>log_to_table</code> function</li>
+            <li>✅ Frontend order form connected to the live endpoint</li>
+            <li>✅ <code>submit_order</code> function — HTTP trigger, anonymous POST endpoint, queue write verified</li>
+            <li>✅ <code>validate_order</code> function — queue trigger, validation, invalid-order routing, and fan-out verified</li>
+            <li>✅ <code>send_confirmation_email</code> function — queue trigger and Azure Communication Services email delivery verified</li>
+            <li>✅ <code>log_to_table</code> function — queue trigger and Azure Table Storage write verified</li>
           </ul>
         </div>
       </div>
@@ -724,14 +724,14 @@
           <div class="phase-line"></div>
         </div>
         <div class="phase-content">
-          <span class="phase-status upcoming">Upcoming</span>
+          <span class="phase-status done">Completed</span>
           <h3>Phase 4 — Integration and Testing</h3>
           <ul>
-            <li>End-to-end order submission</li>
-            <li>Queue validation</li>
-            <li>Email confirmation</li>
-            <li>Table logging</li>
-            <li>Error handling</li>
+            <li>✅ End-to-end order submission</li>
+            <li>✅ Queue validation and fan-out</li>
+            <li>✅ Email confirmation through ACS</li>
+            <li>✅ Table logging to the <code>Orders</code> table</li>
+            <li>✅ Queue trigger message decoding issue resolved with <code>messageEncoding: none</code></li>
           </ul>
         </div>
       </div>
@@ -741,14 +741,15 @@
           <div class="phase-circle">5</div>
         </div>
         <div class="phase-content">
-          <span class="phase-status upcoming">Upcoming</span>
+          <span class="phase-status done">Completed</span>
           <h3>Phase 5 — Evidence and Final Delivery</h3>
           <ul>
             <li>Phase 1 and early Phase 2 screenshots collected in the evidence folder on <code>rahat-dev</code></li>
-            <li>Logs</li>
-            <li>GitHub commits</li>
-            <li>Documentation</li>
-            <li>Final presentation</li>
+            <li>✅ Phase 3, Phase 4, and Phase 5 runtime evidence collected</li>
+            <li>✅ Deployment logs and live function output captured</li>
+            <li>✅ GitHub commits prepared on <code>rahat-dev</code></li>
+            <li>✅ Function documentation updated for the combined deployment package</li>
+            <li>Final presentation remains separate from this architecture page</li>
           </ul>
         </div>
       </div>

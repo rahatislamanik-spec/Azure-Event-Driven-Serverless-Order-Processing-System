@@ -160,7 +160,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 3 Complete — Phase 4 validation function work next
+Current Status: Phase 5 Complete — Phase 6 security and Key Vault work next
 
 Completed:
 
@@ -173,10 +173,12 @@ Completed:
 * Phase 1 Azure infrastructure provisioning
 * Phase 2 frontend connection to live Function App endpoint
 * Phase 3 `submit_order` Function App deployment and browser/curl validation
+* Phase 4 `validate_order` queue-triggered validation and fan-out
+* Phase 5 `log_to_table` and `send_confirmation_email` parallel processing functions
 
 In Progress:
 
-* Phase 4 `validate_order` queue-triggered function planning and implementation
+* Phase 6 security and Key Vault hardening
 
 ---
 
@@ -197,13 +199,13 @@ This project is being developed as a collaborative George Brown College Work Int
 
 **Project Duration:** May 2026 – August 2026
 
-The project has completed infrastructure provisioning, frontend connection, and the first live Azure Function endpoint. The next major build step is the `validate_order` queue-triggered function.
+The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, fan-out processing, Azure Table Storage logging, and Azure Communication Services email confirmation. The next major build step is Phase 6 security and Key Vault hardening.
 
 Development will be completed in multiple phases throughout the Summer 2026 semester. The repository will be updated regularly with architecture diagrams, documentation, implementation progress, testing evidence, deployment artifacts, and project milestones.
 
 ### Project Status
 
-**Current Phase:** Phase 3 Complete — Starting Phase 4
+**Current Phase:** Phase 5 Complete — Starting Phase 6
 
 #### Progress Overview
 
@@ -216,8 +218,10 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 * ✅ Azure resource deployment
 * ✅ Frontend implementation connected to live Function App endpoint
 * ✅ `submit_order` Azure Function implemented and verified
-* ⏳ `validate_order` queue-triggered function
-* ⏳ Testing and validation
+* ✅ `validate_order` queue-triggered function implemented and verified
+* ✅ `log_to_table` table logging function implemented and verified
+* ✅ `send_confirmation_email` Azure Communication Services function implemented and verified
+* ⏳ Security and Key Vault hardening
 
 ### Live Project Pages
 
@@ -258,7 +262,6 @@ All major updates, architecture changes, implementation milestones, testing evid
 This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
 
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
 
 
 

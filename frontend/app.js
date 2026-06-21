@@ -1,4 +1,4 @@
-const API_ENDPOINT = "https://YOUR-FUNCTION-APP.azurewebsites.net/api/submit_order";
+const API_ENDPOINT = "https://func-order-processing-dev.azurewebsites.net/api/submit_order";
 
 document.getElementById("orderForm").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -7,8 +7,8 @@ document.getElementById("orderForm").addEventListener("submit", async (event) =>
     lastName: document.getElementById("lastName").value.trim(),
     email: document.getElementById("email").value.trim(),
     phone: document.getElementById("phone").value.trim(),
-    address: document.getElementById("address").value.trim(),
-    productId: document.getElementById("productId").value,
+    deliveryAddress: document.getElementById("address").value.trim(),
+    laptop: document.getElementById("productId").value,
     quantity: Number(document.getElementById("quantity").value)
   };
   const result = document.getElementById("result");
@@ -16,7 +16,7 @@ document.getElementById("orderForm").addEventListener("submit", async (event) =>
   try {
     const response = await fetch(API_ENDPOINT, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)});
     const data = await response.json();
-    result.textContent = response.ok ? `Order received. Order ID: ${data.orderId}` : `Order failed: ${data.error || "Invalid request"}`;
+    result.textContent = response.ok ? `Order received. Order ID: ${data.orderId}` : `Order failed: ${data.message || data.error || "Invalid request"}`;
   } catch (error) {
     result.textContent = "Unable to submit order. Please try again later.";
     console.error(error);
