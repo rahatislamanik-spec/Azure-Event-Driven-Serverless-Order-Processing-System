@@ -1,8 +1,10 @@
 # Azure Event-Driven Serverless Order Processing System
+> **Status:** Architecture Complete
+> **Last Updated:** June 2026
 
 ## Overview
 
-This project is a collaborative George Brown College Work Integrated Learning (WIL) project that demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure.
+This project demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure — built collaboratively by a 5-person development team, with Md Rahat Islam Anik serving as repository owner.
 
 The solution leverages serverless computing, asynchronous messaging, queue-based workflows, automated email notifications, centralized logging, and cloud observability to simulate a production-oriented order processing environment.
 
@@ -90,7 +92,7 @@ Application Insights
 ├── architecture/
 ├── documentation/
 │   ├── deployment-guide.md
-│   ├── professor-approval-summary.md
+│   ├── stakeholder-approval-summary.md
 │   ├── meeting-notes/
 │   └── team-planning/
 ├── frontend/
@@ -194,7 +196,7 @@ In Progress:
 ## GitHub Repository
 
 Repository:
-https://github.com/rahatislamanik-spec/azure-event-driven-serverless-order-processing-system
+https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System
 
 Repository Owner:
 Md Rahat Islam Anik
@@ -202,7 +204,7 @@ Md Rahat Islam Anik
 
 ## Project Team
 
-This project is being developed as a collaborative George Brown College Work Integrated Learning (WIL) project focused on Azure serverless computing, event-driven architecture, cloud-native application development, and observability.
+This project was developed collaboratively, focused on Azure serverless computing, event-driven architecture, cloud-native application development, and observability.
 
 ### Project Timeline
 
@@ -210,7 +212,7 @@ This project is being developed as a collaborative George Brown College Work Int
 
 The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, inventory stock checks, fan-out processing, Azure Table Storage logging, Azure Communication Services confirmation and rejection emails, Key Vault-backed secret handling, Managed Identity access, monitoring configuration, and Phase 8 end-to-end testing. Frontend hosting through Azure Static Web Apps remains on hold pending professor guidance.
 
-Development will be completed in multiple phases throughout the Summer 2026 semester. The repository will be updated regularly with architecture diagrams, documentation, implementation progress, testing evidence, deployment artifacts, and project milestones.
+Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
 ### Project Status
 
@@ -245,6 +247,7 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 ### Team Lead
 
 * Hikmatullah Shinwari — Team Lead
+* Md Rahat Islam Anik — GitHub Repository Owner & Team Member
 
 ### Team Members
 
@@ -254,16 +257,6 @@ Development will be completed in multiple phases throughout the Summer 2026 seme
 * Ashdeep Singh Grewal — Team Member
 * Puneet Singh — Team Member
 
-### Academic Information
-
-| Name                     | Student ID | George Brown Email                                                                      |
-| ------------------------ | ---------- | --------------------------------------------------------------------------------------- |
-| Hikmatullah Shinwari     | 101635231  | [hikmatullah.shinwari@georgebrown.ca](mailto:hikmatullah.shinwari@georgebrown.ca)       |
-| Md Rahat Islam Anik      | 101635860  | [mdrahatislam.anik@georgebrown.ca](mailto:mdrahatislam.anik@georgebrown.ca)             |
-| Yatish Yashwant Vispute  | 101539987  | [yatishyashwant.vispute@georgebrown.ca](mailto:yatishyashwant.vispute@georgebrown.ca)   |
-| Devansh Mehulkumar Bhatt | 101610044  | [devanshmehulkumar.bhatt@georgebrown.ca](mailto:devanshmehulkumar.bhatt@georgebrown.ca) |
-| Ashdeep Singh Grewal     | 101517826  | [ashdeepsingh.grewal@georgebrown.ca](mailto:ashdeepsingh.grewal@georgebrown.ca)         |
-| Puneet Singh             | 101629857  | [101629857@georgebrown.ca](mailto:101629857@georgebrown.ca)                             |
 
 ### Team Collaboration
 
