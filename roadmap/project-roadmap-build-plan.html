@@ -358,16 +358,17 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 3 Complete — Starting Phase 4 (validate_order Function)</h3>
+      <h3>We Are Here: Phase 6 Complete — Starting Phase 7 (Monitoring &amp; Observability)</h3>
       <p class="muted">
-        Phase 1 infrastructure is provisioned and verified in the Azure Portal. The frontend now posts
-        to the live Function App endpoint, and the <code>submit_order</code> HTTP trigger has been built,
-        deployed, and verified through both <code>curl</code> and the real browser form. Next up:
-        implement the <code>validate_order</code> queue-triggered function.
+        The full event-driven order pipeline is now deployed and verified live. Orders can be submitted
+        through the HTTP endpoint, validated by a queue-triggered function, fanned out to email and logging
+        queues, written to Azure Table Storage, and confirmed through Azure Communication Services Email.
+        Next up: move toward Phase 6 security hardening and Key Vault-backed configuration.
       </p>
       <div class="blocker" style="background: var(--green-bg); color: var(--green);">
-        ✅ PHASE 3 COMPLETE: Frontend integration, CORS, anonymous HTTP trigger access, live Function App
-        deployment, queue write, and successful browser confirmation flow have all been verified.
+        ✅ PHASE 5 COMPLETE: <code>submit_order</code>, <code>validate_order</code>,
+        <code>log_to_table</code>, and <code>send_confirmation_email</code> are deployed together
+        and verified through a live end-to-end test.
       </div>
     </div>
   </section>
@@ -385,9 +386,9 @@
         <tr><td>1</td><td>Azure Infrastructure Provisioning</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 0</td></tr>
         <tr><td>2</td><td>Frontend Connection</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 1</td></tr>
         <tr><td>3</td><td>submit_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 1</td></tr>
-        <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 3</td></tr>
-        <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 4</td></tr>
-        <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 5</td></tr>
+        <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 3</td></tr>
+        <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 4</td></tr>
+        <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-done">Done</span></td><td>Phase 5</td></tr>
         <tr><td>7</td><td>Monitoring &amp; Observability</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 6</td></tr>
         <tr><td>8</td><td>End-to-End Testing &amp; Evidence</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 7</td></tr>
       </tbody>
@@ -593,7 +594,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 4 — validate_order Function</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -603,7 +604,8 @@
       </div>
       <p class="muted">
         Queue-triggered function that checks order data integrity, then fans out valid orders to
-        two parallel queues, or routes invalid orders to the dead-letter queue.
+        two parallel queues, or routes invalid orders to the dead-letter queue. The function is
+        deployed as part of the combined Python V2 Function App package.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
@@ -626,12 +628,12 @@
       </div>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Scaffold <code>validate_order</code> function with Queue Trigger binding</li>
-        <li>Implement field validation rules</li>
-        <li>Implement fan-out to <code>orders-to-email</code> + <code>orders-to-log</code></li>
-        <li>Implement routing to <code>orders-invalid</code> on validation failure</li>
-        <li>Define a basic handler/monitor for <code>orders-invalid</code> (addresses earlier documentation gap)</li>
-        <li>Test valid and invalid order scenarios locally</li>
+        <li class="done">Scaffold <code>validate_order</code> function with Queue Trigger binding</li>
+        <li class="done">Implement field validation rules</li>
+        <li class="done">Implement fan-out to <code>orders-to-email</code> + <code>orders-to-log</code></li>
+        <li class="done">Implement routing to <code>orders-invalid</code> on validation failure</li>
+        <li class="done">Configure queue trigger decoding with <code>messageEncoding: none</code> for plain JSON queue messages</li>
+        <li class="done">Verify valid order fan-out by inspecting the live Azure Storage Queues</li>
       </ul>
     </div>
   </div>
@@ -640,7 +642,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 5 — Parallel Processing Functions</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -649,9 +651,9 @@
         <span><strong>GitHub Issue:</strong> #5 (ACS Email) + #6 (Table Storage Logging)</span>
       </div>
       <p class="muted">
-        The two final functions that run independently and in parallel — one sends the customer a
-        confirmation email, the other writes the order record to the database. This phase carries
-        the highest external-dependency risk due to ACS domain verification.
+        The two final functions run independently and in parallel — one sends the customer a
+        confirmation email, the other writes the order record to the database. The live test confirmed
+        both branches completed from the same validated order.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
@@ -661,7 +663,7 @@
         </div>
         <div class="component-card">
           <div class="comp-name">✉️ Azure Communication Services</div>
-          <div class="comp-desc"><code>acs-order-email-dev</code> — requires domain verification (1–3 day Microsoft approval window). Start early.</div>
+          <div class="comp-desc"><code>acs-order-email-dev</code> and <code>acs-order-email-service-dev</code> with Azure Managed Domain sender verification.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">🗄️ log_to_table</div>
@@ -670,12 +672,13 @@
       </div>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Begin ACS domain verification as early as possible (highest external risk item)</li>
-        <li>Scaffold <code>send_confirmation_email</code> with Queue Trigger on <code>orders-to-email</code></li>
-        <li>Build HTML confirmation email template</li>
-        <li>Scaffold <code>log_to_table</code> with Queue Trigger on <code>orders-to-log</code></li>
-        <li>Write order record to <code>Orders</code> table</li>
-        <li>Test both functions trigger independently and in parallel</li>
+        <li class="done">Create Azure Communication Services resources for email delivery</li>
+        <li class="done">Scaffold <code>send_confirmation_email</code> with Queue Trigger on <code>orders-to-email</code></li>
+        <li class="done">Build HTML confirmation email template</li>
+        <li class="done">Scaffold <code>log_to_table</code> with Queue Trigger on <code>orders-to-log</code></li>
+        <li class="done">Write order record to <code>Orders</code> table</li>
+        <li class="done">Verify both functions trigger independently and in parallel</li>
+        <li class="done">Confirm order email was received in Gmail with formatted order details</li>
       </ul>
     </div>
   </div>
@@ -684,36 +687,48 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 6 — Security &amp; Key Vault</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
         <span><strong>Duration:</strong> 1 day</span>
-        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>Owner:</strong> Rahat</span>
         <span><strong>GitHub Issue:</strong> Supporting task (security hardening)</span>
       </div>
       <p class="muted">
-        Move all secrets (storage connection strings, ACS keys) out of code and into Key Vault, and
-        configure Managed Identity so functions can access secrets without storing credentials.
+        Moved all secrets (storage connection string, ACS connection string) out of plain-text Function
+        App settings and into Azure Key Vault, accessed via System-Assigned Managed Identity —
+        implementing the "Security by Design" principle from the original architecture diagram, which
+        was previously only diagrammed, not actually implemented.
       </p>
-      <h3>Components to Build</h3>
+      <h3>Components Built</h3>
       <div class="component-grid">
         <div class="component-card">
           <div class="comp-name">🔑 Key Vault Secrets</div>
-          <div class="comp-desc">Storage connection string, ACS connection string stored as secrets.</div>
+          <div class="comp-desc">Two secrets created in kv-orderproc-rahat: StorageConnectionString and AcsConnectionString. ✅ Created.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">🪪 Managed Identity</div>
-          <div class="comp-desc">Function App's system-assigned identity granted access to Key Vault.</div>
+          <div class="comp-desc">System-Assigned Managed Identity enabled on func-order-processing-dev, granted "Key Vault Secrets User" (read-only) role scoped to the vault — least-privilege. ✅ Configured and verified.</div>
         </div>
       </div>
+      <h3>Key Vault References (App Settings)</h3>
+      <p class="muted">
+        Both Function App settings now use Key Vault reference syntax instead of plain-text values.
+        These reference URIs identify which secret to pull at runtime; they contain no secret values
+        themselves.
+      </p>
+      <ul class="task-list">
+        <li><code>AzureWebJobsStorage</code> = <code>@Microsoft.KeyVault(SecretUri=https://kv-orderproc-rahat.vault.azure.net/secrets/StorageConnectionString/)</code></li>
+        <li><code>ACS_CONNECTION_STRING</code> = <code>@Microsoft.KeyVault(SecretUri=https://kv-orderproc-rahat.vault.azure.net/secrets/AcsConnectionString/)</code></li>
+      </ul>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Enable system-assigned Managed Identity on the Function App</li>
-        <li>Grant Key Vault access policy to the Function App identity</li>
-        <li>Move connection strings from <code>local.settings.json</code> into Key Vault secrets</li>
-        <li>Update Function App settings to reference Key Vault secrets</li>
-        <li>Verify functions still run correctly with secrets sourced from Key Vault</li>
+        <li>Enable system-assigned Managed Identity on the Function App — done</li>
+        <li>Grant Key Vault Secrets Officer role to own account, Secrets User role to Function App identity (RBAC mode) — done</li>
+        <li>Create StorageConnectionString and AcsConnectionString secrets in Key Vault — done</li>
+        <li>Update Function App settings to reference Key Vault secrets — done</li>
+        <li>Re-run full end-to-end pipeline test to verify secrets resolve correctly at runtime — done, verified live (real order submitted, table record confirmed, confirmation email received)</li>
       </ul>
     </div>
   </div>
@@ -884,6 +899,37 @@
     </p>
 
     <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Phase 6 Completion (Security &amp; Key Vault)</div>
+      <ul>
+        <li><strong>Phase 6 completed.</strong> Moved the storage account connection string and ACS connection string out of plain-text Function App settings and into Azure Key Vault, accessed via System-Assigned Managed Identity</li>
+        <li>Hit and resolved a permissions issue: the vault uses RBAC authorization mode (<code>enableRbacAuthorization: true</code>) rather than legacy access policies, so creating secrets initially failed with Forbidden/ForbiddenByRbac even on the account that created the vault — fixed by explicitly assigning the "Key Vault Secrets Officer" role to my own account on the vault. Worth documenting since RBAC-vs-access-policy mode is a common point of confusion in Key Vault</li>
+        <li>Enabled System-Assigned Managed Identity on func-order-processing-dev, giving it its own Azure AD identity separate from any personal credentials</li>
+        <li>Granted the Function App's identity the "Key Vault Secrets User" role (read-only), scoped to the vault — least-privilege: the identity can read secrets at runtime but cannot create, modify, or delete them</li>
+        <li>Created two secrets in kv-orderproc-rahat: StorageConnectionString and AcsConnectionString</li>
+        <li>Updated both App Settings to use Key Vault reference syntax (<code>@Microsoft.KeyVault(SecretUri=...)</code>) instead of plain-text values</li>
+        <li>Re-ran the full end-to-end pipeline test after the change to confirm secrets resolve correctly from Key Vault at runtime: submitted a real order, confirmed the table record, confirmed the confirmation email was received — proving the Managed Identity + Key Vault setup genuinely works, not just configured</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Phase 4 and Phase 5 Completion</div>
+      <ul>
+        <li><strong>Phase 4 completed.</strong> Built and deployed <code>validate_order</code> as a queue-triggered function on <code>orders-incoming</code></li>
+        <li><strong>Phase 5 completed.</strong> Built and deployed <code>log_to_table</code> and <code>send_confirmation_email</code> as parallel queue-triggered functions</li>
+        <li><strong>Verified live:</strong> submitted a real order to the live HTTP endpoint, validated the queue fan-out, confirmed records in Azure Table Storage, and received the confirmation email in Gmail</li>
+        <li><strong>Deployment model corrected:</strong> deploying <code>validate_order</code> from its own folder replaced the already-working <code>submit_order</code> function in the live Function App. Root cause: <code>func azure functionapp publish</code> deploys the current directory as the complete Function App package. Fix: combined all functions into one Python V2 <code>function_app.py</code> deployment package</li>
+        <li><strong>Python version issue resolved:</strong> local development defaulted to Python 3.9.6 while the Azure Function App required Python 3.11. Fix: created a dedicated Python 3.11 virtual environment for the project</li>
+        <li><strong>Silent dependency failure resolved:</strong> missing <code>azure-data-tables</code> and <code>azure-communication-email</code> dependencies caused remote builds to appear successful while zero functions registered. Fix: added required dependencies to <code>requirements.txt</code></li>
+        <li><strong>HTTP authorization corrected:</strong> initial <code>submit_order</code> deployment used FUNCTION-level auth and returned 401 Unauthorized. Fix: explicitly set the public customer-facing endpoint to <code>ANONYMOUS</code></li>
+        <li><strong>Major queue trigger issue resolved:</strong> <code>validate_order</code> was registered and coded correctly, but every queue message moved to poison with no Python-level error. Azure Portal Log Stream finally revealed: <code>Message decoding has failed! Check MessageEncoding settings.</code></li>
+        <li><strong>Root cause:</strong> the Azure Functions queue trigger binding expected Base64-encoded messages, while the Storage Queue SDK wrote plain JSON text. The trigger failed before Python code executed, which explained the absence of Python exceptions</li>
+        <li><strong>Fix:</strong> added <code>"extensions": { "queues": { "messageEncoding": "none" } }</code> to <code>host.json</code>. After this change, the live pipeline processed queue messages correctly</li>
+        <li><strong>New Azure resources:</strong> <code>acs-order-email-dev</code>, <code>acs-order-email-service-dev</code>, and Azure Managed Domain sender configuration for email delivery</li>
+        <li>Next: begin Phase 6 by moving secrets and configuration toward Key Vault-backed application settings</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
       <div class="log-date">Week of June 15, 2026 — Phase 2 and Phase 3 Completion</div>
       <ul>
         <li><strong>Phase 2 completed.</strong> Connected <code>frontend/app.js</code> to the live Function App endpoint at <code>https://func-order-processing-dev.azurewebsites.net/api/submit_order</code></li>
@@ -927,7 +973,7 @@
     </div>
 
     <div class="empty-log">
-      Next weekly entry will track Phase 4 progress on the <code>validate_order</code> function.
+      Next weekly entry will track Phase 6 progress on Security &amp; Key Vault configuration.
     </div>
   </section>
 
