@@ -434,9 +434,11 @@
   <!-- 2. PROJECT STATUS -->
   <section class="card">
     <h2><span class="icon">📊</span> Project Status</h2>
-    <p class="muted">Current phase: <strong>Phase 6 complete — secrets migrated to Key Vault via Managed Identity, Phase 7 monitoring next.</strong>
-      The live pipeline now accepts orders, validates queue messages, fans out valid orders,
-      writes to Azure Table Storage, and sends confirmation email through Azure Communication Services.</p>
+    <p class="muted">Current phase: <strong>Phase 8 complete — Revision 4 inventory and rejection-email flow verified.</strong>
+      The live pipeline now accepts orders, validates queue messages, checks LaptopInventory stock,
+      fans out valid orders, writes to Azure Table Storage, sends confirmation emails, and sends
+      rejection emails for invalid or insufficient-stock orders. Static Web Apps hosting remains
+      pending professor guidance.</p>
     <div class="status-grid">
       <div class="status-item done">
         <strong>✅ Repository Setup</strong>
@@ -460,7 +462,7 @@
       </div>
       <div class="status-item done">
         <strong>✅ Application Development</strong>
-        <span><code>submit_order</code>, <code>validate_order</code>, <code>log_to_table</code>, and <code>send_confirmation_email</code> deployed and verified live</span>
+        <span><code>submit_order</code>, <code>validate_order</code>, <code>log_to_table</code>, <code>send_confirmation_email</code>, and <code>send_rejection_email</code> deployed and verified live</span>
       </div>
     </div>
   </section>
@@ -532,7 +534,8 @@
     <h3>Approved Flow</h3>
     <p class="muted">
       Customer → Azure Static Web App → <code>submit_order</code> Function →
-      <code>orders-incoming</code> Queue → <code>validate_order</code> Function
+      <code>orders-incoming</code> Queue → <code>validate_order</code> Function →
+      <code>LaptopInventory</code> Table stock check
     </p>
     <p class="muted">
       <strong>Valid order:</strong> → <code>orders-to-email</code> Queue → <code>send_confirmation_email</code>
@@ -540,7 +543,8 @@
       &nbsp;|&nbsp; → <code>orders-to-log</code> Queue → <code>log_to_table</code> Function → Azure Table Storage
     </p>
     <p class="muted">
-      <strong>Invalid order:</strong> → <code>orders-invalid</code> Queue
+      <strong>Invalid or rejected order:</strong> → <code>orders-invalid</code> Queue →
+      <code>send_rejection_email</code> Function → Azure Communication Services Email
     </p>
     <p class="muted">
       <strong>Monitoring:</strong> All functions emit logs, traces, and telemetry to Application Insights,
@@ -592,9 +596,9 @@
       <li>Resource Group: <code>rg-order-processing-dev</code></li>
       <li>Virtual Network (network boundary)</li>
       <li>Azure Static Web App (Presentation Layer)</li>
-      <li>Azure Function App with four functions (Application Layer)</li>
+      <li>Azure Function App with five functions (Application Layer)</li>
       <li>Azure Storage Account with four Storage Queues (Messaging Layer)</li>
-      <li>Azure Table Storage — Orders Table (Data Layer)</li>
+      <li>Azure Table Storage — Orders and LaptopInventory tables (Data Layer)</li>
       <li>Azure Communication Services — Email (Communication Layer)</li>
       <li>Azure Key Vault (Security Layer)</li>
       <li>Application Insights, Azure Monitor, Log Analytics Workspace (Observability Layer)</li>
@@ -620,6 +624,7 @@
         <tr><td>Queue</td><td><code>orders-to-log</code></td><td>Holds logging work items</td></tr>
         <tr><td>Queue</td><td><code>orders-invalid</code></td><td>Holds invalid or rejected orders</td></tr>
         <tr><td>Table Storage</td><td><code>Orders</code></td><td>Stores order records</td></tr>
+        <tr><td>Table Storage</td><td><code>LaptopInventory</code></td><td>Tracks laptop stock levels used by validation logic</td></tr>
         <tr><td>Communication Services</td><td><code>acs-order-email-dev</code></td><td>Sends confirmation emails</td></tr>
         <tr><td>Key Vault</td><td><code>kv-orderproc-rahat</code></td><td>Stores secrets and configuration (planned name kv-order-processing-dev was globally taken)</td></tr>
         <tr><td>Application Insights</td><td><code>appi-order-processing-dev</code></td><td>Captures app telemetry</td></tr>
@@ -711,8 +716,9 @@
           <ul>
             <li>✅ Frontend order form connected to the live endpoint</li>
             <li>✅ <code>submit_order</code> function — HTTP trigger, anonymous POST endpoint, queue write verified</li>
-            <li>✅ <code>validate_order</code> function — queue trigger, validation, invalid-order routing, and fan-out verified</li>
+            <li>✅ <code>validate_order</code> function — queue trigger, validation, LaptopInventory stock check, invalid-order routing, inventory decrement, and fan-out verified</li>
             <li>✅ <code>send_confirmation_email</code> function — queue trigger and Azure Communication Services email delivery verified</li>
+            <li>✅ <code>send_rejection_email</code> function — queue trigger and Azure Communication Services rejection email delivery verified</li>
             <li>✅ <code>log_to_table</code> function — queue trigger and Azure Table Storage write verified</li>
           </ul>
         </div>
@@ -730,6 +736,8 @@
             <li>✅ End-to-end order submission</li>
             <li>✅ Queue validation and fan-out</li>
             <li>✅ Email confirmation through ACS</li>
+            <li>✅ Rejection email delivery through ACS</li>
+            <li>✅ LaptopInventory stock checks and decrement behavior</li>
             <li>✅ Table logging to the <code>Orders</code> table</li>
             <li>✅ Queue trigger message decoding issue resolved with <code>messageEncoding: none</code></li>
           </ul>

@@ -358,17 +358,20 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 6 Complete — Starting Phase 7 (Monitoring &amp; Observability)</h3>
+      <h3>We Are Here: Phase 8 Complete — Frontend Hosting Decision Pending</h3>
       <p class="muted">
         The full event-driven order pipeline is now deployed and verified live. Orders can be submitted
-        through the HTTP endpoint, validated by a queue-triggered function, fanned out to email and logging
-        queues, written to Azure Table Storage, and confirmed through Azure Communication Services Email.
-        Next up: move toward Phase 6 security hardening and Key Vault-backed configuration.
+        through the HTTP endpoint, validated by a queue-triggered function, checked against live
+        LaptopInventory stock, fanned out to email and logging queues, written to Azure Table Storage,
+        and handled through Azure Communication Services confirmation or rejection emails. Key Vault,
+        Managed Identity, monitoring, and the Phase 8 test matrix are complete. Azure Static Web Apps
+        hosting remains pending professor guidance.
       </p>
       <div class="blocker" style="background: var(--green-bg); color: var(--green);">
-        ✅ PHASE 5 COMPLETE: <code>submit_order</code>, <code>validate_order</code>,
-        <code>log_to_table</code>, and <code>send_confirmation_email</code> are deployed together
-        and verified through a live end-to-end test.
+        ✅ PHASE 8 COMPLETE: <code>submit_order</code>, <code>validate_order</code>,
+        <code>log_to_table</code>, <code>send_confirmation_email</code>, and
+        <code>send_rejection_email</code> are deployed together and verified through the live
+        six-scenario test matrix.
       </div>
     </div>
   </section>
@@ -389,8 +392,8 @@
         <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 3</td></tr>
         <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 4</td></tr>
         <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-done">Done</span></td><td>Phase 5</td></tr>
-        <tr><td>7</td><td>Monitoring &amp; Observability</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 6</td></tr>
-        <tr><td>8</td><td>End-to-End Testing &amp; Evidence</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 7</td></tr>
+        <tr><td>7</td><td>Monitoring &amp; Observability</td><td>1 day</td><td><span class="status-pill status-done">Done</span></td><td>Phase 6</td></tr>
+        <tr><td>8</td><td>End-to-End Testing &amp; Evidence</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 7</td></tr>
       </tbody>
     </table>
     <p class="muted" style="margin-top:10px; font-size:0.85rem;">
@@ -651,15 +654,20 @@
         <span><strong>GitHub Issue:</strong> #5 (ACS Email) + #6 (Table Storage Logging)</span>
       </div>
       <p class="muted">
-        The two final functions run independently and in parallel — one sends the customer a
-        confirmation email, the other writes the order record to the database. The live test confirmed
-        both branches completed from the same validated order.
+        The processing functions run independently and in parallel after validation. Valid orders
+        are logged and receive confirmation emails; invalid or rejected orders are routed to
+        <code>orders-invalid</code> and receive a rejection email. This expanded scope was added to
+        match the team's approved Revision 4 architecture diagram.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
         <div class="component-card">
           <div class="comp-name">📧 send_confirmation_email</div>
           <div class="comp-desc">Queue-triggered function connecting to Azure Communication Services Email.</div>
+        </div>
+        <div class="component-card">
+          <div class="comp-name">📨 send_rejection_email</div>
+          <div class="comp-desc">Queue-triggered function on <code>orders-invalid</code> that sends rejection notices for validation failures or insufficient stock.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">✉️ Azure Communication Services</div>
@@ -675,6 +683,8 @@
         <li class="done">Create Azure Communication Services resources for email delivery</li>
         <li class="done">Scaffold <code>send_confirmation_email</code> with Queue Trigger on <code>orders-to-email</code></li>
         <li class="done">Build HTML confirmation email template</li>
+        <li class="done">Build <code>send_rejection_email</code> with Queue Trigger on <code>orders-invalid</code></li>
+        <li class="done">Build HTML rejection email template for failed validation and insufficient-stock orders</li>
         <li class="done">Scaffold <code>log_to_table</code> with Queue Trigger on <code>orders-to-log</code></li>
         <li class="done">Write order record to <code>Orders</code> table</li>
         <li class="done">Verify both functions trigger independently and in parallel</li>
@@ -737,7 +747,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 7 — Monitoring &amp; Observability</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -746,8 +756,8 @@
         <span><strong>GitHub Issue:</strong> #7 (Configure Monitoring and Application Insights)</span>
       </div>
       <p class="muted">
-        Wire up Application Insights and Log Analytics so every function execution is traced into a
-        single end-to-end Transaction Trace, from form submission to email sent.
+        Application Insights and Log Analytics are configured so function executions can be reviewed
+        across submission, validation, inventory handling, logging, and email notification paths.
       </p>
       <h3>Components to Build</h3>
       <div class="component-grid">
@@ -766,11 +776,11 @@
       </div>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Create Application Insights resource and link to Function App</li>
-        <li>Create Log Analytics Workspace and link to Application Insights</li>
-        <li>Verify each function logs execution traces</li>
-        <li>Confirm a full order flow produces a single Transaction Trace end-to-end</li>
-        <li>Set up basic alert (e.g., failed function execution)</li>
+        <li class="done">Create Application Insights resource and link to Function App</li>
+        <li class="done">Create Log Analytics Workspace and link to Application Insights</li>
+        <li class="done">Verify each function logs execution traces</li>
+        <li class="done">Confirm runtime logs for successful and rejected order flows</li>
+        <li class="done">Configure basic alerting; live notification testing blocked by free/student subscription limitation and documented honestly</li>
       </ul>
     </div>
   </div>
@@ -779,7 +789,7 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 8 — End-to-End Testing &amp; Evidence Collection</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
@@ -788,20 +798,19 @@
         <span><strong>GitHub Issue:</strong> #8 (Final Integration Testing and Evidence Collection)</span>
       </div>
       <p class="muted">
-        Full system test of every path — valid orders, invalid orders, queue processing, email
-        delivery, and database logging — followed by collecting all evidence (screenshots, logs,
-        traces) needed for final grading and the project delivery report (HTML #2).
+        Full system testing covered valid and invalid order paths, queue processing, inventory
+        checks, email delivery, and database logging. The test matrix confirmed the quantity
+        validation bug fix and the Revision 4 inventory/rejection-email expansion.
       </p>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Test valid order flow end-to-end (form → email → table record)</li>
-        <li>Test invalid order flow (missing fields, bad email, zero quantity → dead-letter queue)</li>
-        <li>Test queue processing under multiple simultaneous submissions</li>
-        <li>Capture Application Insights Transaction Trace screenshots</li>
-        <li>Capture Table Storage records, email delivery confirmation, queue states</li>
-        <li>Compile evidence into <code>/evidence</code> folder</li>
-        <li>Build Project Delivery Report (HTML #2)</li>
-        <li>Final documentation pass — update README, architecture diagrams if region changed</li>
+        <li class="done">Test valid order flow end-to-end (form → inventory decrement → email → table record)</li>
+        <li class="done">Test missing-field validation</li>
+        <li class="done">Test invalid email validation</li>
+        <li class="done">Test zero-quantity validation after fixing the required-field edge case</li>
+        <li class="done">Test insufficient-stock rejection flow</li>
+        <li class="done">Test unknown laptop model rejection flow</li>
+        <li class="done">Capture runtime evidence and update documentation to match the approved Revision 4 architecture</li>
       </ul>
     </div>
   </div>
@@ -897,6 +906,17 @@
       Updated at the end of each work week. Each entry records what was completed, what's blocked,
       and what's next — this is the accountability trail for the project.
     </p>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Revision 4 Scope Expansion and Phase 8 Testing</div>
+      <ul>
+        <li><strong>Revision 4 architecture alignment completed.</strong> Added <code>LaptopInventory</code> stock tracking and <code>send_rejection_email</code> to match the approved architecture diagram prepared by Hikmat.</li>
+        <li><strong>Inventory management implemented.</strong> <code>validate_order</code> now checks the <code>LaptopInventory</code> table before approving an order, decrements stock on successful validation, and rejects orders when stock is insufficient or the laptop model is unknown.</li>
+        <li><strong>Rejection notification path implemented.</strong> Orders routed to <code>orders-invalid</code> now trigger <code>send_rejection_email</code> through Azure Communication Services.</li>
+        <li><strong>Quantity validation bug found and fixed.</strong> Systematic Phase 8 testing found that <code>quantity: 0</code> was being classified as a missing field before reaching the dedicated positive-integer validation. The required-field check was corrected so zero quantity now returns the clearer quantity validation error.</li>
+        <li><strong>Phase 8 test matrix completed.</strong> Six scenarios were confirmed working: valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models.</li>
+      </ul>
+    </div>
 
     <div class="log-entry">
       <div class="log-date">Week of June 15, 2026 — Phase 6 Completion (Security &amp; Key Vault)</div>
@@ -1093,6 +1113,16 @@
         <li><strong>Diagnosis Process:</strong> Azure Monitor's built-in <code>az monitor action-group test-notifications create</code> command was attempted to trigger a test notification without forcing a real application failure.</li>
         <li><strong>Root Cause:</strong> The test-notification feature returned <code>(Conflict) Free subscription not supported</code>, indicating a platform limitation for the free/student subscription tier rather than a configuration issue.</li>
         <li><strong>Status:</strong> The alert rule and Action Group were verified by configuration inspection through <code>az monitor metrics alert show</code> and <code>az monitor action-group show</code>. Notification live-fire testing remains blocked by subscription-tier limitations and is documented honestly as configuration-verified rather than live-notification-verified.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">12. Quantity Zero Misclassified as Missing Field — Phase 8</div>
+      <ul>
+        <li><strong>Problem:</strong> During systematic test-matrix validation, an order with <code>quantity: 0</code> returned the generic missing-field response instead of the clearer "Quantity must be a positive whole number" validation response.</li>
+        <li><strong>Diagnosis Process:</strong> The failing case was compared against other invalid-input tests. Missing fields, bad email, insufficient stock, and unknown laptop models all routed correctly, narrowing the issue to the HTTP trigger's required-field check.</li>
+        <li><strong>Root Cause:</strong> The required-field check treated all falsy values as missing. In Python, numeric zero is falsy, so <code>0</code> was caught before the dedicated quantity validation branch.</li>
+        <li><strong>Fix:</strong> The required-field logic was updated to allow <code>0</code> through the missing-field check so the quantity-specific validation can return the correct error message. The full six-case test matrix was re-run successfully after the fix.</li>
       </ul>
     </div>
   </section>
