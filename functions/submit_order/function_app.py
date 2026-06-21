@@ -40,7 +40,7 @@ def submit_order(req: func.HttpRequest) -> func.HttpResponse:
         "laptop",
         "quantity"
     ]
-    missing_fields = [field for field in required_fields if not order.get(field)]
+    missing_fields = [field for field in required_fields if not order.get(field) and order.get(field) != 0]
 
     if missing_fields:
         return func.HttpResponse(
@@ -225,7 +225,7 @@ def validate_order(msg: func.QueueMessage) -> None:
         except (ValueError, TypeError):
             validation_errors.append("Quantity must be a whole number.")
 
-    # ---- Route based on validation result ----
+    # ---- Route based on field validation result ----
     if validation_errors:
         logging.warning(f"Order {order_id} failed validation: {validation_errors}")
         invalid_payload = {
@@ -240,6 +240,58 @@ def validate_order(msg: func.QueueMessage) -> None:
         except Exception as e:
             logging.error(f"Failed to route order {order_id} to orders-invalid: {e}")
         return
+
+    # ---- Check inventory stock for the requested laptop ----
+    laptop_name = order.get("laptop", "")
+    requested_quantity = int(order.get("quantity", 0))
+
+    connection_string = os.environ.get("AzureWebJobsStorage")
+    table_service = TableServiceClient.from_connection_string(connection_string)
+    inventory_table = table_service.get_table_client(table_name="LaptopInventory")
+
+    try:
+        inventory_entity = inventory_table.get_entity(
+            partition_key="inventory",
+            row_key=laptop_name
+        )
+        available_stock = inventory_entity.get("stockCount", 0)
+    except Exception as e:
+        logging.error(f"Could not find inventory record for '{laptop_name}': {e}")
+        available_stock = 0
+
+    if available_stock < requested_quantity:
+        logging.warning(
+            f"Order {order_id} rejected — insufficient stock for '{laptop_name}'. "
+            f"Requested: {requested_quantity}, Available: {available_stock}"
+        )
+        invalid_payload = {
+            **order,
+            "status": "invalid",
+            "validationErrors": [
+                f"Insufficient stock for '{laptop_name}'. "
+                f"Requested {requested_quantity}, only {available_stock} available."
+            ]
+        }
+        try:
+            invalid_client = get_queue_client("orders-invalid")
+            invalid_client.send_message(json.dumps(invalid_payload))
+            logging.info(f"Order {order_id} routed to orders-invalid queue (insufficient stock).")
+        except Exception as e:
+            logging.error(f"Failed to route order {order_id} to orders-invalid: {e}")
+        return
+
+    # ---- Stock is sufficient: decrement inventory ----
+    try:
+        inventory_entity["stockCount"] = available_stock - requested_quantity
+        inventory_table.update_entity(mode="merge", entity=inventory_entity)
+        logging.info(
+            f"Inventory updated for '{laptop_name}': "
+            f"{available_stock} -> {available_stock - requested_quantity}"
+        )
+    except Exception as e:
+        # Log the failure but do not block the order — inventory drift is
+        # preferable to losing a valid, already-accepted customer order.
+        logging.error(f"Failed to decrement inventory for '{laptop_name}': {e}")
 
     # ---- Valid order: fan out to orders-to-email AND orders-to-log ----
     valid_payload = {
@@ -408,3 +460,85 @@ def send_confirmation_email(msg: func.QueueMessage) -> None:
         )
     except Exception as e:
         logging.error(f"Failed to send confirmation email for order {order_id}: {e}")
+
+
+# =============================================================================
+# send_rejection_email — Queue Trigger
+# =============================================================================
+
+@app.queue_trigger(
+    arg_name="msg",
+    queue_name="orders-invalid",
+    connection="AzureWebJobsStorage"
+)
+def send_rejection_email(msg: func.QueueMessage) -> None:
+    logging.info("send_rejection_email function triggered.")
+
+    try:
+        order = json.loads(msg.get_body().decode("utf-8"))
+    except (ValueError, UnicodeDecodeError) as e:
+        logging.error(f"Failed to parse queue message as JSON: {e}")
+        return
+
+    order_id = order.get("orderId", "UNKNOWN")
+    recipient_email = order.get("email")
+
+    if not recipient_email:
+        logging.error(
+            f"Order {order_id} has no email address — cannot send rejection notice."
+        )
+        return
+
+    connection_string = os.environ.get("ACS_CONNECTION_STRING")
+    if not connection_string:
+        logging.error("ACS_CONNECTION_STRING is not configured.")
+        return
+
+    sender_address = "DoNotReply@7aeee3c2-241a-4930-ac4c-9968c4d91b42.azurecomm.net"
+
+    customer_name = order.get("customerName", "Customer")
+    validation_errors = order.get("validationErrors", ["Your order could not be processed."])
+    reasons_html = "".join(f"<li>{reason}</li>" for reason in validation_errors)
+
+    html_content = f"""
+    <html>
+      <body style="font-family: Arial, sans-serif; color: #1f2933;">
+        <h2 style="color: #a82020;">Order Could Not Be Processed</h2>
+        <p>Hi {customer_name},</p>
+        <p>
+          Unfortunately we were unable to process your order
+          (ID: {order_id}). Here's why:
+        </p>
+        <ul>{reasons_html}</ul>
+        <p>
+          Please review the details and submit your order again. If you
+          believe this is an error, feel free to reach out.
+        </p>
+        <p style="color: #5a6470; font-size: 0.85em;">
+          Azure Serverless Laptop Store — Event-Driven Order Processing System
+        </p>
+      </body>
+    </html>
+    """
+
+    message = {
+        "senderAddress": sender_address,
+        "recipients": {
+            "to": [{"address": recipient_email}]
+        },
+        "content": {
+            "subject": f"Order Update — {order_id}",
+            "html": html_content
+        }
+    }
+
+    try:
+        email_client = EmailClient.from_connection_string(connection_string)
+        poller = email_client.begin_send(message)
+        result = poller.result()
+        logging.info(
+            f"Rejection email sent for order {order_id} to {recipient_email}. "
+            f"Message ID: {result.get('id', 'unknown')}"
+        )
+    except Exception as e:
+        logging.error(f"Failed to send rejection email for order {order_id}: {e}")

@@ -17,7 +17,7 @@ The solution leverages serverless computing, asynchronous messaging, queue-based
 * Utilize Azure Functions for serverless processing
 * Implement asynchronous messaging using Azure Storage Queues
 * Store order data in Azure Table Storage
-* Send automated customer confirmation emails
+* Send automated customer confirmation and rejection emails
 * Monitor application health using Azure Monitor and Application Insights
 * Demonstrate collaborative GitHub development workflows
 
@@ -30,8 +30,8 @@ The solution leverages serverless computing, asynchronous messaging, queue-based
 | Azure Static Web Apps        | Frontend hosting          |
 | Azure Functions              | Serverless compute        |
 | Azure Storage Queues         | Asynchronous processing   |
-| Azure Table Storage          | Order persistence         |
-| Azure Communication Services | Email notifications       |
+| Azure Table Storage          | Order and inventory persistence |
+| Azure Communication Services | Confirmation and rejection email notifications |
 | Azure Monitor                | Monitoring and alerting   |
 | Application Insights         | Logging and observability |
 
@@ -56,6 +56,10 @@ orders-incoming Queue
 ↓
 
 validate_order Function
+
+↓
+
+LaptopInventory Table
 
 ↓
 
@@ -96,6 +100,7 @@ Application Insights
 │   ├── submit_order/
 │   ├── validate_order/
 │   ├── send_confirmation_email/
+│   ├── send_rejection_email/
 │   └── log_to_table/
 ├── sample-data/
 ├── evidence/
@@ -162,7 +167,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 6 Complete — Phase 7 monitoring and observability next
+Current Status: Phase 8 testing complete — frontend hosting decision pending
 
 Completed:
 
@@ -176,12 +181,15 @@ Completed:
 * Phase 2 frontend connection to live Function App endpoint
 * Phase 3 `submit_order` Function App deployment and browser/curl validation
 * Phase 4 `validate_order` queue-triggered validation and fan-out
-* Phase 5 `log_to_table` and `send_confirmation_email` parallel processing functions
-* Phase 6 secrets migrated to Azure Key Vault, accessed via Managed Identity
+* Phase 5 `log_to_table`, `send_confirmation_email`, and `send_rejection_email` processing functions
+* Phase 6 security hardening with Key Vault-backed settings and Managed Identity
+* Phase 7 monitoring and observability configuration
+* Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
+* Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
 
 In Progress:
 
-* Phase 7 monitoring and observability configuration
+* Frontend hosting decision for Azure Static Web Apps remains pending professor guidance
 
 ---
 
@@ -202,13 +210,13 @@ This project was developed collaboratively, focused on Azure serverless computin
 
 **Project Duration:** May 2026 – August 2026
 
-The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, fan-out processing, Azure Table Storage logging, Azure Communication Services email confirmation, and migrating all secrets to Azure Key Vault via Managed Identity. The next major build step is Phase 7 monitoring and observability.
+The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, inventory stock checks, fan-out processing, Azure Table Storage logging, Azure Communication Services confirmation and rejection emails, Key Vault-backed secret handling, Managed Identity access, monitoring configuration, and Phase 8 end-to-end testing. Frontend hosting through Azure Static Web Apps remains on hold pending professor guidance.
 
 Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
 ### Project Status
 
-**Current Phase:** Phase 6 Complete — Starting Phase 7
+**Current Phase:** Phase 8 Complete — Frontend Hosting Pending
 
 #### Progress Overview
 
@@ -222,10 +230,14 @@ Development is being completed in multiple phases, with the repository updated r
 * ✅ Frontend implementation connected to live Function App endpoint
 * ✅ `submit_order` Azure Function implemented and verified
 * ✅ `validate_order` queue-triggered function implemented and verified
+* ✅ `LaptopInventory` table integrated for stock checks and decrement logic
 * ✅ `log_to_table` table logging function implemented and verified
 * ✅ `send_confirmation_email` Azure Communication Services function implemented and verified
-* ✅ Secrets migrated to Azure Key Vault, accessed via Managed Identity
-* ⏳ Monitoring and observability configuration
+* ✅ `send_rejection_email` Azure Communication Services function implemented and verified
+* ✅ Key Vault and Managed Identity security hardening completed
+* ✅ Monitoring and observability configuration completed
+* ✅ Phase 8 test matrix completed across six order scenarios
+* ⏳ Azure Static Web Apps hosting decision pending professor guidance
 
 ### Live Project Pages
 
@@ -257,6 +269,5 @@ All major updates, architecture changes, implementation milestones, testing evid
 This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
 
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
 
 
