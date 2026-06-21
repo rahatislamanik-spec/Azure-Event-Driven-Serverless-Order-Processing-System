@@ -162,7 +162,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 5 Complete — Phase 6 security and Key Vault work next
+Current Status: Phase 6 Complete — Phase 7 monitoring and observability next
 
 Completed:
 
@@ -177,10 +177,11 @@ Completed:
 * Phase 3 `submit_order` Function App deployment and browser/curl validation
 * Phase 4 `validate_order` queue-triggered validation and fan-out
 * Phase 5 `log_to_table` and `send_confirmation_email` parallel processing functions
+* Phase 6 secrets migrated to Azure Key Vault, accessed via Managed Identity
 
 In Progress:
 
-* Phase 6 security and Key Vault hardening
+* Phase 7 monitoring and observability configuration
 
 ---
 
@@ -201,13 +202,13 @@ This project was developed collaboratively, focused on Azure serverless computin
 
 **Project Duration:** May 2026 – August 2026
 
-The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, fan-out processing, Azure Table Storage logging, and Azure Communication Services email confirmation. The next major build step is Phase 6 security and Key Vault hardening.
+The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, fan-out processing, Azure Table Storage logging, Azure Communication Services email confirmation, and migrating all secrets to Azure Key Vault via Managed Identity. The next major build step is Phase 7 monitoring and observability.
 
 Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
 ### Project Status
 
-**Current Phase:** Phase 5 Complete — Starting Phase 6
+**Current Phase:** Phase 6 Complete — Starting Phase 7
 
 #### Progress Overview
 
@@ -223,7 +224,8 @@ Development is being completed in multiple phases, with the repository updated r
 * ✅ `validate_order` queue-triggered function implemented and verified
 * ✅ `log_to_table` table logging function implemented and verified
 * ✅ `send_confirmation_email` Azure Communication Services function implemented and verified
-* ⏳ Security and Key Vault hardening
+* ✅ Secrets migrated to Azure Key Vault, accessed via Managed Identity
+* ⏳ Monitoring and observability configuration
 
 ### Live Project Pages
 
