@@ -977,6 +977,126 @@
     </div>
   </section>
 
+  <!-- ISSUES FACED AND PROBLEMS SOLVED -->
+  <section class="card">
+    <h2><span class="icon">🛠️</span> Issues Faced &amp; Problems Solved</h2>
+    <p class="muted">
+      This section documents the major engineering problems encountered during the build, how each issue was diagnosed,
+      the confirmed root cause, and the fix or current status. It is intended to preserve the real troubleshooting
+      history behind the project rather than only showing the final working architecture.
+    </p>
+
+    <div class="log-entry">
+      <div class="log-date">1. Azure for Students Region Restrictions — Phase 1</div>
+      <ul>
+        <li><strong>Problem:</strong> The original architecture documented Canada Central as the deployment region. Storage Account creation failed with a <code>RequestDisallowedByAzure</code> policy error.</li>
+        <li><strong>Diagnosis Process:</strong> Canada East was tested as a fallback and produced the same policy error. The failure was confirmed through both Azure Portal and Azure CLI, proving it was a subscription-level policy restriction rather than a single failed deployment attempt.</li>
+        <li><strong>Root Cause:</strong> Azure for Students subscriptions use a curated list of allowed regions. Canada Central and Canada East were not available for the required resource deployment.</li>
+        <li><strong>Fix:</strong> Professor Ali Ziyaei was contacted with the issue and approved East US as the permanent project region. All subsequent project resources were deployed to East US.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">2. Resource Provider Registration Delays — Phase 1 and recurring</div>
+      <ul>
+        <li><strong>Problem:</strong> Multiple resource types, including Storage, Network, Web, and Communication resources, failed on first deployment attempt because the related Azure resource provider was not registered.</li>
+        <li><strong>Diagnosis Process:</strong> The Azure CLI suggested auto-registration, but immediate retries continued to fail. Rechecking the provider state showed registration was asynchronous and required time to complete.</li>
+        <li><strong>Root Cause:</strong> New subscriptions do not always have every resource provider pre-registered. Provider registration can take several minutes even after the registration command is accepted.</li>
+        <li><strong>Fix:</strong> A repeatable provider registration pattern was used: run <code>az provider register</code>, then poll <code>registrationState</code> until the provider returns <code>Registered</code> before retrying deployment.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">3. Function App GUI Hosting Plan Trap — Phase 1</div>
+      <ul>
+        <li><strong>Problem:</strong> Python did not appear in the Azure Portal Runtime Stack dropdown while creating the Function App.</li>
+        <li><strong>Diagnosis Process:</strong> The issue was traced back to the hosting plan and operating system selection. Selecting <code>Consumption (Windows)</code> silently locked the Function App to Windows.</li>
+        <li><strong>Root Cause:</strong> Python Azure Functions require Linux hosting. The portal flow did not make the operating system dependency clear before the selection constrained the available runtime stack.</li>
+        <li><strong>Fix:</strong> The portal creation flow was bypassed for this step. Azure CLI was used with <code>--os-type Linux</code> explicitly specified so the Function App could be created with the correct Python runtime.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">4. Key Vault RBAC Permissions Gap — Phase 6</div>
+      <ul>
+        <li><strong>Problem:</strong> Creating secrets in a newly created Key Vault failed with a <code>ForbiddenByRbac</code> error.</li>
+        <li><strong>Diagnosis Process:</strong> The Key Vault configuration was inspected and confirmed to use RBAC authorization mode with <code>enableRbacAuthorization: true</code> instead of legacy access policies.</li>
+        <li><strong>Root Cause:</strong> In RBAC mode, creating a vault does not automatically grant the creator secret-management permissions. Vault creation permissions and secret data-plane permissions are controlled separately.</li>
+        <li><strong>Fix:</strong> The <code>Key Vault Secrets Officer</code> role was explicitly assigned at the vault scope before secret creation was retried.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">5. Deployment Overwrite Bug — Phase 4 and Phase 5</div>
+      <ul>
+        <li><strong>Problem:</strong> Deploying <code>validate_order</code> from a separate folder wiped out the already-working <code>submit_order</code> function. This was confirmed when <code>az functionapp function list</code> showed only <code>validate_order</code> afterward.</li>
+        <li><strong>Diagnosis Process:</strong> The function list was checked before and after separate deployments to determine whether the behavior was caching or a real replacement. The result confirmed the deployment package was replacing the whole Function App contents.</li>
+        <li><strong>Root Cause:</strong> <code>func azure functionapp publish</code> deploys the current working directory as the complete package for the Function App. Separate function folders caused each deployment to replace what came before it.</li>
+        <li><strong>Fix:</strong> All functions were consolidated into one Python V2 <code>function_app.py</code> deployment package using multiple decorators, allowing the full Function App to deploy as one coherent unit.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">6. Python Version Mismatch — Phase 3 through Phase 6</div>
+      <ul>
+        <li><strong>Problem:</strong> Local development defaulted to macOS system Python 3.9.6 while the deployed Azure Function App required Python 3.11.</li>
+        <li><strong>Diagnosis Process:</strong> The local <code>python3 --version</code> output was compared against the Function App runtime configuration returned by <code>az functionapp config show</code>.</li>
+        <li><strong>Root Cause:</strong> macOS ships an older system Python by default. Nothing automatically aligns the local Python runtime with the Azure Functions runtime.</li>
+        <li><strong>Fix:</strong> Python 3.11 was installed through Homebrew and a dedicated <code>.venv311</code> virtual environment was created for local development and deployment.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">7. Missing Dependencies Causing Silent Total Failure — Phase 3 through Phase 6</div>
+      <ul>
+        <li><strong>Problem:</strong> After deployment, <code>az functionapp function list</code> returned an empty array. No functions were registered, even though the deployment output reported success.</li>
+        <li><strong>Diagnosis Process:</strong> Standard deployment output did not show the failure. The issue was traced by comparing <code>requirements.txt</code> against the actual import statements in <code>function_app.py</code>.</li>
+        <li><strong>Root Cause:</strong> Required dependencies such as <code>azure-data-tables</code> and <code>azure-communication-email</code> were missing after new functions were added. The remote build installed only listed packages, then the Python worker failed at import time and did not register the functions.</li>
+        <li><strong>Fix:</strong> The missing packages were added to <code>requirements.txt</code>. The deployment checklist now includes comparing all imports against <code>requirements.txt</code> before publishing.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">8. Queue Message Encoding Bug — Phase 4 <span class="status-pill status-blocked">Most significant debugging effort</span></div>
+      <ul>
+        <li><strong>Problem:</strong> <code>validate_order</code> was correctly coded, correctly registered, and correctly bound to the <code>orders-incoming</code> queue, but every message failed and moved to <code>orders-incoming-poison</code> after reaching <code>MaxDequeueCount</code>. There was no Python traceback or function-level error output.</li>
+        <li><strong>Diagnosis Process:</strong> The binding was verified through the local Functions admin API. The storage connection string and target queue were checked. A second consumer process was ruled out. The function was reduced to two log statements and no business logic, but the same failure continued. Azure Functions Core Tools was reinstalled, and the issue still reproduced. The function was then deployed to Azure to rule out a local-only problem. The decisive clue came from Azure Portal Log Stream, which showed: <code>Message decoding has failed! Check MessageEncoding settings.</code></li>
+        <li><strong>Root Cause:</strong> Azure Functions queue triggers default to expecting Base64-encoded queue messages. The Storage Queue Python SDK was sending plain JSON text through <code>queue_client.send_message(json.dumps(...))</code>. The binding layer failed before Python code executed, which explained why no Python-level exception or log line appeared.</li>
+        <li><strong>Fix:</strong> Queue message encoding was explicitly configured in <code>host.json</code> with <code>"extensions": { "queues": { "messageEncoding": "none" } }</code>. After redeployment, the live pipeline processed queue messages correctly.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">9. submit_order Default Authorization Level — Phase 3</div>
+      <ul>
+        <li><strong>Problem:</strong> The live <code>submit_order</code> endpoint returned HTTP 401 Unauthorized during the first live test, even though the function worked locally.</li>
+        <li><strong>Diagnosis Process:</strong> Local and live behavior were compared. Local testing masked the issue because the local Functions host does not expose the same live authorization behavior by default.</li>
+        <li><strong>Root Cause:</strong> The Azure Functions Python V2 route used FUNCTION-level authorization by default, requiring a function key. That was not appropriate for the public customer-facing order submission endpoint.</li>
+        <li><strong>Fix:</strong> The route decorator was updated to explicitly set <code>auth_level=func.AuthLevel.ANONYMOUS</code>.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">10. Azure Static Web Apps Supported Regions Blocked — Current status</div>
+      <ul>
+        <li><strong>Problem:</strong> Static Web App creation failed with <code>RequestDisallowedByAzure</code> in every supported Azure Static Web Apps region tested: Central US, East US 2, West US 2, West Europe, and East Asia.</li>
+        <li><strong>Diagnosis Process:</strong> Each supported region was tested individually through Azure CLI. Every attempt returned the same policy error.</li>
+        <li><strong>Root Cause:</strong> Azure for Students appears to block Static Web Apps for this subscription, leaving no available supported region for this specific resource type.</li>
+        <li><strong>Status:</strong> Professor Ali Ziyaei was contacted to confirm whether the project should proceed with an alternative hosting path, such as GitHub Pages, or pursue an Azure support ticket. Response is pending.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">11. Azure Monitor Test Notifications Blocked on Free Tier — Phase 7</div>
+      <ul>
+        <li><strong>Problem:</strong> Action Group email notification delivery could not be live-tested because intentionally producing a genuine HTTP 5xx error was difficult. The application correctly handled malformed input and returned clean 400 responses instead of crashing.</li>
+        <li><strong>Diagnosis Process:</strong> Azure Monitor's built-in <code>az monitor action-group test-notifications create</code> command was attempted to trigger a test notification without forcing a real application failure.</li>
+        <li><strong>Root Cause:</strong> The test-notification feature returned <code>(Conflict) Free subscription not supported</code>, indicating a platform limitation for the free/student subscription tier rather than a configuration issue.</li>
+        <li><strong>Status:</strong> The alert rule and Action Group were verified by configuration inspection through <code>az monitor metrics alert show</code> and <code>az monitor action-group show</code>. Notification live-fire testing remains blocked by subscription-tier limitations and is documented honestly as configuration-verified rather than live-notification-verified.</li>
+      </ul>
+    </div>
+  </section>
+
 </main>
 
 <footer>
