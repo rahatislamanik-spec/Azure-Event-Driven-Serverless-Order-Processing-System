@@ -358,7 +358,7 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 5 Complete — Starting Phase 6 (Security &amp; Key Vault)</h3>
+      <h3>We Are Here: Phase 6 Complete — Starting Phase 7 (Monitoring &amp; Observability)</h3>
       <p class="muted">
         The full event-driven order pipeline is now deployed and verified live. Orders can be submitted
         through the HTTP endpoint, validated by a queue-triggered function, fanned out to email and logging
@@ -388,7 +388,7 @@
         <tr><td>3</td><td>submit_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 1</td></tr>
         <tr><td>4</td><td>validate_order Function</td><td>1 – 2 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 3</td></tr>
         <tr><td>5</td><td>Parallel Processing Functions</td><td>2 – 3 days</td><td><span class="status-pill status-done">Done</span></td><td>Phase 4</td></tr>
-        <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 5</td></tr>
+        <tr><td>6</td><td>Security &amp; Key Vault</td><td>1 day</td><td><span class="status-pill status-done">Done</span></td><td>Phase 5</td></tr>
         <tr><td>7</td><td>Monitoring &amp; Observability</td><td>1 day</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 6</td></tr>
         <tr><td>8</td><td>End-to-End Testing &amp; Evidence</td><td>2 – 3 days</td><td><span class="status-pill status-upcoming">Upcoming</span></td><td>Phase 7</td></tr>
       </tbody>
@@ -687,36 +687,48 @@
   <div class="phase-block">
     <div class="phase-block-header">
       <span class="phase-title">Phase 6 — Security &amp; Key Vault</span>
-      <span class="status-pill status-upcoming">Upcoming</span>
+      <span class="status-pill status-done">Done</span>
     </div>
     <div class="phase-block-body">
       <div class="phase-meta">
         <span><strong>Duration:</strong> 1 day</span>
-        <span><strong>Owner:</strong> TBD</span>
+        <span><strong>Owner:</strong> Rahat</span>
         <span><strong>GitHub Issue:</strong> Supporting task (security hardening)</span>
       </div>
       <p class="muted">
-        Move all secrets (storage connection strings, ACS keys) out of code and into Key Vault, and
-        configure Managed Identity so functions can access secrets without storing credentials.
+        Moved all secrets (storage connection string, ACS connection string) out of plain-text Function
+        App settings and into Azure Key Vault, accessed via System-Assigned Managed Identity —
+        implementing the "Security by Design" principle from the original architecture diagram, which
+        was previously only diagrammed, not actually implemented.
       </p>
-      <h3>Components to Build</h3>
+      <h3>Components Built</h3>
       <div class="component-grid">
         <div class="component-card">
           <div class="comp-name">🔑 Key Vault Secrets</div>
-          <div class="comp-desc">Storage connection string, ACS connection string stored as secrets.</div>
+          <div class="comp-desc">Two secrets created in kv-orderproc-rahat: StorageConnectionString and AcsConnectionString. ✅ Created.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">🪪 Managed Identity</div>
-          <div class="comp-desc">Function App's system-assigned identity granted access to Key Vault.</div>
+          <div class="comp-desc">System-Assigned Managed Identity enabled on func-order-processing-dev, granted "Key Vault Secrets User" (read-only) role scoped to the vault — least-privilege. ✅ Configured and verified.</div>
         </div>
       </div>
+      <h3>Key Vault References (App Settings)</h3>
+      <p class="muted">
+        Both Function App settings now use Key Vault reference syntax instead of plain-text values.
+        These reference URIs identify which secret to pull at runtime; they contain no secret values
+        themselves.
+      </p>
+      <ul class="task-list">
+        <li><code>AzureWebJobsStorage</code> = <code>@Microsoft.KeyVault(SecretUri=https://kv-orderproc-rahat.vault.azure.net/secrets/StorageConnectionString/)</code></li>
+        <li><code>ACS_CONNECTION_STRING</code> = <code>@Microsoft.KeyVault(SecretUri=https://kv-orderproc-rahat.vault.azure.net/secrets/AcsConnectionString/)</code></li>
+      </ul>
       <h3>Tasks</h3>
       <ul class="task-list">
-        <li>Enable system-assigned Managed Identity on the Function App</li>
-        <li>Grant Key Vault access policy to the Function App identity</li>
-        <li>Move connection strings from <code>local.settings.json</code> into Key Vault secrets</li>
-        <li>Update Function App settings to reference Key Vault secrets</li>
-        <li>Verify functions still run correctly with secrets sourced from Key Vault</li>
+        <li>Enable system-assigned Managed Identity on the Function App — done</li>
+        <li>Grant Key Vault Secrets Officer role to own account, Secrets User role to Function App identity (RBAC mode) — done</li>
+        <li>Create StorageConnectionString and AcsConnectionString secrets in Key Vault — done</li>
+        <li>Update Function App settings to reference Key Vault secrets — done</li>
+        <li>Re-run full end-to-end pipeline test to verify secrets resolve correctly at runtime — done, verified live (real order submitted, table record confirmed, confirmation email received)</li>
       </ul>
     </div>
   </div>
@@ -885,6 +897,19 @@
       Updated at the end of each work week. Each entry records what was completed, what's blocked,
       and what's next — this is the accountability trail for the project.
     </p>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 15, 2026 — Phase 6 Completion (Security &amp; Key Vault)</div>
+      <ul>
+        <li><strong>Phase 6 completed.</strong> Moved the storage account connection string and ACS connection string out of plain-text Function App settings and into Azure Key Vault, accessed via System-Assigned Managed Identity</li>
+        <li>Hit and resolved a permissions issue: the vault uses RBAC authorization mode (<code>enableRbacAuthorization: true</code>) rather than legacy access policies, so creating secrets initially failed with Forbidden/ForbiddenByRbac even on the account that created the vault — fixed by explicitly assigning the "Key Vault Secrets Officer" role to my own account on the vault. Worth documenting since RBAC-vs-access-policy mode is a common point of confusion in Key Vault</li>
+        <li>Enabled System-Assigned Managed Identity on func-order-processing-dev, giving it its own Azure AD identity separate from any personal credentials</li>
+        <li>Granted the Function App's identity the "Key Vault Secrets User" role (read-only), scoped to the vault — least-privilege: the identity can read secrets at runtime but cannot create, modify, or delete them</li>
+        <li>Created two secrets in kv-orderproc-rahat: StorageConnectionString and AcsConnectionString</li>
+        <li>Updated both App Settings to use Key Vault reference syntax (<code>@Microsoft.KeyVault(SecretUri=...)</code>) instead of plain-text values</li>
+        <li>Re-ran the full end-to-end pipeline test after the change to confirm secrets resolve correctly from Key Vault at runtime: submitted a real order, confirmed the table record, confirmed the confirmation email was received — proving the Managed Identity + Key Vault setup genuinely works, not just configured</li>
+      </ul>
+    </div>
 
     <div class="log-entry">
       <div class="log-date">Week of June 15, 2026 — Phase 4 and Phase 5 Completion</div>
