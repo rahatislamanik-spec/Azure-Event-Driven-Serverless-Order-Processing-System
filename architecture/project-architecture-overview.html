@@ -434,7 +434,7 @@
   <!-- 2. PROJECT STATUS -->
   <section class="card">
     <h2><span class="icon">📊</span> Project Status</h2>
-    <p class="muted">Current phase: <strong>Phase 5 complete, with Phase 6 security hardening next.</strong>
+    <p class="muted">Current phase: <strong>Phase 6 complete — secrets migrated to Key Vault via Managed Identity, Phase 7 monitoring next.</strong>
       The live pipeline now accepts orders, validates queue messages, fans out valid orders,
       writes to Azure Table Storage, and sends confirmation email through Azure Communication Services.</p>
     <div class="status-grid">
@@ -621,7 +621,7 @@
         <tr><td>Queue</td><td><code>orders-invalid</code></td><td>Holds invalid or rejected orders</td></tr>
         <tr><td>Table Storage</td><td><code>Orders</code></td><td>Stores order records</td></tr>
         <tr><td>Communication Services</td><td><code>acs-order-email-dev</code></td><td>Sends confirmation emails</td></tr>
-        <tr><td>Key Vault</td><td><code>kv-order-processing-dev</code></td><td>Stores secrets and configuration</td></tr>
+        <tr><td>Key Vault</td><td><code>kv-orderproc-rahat</code></td><td>Stores secrets and configuration (planned name kv-order-processing-dev was globally taken)</td></tr>
         <tr><td>Application Insights</td><td><code>appi-order-processing-dev</code></td><td>Captures app telemetry</td></tr>
         <tr><td>Azure Monitor</td><td>Azure Monitor</td><td>Metrics, alerts, dashboards</td></tr>
         <tr><td>Log Analytics Workspace</td><td><code>law-order-processing-dev</code></td><td>Centralized logs and diagnostics</td></tr>
@@ -695,7 +695,7 @@
             <li>✅ Function App</li>
             <li>✅ Application Insights</li>
             <li>✅ Key Vault</li>
-            <li>⏳ Communication Services</li>
+            <li>✅ Communication Services</li>
           </ul>
         </div>
       </div>
