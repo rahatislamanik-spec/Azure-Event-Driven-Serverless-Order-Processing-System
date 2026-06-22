@@ -1,3 +1,5 @@
+> 📊 **Visual diagrams available:** See [architecture-diagrams-final.html](architecture-diagrams-final.html) for the full rendered architecture and order flow diagrams.
+
 # High-Level Project Flow
 
 ```text
