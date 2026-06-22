@@ -1,6 +1,21 @@
 # Azure Event-Driven Serverless Order Processing System
-> **Status:** Architecture Complete
-> **Last Updated:** June 2026
+> **Status:** Phase 8 Complete — Live on Azure  |  Last Updated: June 2026
+
+## 🚀 Live Demo
+
+**Order Form (GitHub Pages):**
+https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/
+
+**Architecture & Flow Diagrams:**
+https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html
+
+**Project Roadmap:**
+https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html
+
+**Architecture Overview:**
+https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html
+
+---
 
 ## Overview
 
