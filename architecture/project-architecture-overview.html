@@ -508,9 +508,14 @@
       completion — covering the request path, the validation and fan-out step, and the two parallel
       processing branches (email confirmation and database logging).
     </p>
-    <div class="diagram-placeholder">
-      📌 Diagram placeholder — insert <code>architecture/logical-flow-diagram.png</code><br>
-      <span style="font-size:0.85rem;">(Approved by Professor Ali in initial review)</span>
+    <div class="diagram-placeholder" style="padding:30px 20px;">
+      The full order flow diagram — including happy path, rejection path, LaptopInventory stock check,
+      and observability — is available on the dedicated diagrams page.<br><br>
+      <a href="architecture-diagrams-final.html"
+         style="display:inline-block; background: var(--azure-blue); color:#fff;
+                padding: 9px 20px; border-radius: 8px; text-decoration:none; font-weight:600; font-size:0.92rem;">
+        View Order Flow Diagram →
+      </a>
     </div>
     <h3>Approved Flow</h3>
     <p class="muted">
@@ -541,12 +546,14 @@
       presentation, application, messaging, data, communication, security, and observability —
       showing how each Azure service fits into the overall design.
     </p>
-    <div class="diagram-frame">
-      <img src="infrastructure-diagram-detailed.png" alt="Event-Driven Serverless Order Processing System - Layered Architecture Diagram">
-    </div>
-    <p class="diagram-caption">Figure 1 — Layered architecture view showing the Presentation, Application,
-      Messaging, Data, Communication, Security, and Observability layers, with Azure Key Vault
-      highlighted as part of a dedicated Security Layer.</p>
+    <a href="architecture-diagrams-final.html"
+       style="display:inline-block; margin-top:14px; background: var(--azure-blue); color:#fff;
+              padding: 10px 22px; border-radius: 8px; text-decoration:none; font-weight:600; font-size:0.95rem;">
+      View Architecture &amp; Flow Diagrams →
+    </a>
+    <p class="diagram-caption" style="margin-top:12px;">Figure 1 — Dedicated diagrams page: layered architecture view (7 functional layers) and
+      detailed order flow diagram — happy path, rejection path, LaptopInventory stock check,
+      Key Vault secure access, and observability. All 5 functions, Revision 4.</p>
   </section>
 
   <!-- 7. INFRASTRUCTURE DIAGRAM -->
