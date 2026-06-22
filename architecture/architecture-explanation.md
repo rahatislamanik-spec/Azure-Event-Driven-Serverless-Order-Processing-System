@@ -15,4 +15,4 @@ This project uses an event-driven serverless architecture. The system separates 
 
 ## Why This Architecture Is Feasible
 
-The project avoids unnecessary complexity such as AKS, Kubernetes, Service Bus Premium, API Management, and Cosmos DB. It uses manageable Azure services that are appropriate for a student WIL project while still demonstrating real cloud architecture concepts.
+The project avoids unnecessary complexity such as AKS, Kubernetes, Service Bus Premium, API Management, and Cosmos DB. It uses manageable Azure services that scale appropriately for this workload while still demonstrating real cloud architecture concepts.
