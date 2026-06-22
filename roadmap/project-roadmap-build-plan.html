@@ -358,14 +358,13 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 8 Complete — Frontend Hosting Decision Pending</h3>
+      <h3>We Are Here: Phase 8 Complete — GitHub Pages Approved, Project Finalising</h3>
       <p class="muted">
         The full event-driven order pipeline is now deployed and verified live. Orders can be submitted
         through the HTTP endpoint, validated by a queue-triggered function, checked against live
         LaptopInventory stock, fanned out to email and logging queues, written to Azure Table Storage,
         and handled through Azure Communication Services confirmation or rejection emails. Key Vault,
-        Managed Identity, monitoring, and the Phase 8 test matrix are complete. Azure Static Web Apps
-        hosting remains pending professor guidance.
+        Managed Identity, monitoring, and the Phase 8 test matrix are complete. Frontend is hosted via GitHub Pages — Azure Static Web Apps was blocked on all 5 supported regions; GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026).
       </p>
       <div class="blocker" style="background: var(--green-bg); color: var(--green);">
         ✅ PHASE 8 COMPLETE: <code>submit_order</code>, <code>validate_order</code>,
@@ -1097,7 +1096,7 @@
     </div>
 
     <div class="log-entry">
-      <div class="log-date">10. Azure Static Web Apps Supported Regions Blocked — Current status</div>
+      <div class="log-date">10. Azure Static Web Apps Supported Regions Blocked — RESOLVED: GitHub Pages approved</div>
       <ul>
         <li><strong>Problem:</strong> Static Web App creation failed with <code>RequestDisallowedByAzure</code> in every supported Azure Static Web Apps region tested: Central US, East US 2, West US 2, West Europe, and East Asia.</li>
         <li><strong>Diagnosis Process:</strong> Each supported region was tested individually through Azure CLI. Every attempt returned the same policy error.</li>

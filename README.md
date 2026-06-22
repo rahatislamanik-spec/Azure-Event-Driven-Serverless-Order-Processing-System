@@ -189,7 +189,7 @@ Completed:
 
 In Progress:
 
-* Frontend hosting decision for Azure Static Web Apps remains pending professor guidance
+* Frontend hosted via GitHub Pages — Azure Static Web Apps blocked on all 5 supported regions, GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026)
 
 ---
 
@@ -210,7 +210,7 @@ This project was developed collaboratively, focused on Azure serverless computin
 
 **Project Duration:** May 2026 – August 2026
 
-The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, inventory stock checks, fan-out processing, Azure Table Storage logging, Azure Communication Services confirmation and rejection emails, Key Vault-backed secret handling, Managed Identity access, monitoring configuration, and Phase 8 end-to-end testing. Frontend hosting through Azure Static Web Apps remains on hold pending professor guidance.
+The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, inventory stock checks, fan-out processing, Azure Table Storage logging, Azure Communication Services confirmation and rejection emails, Key Vault-backed secret handling, Managed Identity access, monitoring configuration, and Phase 8 end-to-end testing. Frontend is hosted via GitHub Pages — Azure Static Web Apps was blocked on all 5 supported regions under the Azure for Students subscription; GitHub Pages was approved as a substitute by Professor Ali Ziyaei (June 22, 2026).
 
 Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
 
@@ -237,7 +237,7 @@ Development is being completed in multiple phases, with the repository updated r
 * ✅ Key Vault and Managed Identity security hardening completed
 * ✅ Monitoring and observability configuration completed
 * ✅ Phase 8 test matrix completed across six order scenarios
-* ⏳ Azure Static Web Apps hosting decision pending professor guidance
+* ✅ Frontend hosting via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
 
 ### Live Project Pages
 
