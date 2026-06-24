@@ -3,17 +3,12 @@
 
 ## 🚀 Live Demo
 
-**Order Form (GitHub Pages):**
-https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/
-
-**Architecture & Flow Diagrams:**
-https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html
-
-**Project Roadmap:**
-https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html
-
-**Architecture Overview:**
-https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html
+| | Link |
+|---|---|
+| 🛒 **Order Form** | [Launch Storefront](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/) |
+| 📊 **Architecture & Flow Diagrams** | [View Diagrams](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html) |
+| 🗺️ **Project Roadmap** | [View Roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html) |
+| 🏗️ **Architecture Overview** | [View Overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html) |
 
 ---
 
