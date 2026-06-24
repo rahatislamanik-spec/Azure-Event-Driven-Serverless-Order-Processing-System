@@ -907,94 +907,93 @@
     </p>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026 — Revision 4 Scope Expansion and Phase 8 Testing</div>
+      <div class="log-date">Week of June 23, 2026 — CoreTech Professional Storefront Launch</div>
       <ul>
-        <li><strong>Revision 4 architecture alignment completed.</strong> Added <code>LaptopInventory</code> stock tracking and <code>send_rejection_email</code> to match the approved architecture diagram prepared by Hikmat.</li>
-        <li><strong>Inventory management implemented.</strong> <code>validate_order</code> now checks the <code>LaptopInventory</code> table before approving an order, decrements stock on successful validation, and rejects orders when stock is insufficient or the laptop model is unknown.</li>
-        <li><strong>Rejection notification path implemented.</strong> Orders routed to <code>orders-invalid</code> now trigger <code>send_rejection_email</code> through Azure Communication Services.</li>
-        <li><strong>Quantity validation bug found and fixed.</strong> Systematic Phase 8 testing found that <code>quantity: 0</code> was being classified as a missing field before reaching the dedicated positive-integer validation. The required-field check was corrected so zero quantity now returns the clearer quantity validation error.</li>
-        <li><strong>Phase 8 test matrix completed.</strong> Six scenarios were confirmed working: valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models.</li>
+        <li><strong>CoreTech e-commerce storefront deployed.</strong> Replaced the plain white order form with a professional retail storefront — "CoreTech — Canada's Electronics Destination" — featuring a navy/red/gold colour scheme, sticky navigation, hero section, and individual product cards for each laptop model in the LaptopInventory table.</li>
+        <li><strong>Product cards with Buy Now modals.</strong> Each product card (NimbusBook Pro 14 at $1,199.99, AzureBook Air 13 at $899.99, CloudStation 15 at $1,799.99) has a Buy Now button that opens a modal order form pre-filled with the laptop name — eliminating the earlier dropdown mismatch bug entirely by design.</li>
+        <li><strong>Live test confirmed end-to-end.</strong> Submitted a real order through the live CoreTech storefront on GitHub Pages — confirmation email received in Gmail, order logged to Azure Table Storage, full pipeline verified.</li>
+        <li><strong>README Live Demo section polished.</strong> Replaced plain raw URLs with a clean icon-table format linking to the storefront, architecture diagrams, roadmap, and architecture overview — more readable and professional for any reviewer landing on the repo.</li>
       </ul>
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026 — Phase 6 Completion (Security &amp; Key Vault)</div>
+      <div class="log-date">Week of June 22, 2026 — Audit Fixes, Diagram Updates, GitHub Pages Live</div>
       <ul>
-        <li><strong>Phase 6 completed.</strong> Moved the storage account connection string and ACS connection string out of plain-text Function App settings and into Azure Key Vault, accessed via System-Assigned Managed Identity</li>
-        <li>Hit and resolved a permissions issue: the vault uses RBAC authorization mode (<code>enableRbacAuthorization: true</code>) rather than legacy access policies, so creating secrets initially failed with Forbidden/ForbiddenByRbac even on the account that created the vault — fixed by explicitly assigning the "Key Vault Secrets Officer" role to my own account on the vault. Worth documenting since RBAC-vs-access-policy mode is a common point of confusion in Key Vault</li>
-        <li>Enabled System-Assigned Managed Identity on func-order-processing-dev, giving it its own Azure AD identity separate from any personal credentials</li>
-        <li>Granted the Function App's identity the "Key Vault Secrets User" role (read-only), scoped to the vault — least-privilege: the identity can read secrets at runtime but cannot create, modify, or delete them</li>
-        <li>Created two secrets in kv-orderproc-rahat: StorageConnectionString and AcsConnectionString</li>
-        <li>Updated both App Settings to use Key Vault reference syntax (<code>@Microsoft.KeyVault(SecretUri=...)</code>) instead of plain-text values</li>
-        <li>Re-ran the full end-to-end pipeline test after the change to confirm secrets resolve correctly from Key Vault at runtime: submitted a real order, confirmed the table record, confirmed the confirmation email was received — proving the Managed Identity + Key Vault setup genuinely works, not just configured</li>
+        <li><strong>Senior hiring manager audit completed.</strong> Ran a comprehensive 9-point audit covering code quality, documentation consistency, evidence completeness, security, and live demo accessibility. Found and fixed 4 real issues.</li>
+        <li><strong>Critical laptop code bug fixed.</strong> The frontend was sending internal codes (LAPTOP-001, LAPTOP-002, LAPTOP-003) as the laptop field value, while the LaptopInventory table uses the actual model names as RowKeys. Every live order was being rejected with "Insufficient stock." Fixed by updating both root and frontend/ index.html option values to match the exact RowKeys.</li>
+        <li><strong>README status badge corrected.</strong> The badge had said "Architecture Complete" since the project started and was never updated. Changed to "Phase 8 Complete — Live on Azure" to immediately signal a finished, working system to any reviewer.</li>
+        <li><strong>Live Demo section added to README.</strong> Added prominent links to the live order form, architecture diagrams, roadmap, and architecture overview — a reviewer can now click directly from the README to a working demo.</li>
+        <li><strong>Architecture diagrams page launched.</strong> Pushed <code>architecture-diagrams-final.html</code> — a self-contained HTML file with embedded SVG diagrams showing the full Revision 4 architecture (5 functions, LaptopInventory, rejection path, Key Vault/Managed Identity) with no external image dependencies.</li>
+        <li><strong>Revision 4 infrastructure diagram replaced.</strong> Updated both diagram image files with the final Revision 4 version showing all 5 functions, both table types, and the correct flow.</li>
+        <li><strong>Professor Feedback section removed.</strong> Cleaned up the architecture overview page to reflect the project's professional portfolio state rather than its academic review origin.</li>
+        <li><strong>Frontend deployed to GitHub Pages.</strong> Copied index.html, app.js, and styles.css to repo root so GitHub Pages (serving from /main) can render the live order form at the public URL.</li>
+        <li><strong>GitHub Pages approved by Professor Ali Ziyaei.</strong> Azure Static Web Apps was blocked on all 5 supported regions under the Azure for Students subscription (RequestDisallowedByAzure). Emailed Professor Ali explaining the situation; he replied "Good thinking and good workaround. Yes, it is accepted." All documentation updated to reflect this resolution.</li>
+        <li><strong>Phase 6, 7, and 8 evidence screenshots pushed.</strong> 14 sanitized screenshots added: 3 for Phase 6 (Key Vault RBAC, App Settings references, runtime validation), 4 for Phase 7 (App Insights overview, live metrics, performance breakdown, Log Analytics query), and 7 for Phase 8 (5 functions deployed, valid order confirmation, inventory table, insufficient stock rejection, missing field validation, unknown item rejection, complete test matrix summary).</li>
       </ul>
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026 — Phase 4 and Phase 5 Completion</div>
+      <div class="log-date">Week of June 21, 2026 — Phases 4, 5, and 6 Complete in One Session</div>
       <ul>
-        <li><strong>Phase 4 completed.</strong> Built and deployed <code>validate_order</code> as a queue-triggered function on <code>orders-incoming</code></li>
-        <li><strong>Phase 5 completed.</strong> Built and deployed <code>log_to_table</code> and <code>send_confirmation_email</code> as parallel queue-triggered functions</li>
-        <li><strong>Verified live:</strong> submitted a real order to the live HTTP endpoint, validated the queue fan-out, confirmed records in Azure Table Storage, and received the confirmation email in Gmail</li>
-        <li><strong>Deployment model corrected:</strong> deploying <code>validate_order</code> from its own folder replaced the already-working <code>submit_order</code> function in the live Function App. Root cause: <code>func azure functionapp publish</code> deploys the current directory as the complete Function App package. Fix: combined all functions into one Python V2 <code>function_app.py</code> deployment package</li>
-        <li><strong>Python version issue resolved:</strong> local development defaulted to Python 3.9.6 while the Azure Function App required Python 3.11. Fix: created a dedicated Python 3.11 virtual environment for the project</li>
-        <li><strong>Silent dependency failure resolved:</strong> missing <code>azure-data-tables</code> and <code>azure-communication-email</code> dependencies caused remote builds to appear successful while zero functions registered. Fix: added required dependencies to <code>requirements.txt</code></li>
-        <li><strong>HTTP authorization corrected:</strong> initial <code>submit_order</code> deployment used FUNCTION-level auth and returned 401 Unauthorized. Fix: explicitly set the public customer-facing endpoint to <code>ANONYMOUS</code></li>
-        <li><strong>Major queue trigger issue resolved:</strong> <code>validate_order</code> was registered and coded correctly, but every queue message moved to poison with no Python-level error. Azure Portal Log Stream finally revealed: <code>Message decoding has failed! Check MessageEncoding settings.</code></li>
-        <li><strong>Root cause:</strong> the Azure Functions queue trigger binding expected Base64-encoded messages, while the Storage Queue SDK wrote plain JSON text. The trigger failed before Python code executed, which explained the absence of Python exceptions</li>
-        <li><strong>Fix:</strong> added <code>"extensions": { "queues": { "messageEncoding": "none" } }</code> to <code>host.json</code>. After this change, the live pipeline processed queue messages correctly</li>
-        <li><strong>New Azure resources:</strong> <code>acs-order-email-dev</code>, <code>acs-order-email-service-dev</code>, and Azure Managed Domain sender configuration for email delivery</li>
-        <li>Next: begin Phase 6 by moving secrets and configuration toward Key Vault-backed application settings</li>
+        <li><strong>Phase 4 completed.</strong> Built and deployed <code>validate_order</code> as a queue-triggered function on <code>orders-incoming</code>. Re-validates required fields, email format, and quantity independently of <code>submit_order</code>. Fans out valid orders to both <code>orders-to-email</code> and <code>orders-to-log</code> queues simultaneously. Routes invalid or malformed orders to <code>orders-invalid</code>.</li>
+        <li><strong>Phase 5 completed.</strong> Built and deployed <code>log_to_table</code> and <code>send_confirmation_email</code> as parallel queue-triggered functions. <code>log_to_table</code> writes each validated order as an entity to the Orders Azure Table Storage table. <code>send_confirmation_email</code> sends a real HTML confirmation email via Azure Communication Services — verified by receiving a real email in Gmail within seconds of order submission.</li>
+        <li><strong>Deployment model corrected.</strong> Deploying <code>validate_order</code> from its own folder completely overwrote the already-working <code>submit_order</code> function in the live Function App. Root cause: <code>func azure functionapp publish</code> treats the current directory as the complete Function App package. Fix: combined all functions into one Python V2 <code>function_app.py</code> deployment package.</li>
+        <li><strong>Azure Communication Services configured.</strong> Created <code>acs-order-email-dev</code> (Communication Services), <code>acs-order-email-service-dev</code> (Email Communication Service), and Azure Managed Domain — auto-verified instantly with DKIM, DMARC, and SPF all showing Verified status immediately upon creation.</li>
+        <li><strong>Major queue trigger issue resolved after hours of debugging.</strong> <code>validate_order</code> was correctly registered and coded but every queue message moved silently to the poison queue with zero Python-level errors. Ruled out: binding registration, connection string correctness, code logic, local tooling corruption, and Azure deployment issues. Finally found the real cause in Azure Portal Log Stream: "Message decoding has failed! Check MessageEncoding settings." Root cause: the Azure Functions queue trigger binding defaults to expecting Base64-encoded messages, while the Storage Queue SDK writes plain JSON text. The binding failed before Python code ever executed — explaining the total absence of Python exceptions throughout the entire debugging session. Fix: added <code>"extensions": { "queues": { "messageEncoding": "none" } }</code> to host.json. The entire pipeline worked immediately after this single change.</li>
+        <li><strong>Phase 6 completed.</strong> Moved both connection strings (storage account and ACS) out of plain-text Function App settings and into Azure Key Vault, accessed at runtime via System-Assigned Managed Identity. Hit and resolved an initial Forbidden/ForbiddenByRbac error — root cause was that the vault uses RBAC authorization mode, and even the vault creator has no secret-management rights without an explicit role assignment. Fixed by assigning the "Key Vault Secrets Officer" role. Granted the Function App identity the "Key Vault Secrets User" role (read-only, least-privilege). Updated both App Settings to use <code>@Microsoft.KeyVault(SecretUri=...)</code> reference syntax. Re-ran the full pipeline test after the change — confirmed secrets resolve correctly from Key Vault at runtime.</li>
+        <li><strong>Infrastructure build scripts committed.</strong> Added 6 numbered shell scripts (<code>01-resource-group-and-networking.sh</code> through <code>06-deploy-functions.sh</code>) documenting the complete Azure resource provisioning sequence with inline commentary explaining the RBAC lesson-learned and other non-obvious decisions.</li>
+        <li><strong>Revision 4 scope expansion completed.</strong> Added <code>send_rejection_email</code> function and <code>LaptopInventory</code> table integration to match the approved Revision 4 architecture diagram. <code>validate_order</code> now checks live stock before accepting an order, decrements on success, and routes to <code>orders-invalid</code> (triggering a rejection email) on insufficient stock or unknown laptop model.</li>
+        <li><strong>Quantity validation bug found and fixed.</strong> Systematic Phase 8 testing revealed that <code>quantity: 0</code> was being classified as a missing field before reaching the positive-integer validation. Fixed by adding <code>and order.get(field) != 0</code> to the required-field check so zero quantity now returns the correct validation error.</li>
+        <li><strong>Phase 8 test matrix completed.</strong> Six scenarios confirmed working end-to-end: valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models.</li>
       </ul>
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026 — Phase 2 and Phase 3 Completion</div>
+      <div class="log-date">Week of June 19, 2026 — Phases 2 and 3 Complete, Pipeline Live</div>
       <ul>
-        <li><strong>Phase 2 completed.</strong> Connected <code>frontend/app.js</code> to the live Function App endpoint at <code>https://func-order-processing-dev.azurewebsites.net/api/submit_order</code></li>
-        <li>Corrected frontend-to-backend field mapping: <code>address</code> → <code>deliveryAddress</code> and <code>productId</code> → <code>laptop</code></li>
-        <li>Configured CORS on the Function App with allowed origins set to <code>*</code> for project testing</li>
-        <li><strong>Phase 3 completed.</strong> Built and deployed the Python V2 <code>submit_order</code> HTTP trigger with anonymous POST access</li>
-        <li>Implemented required-field validation, basic email validation, positive quantity validation, UUID order ID generation, and queue write to <code>orders-incoming</code></li>
-        <li>Resolved deployment issue #1: added missing <code>azure-storage-queue</code> dependency after the function failed to register</li>
-        <li>Resolved deployment issue #2: created a Python 3.11 virtual environment to match the Azure Function App runtime</li>
-        <li>Resolved deployment issue #3: changed the HTTP trigger from FUNCTION-level auth to <code>ANONYMOUS</code> for the public-facing endpoint</li>
-        <li><strong>Verified:</strong> direct <code>curl</code> test and browser form submission both returned a successful "Order received" response with an order ID</li>
-        <li>Next: begin Phase 4 by implementing the <code>validate_order</code> queue-triggered function</li>
+        <li><strong>Phase 2 completed.</strong> Connected <code>frontend/app.js</code> to the live Function App endpoint at <code>https://func-order-processing-dev.azurewebsites.net/api/submit_order</code>. Corrected frontend-to-backend field mapping: HTML form field <code>address</code> maps to JSON key <code>deliveryAddress</code>, and form field <code>productId</code> maps to JSON key <code>laptop</code>. Configured CORS on the Function App with allowed origins set to <code>*</code>. Verified by submitting a real order through the browser form and receiving "Order received" with a UUID order ID.</li>
+        <li><strong>Phase 3 completed.</strong> Built and deployed <code>submit_order</code> using the Python V2 programming model — HTTP trigger, anonymous POST endpoint, validates 7 required fields, derives <code>customerName</code> from <code>firstName + lastName</code> and <code>product</code> from <code>laptop</code>, generates a UUID order ID, pushes a normalized message to the <code>orders-incoming</code> queue, returns HTTP 202 Accepted.</li>
+        <li><strong>Three deployment issues resolved.</strong> (1) Added missing <code>azure-storage-queue</code> dependency — remote build reported success but zero functions registered without it. (2) Created a dedicated Python 3.11 virtual environment to match the Azure Function App runtime (local default was 3.9.6). (3) Changed HTTP trigger from FUNCTION-level auth to ANONYMOUS for the public-facing endpoint — initial deployment returned 401 Unauthorized.</li>
+        <li><strong>Project roadmap document published.</strong> Added <code>roadmap/project-roadmap-build-plan.html</code> as a living, weekly-updated companion document to the architecture overview page — tracking phase status, provisioned resources, blockers, and next steps in real time.</li>
+        <li><strong>Phase 1 and Phase 2 evidence screenshots pushed.</strong> 18 Phase 1 screenshots (Azure CLI setup, Portal sign-in, storage account deployment, queues, Key Vault, resource group overview) and 8 Phase 2 screenshots (local function development, runtime, API success response, queue message confirmed) committed to the evidence folder.</li>
       </ul>
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026 — Session 2 (June 18)</div>
+      <div class="log-date">Week of June 15, 2026 — Phase 1 Infrastructure Provisioned</div>
       <ul>
-        <li><strong>Phase 1 fully completed.</strong> Created all 4 Storage Queues (<code>orders-incoming</code>, <code>orders-to-email</code>, <code>orders-to-log</code>, <code>orders-invalid</code>)</li>
-        <li>Created <code>Orders</code> table in Table Storage</li>
-        <li>Created Virtual Network <code>vnet-order-processing-dev</code> (registered Microsoft.Network provider first)</li>
-        <li>Created Function App <code>func-order-processing-dev</code> (Linux, Python 3.11, Consumption plan) — registered Microsoft.Web provider first</li>
-        <li>Created Key Vault <code>kv-orderproc-rahat</code> (original name <code>kv-order-processing-dev</code> was globally taken)</li>
-        <li>Confirmed all 8 resources visible together in Resource Manager → All Resources view</li>
-        <li>Noted: Application Insights and a Log Analytics Workspace were auto-created alongside the Function App</li>
-        <li>Next: Begin Phase 2 (Frontend Connection) and Phase 3 (<code>submit_order</code> function)</li>
+        <li><strong>Phase 1 completed.</strong> All 8 core Azure resources provisioned and verified together in Azure Portal under <code>rg-order-processing-dev</code> in East US.</li>
+        <li><strong>Storage Account created.</strong> <code>storderstoragedev</code> — Standard LRS, General-purpose v2. Four Storage Queues created inside it: <code>orders-incoming</code>, <code>orders-to-email</code>, <code>orders-to-log</code>, <code>orders-invalid</code>. Orders table created in Table Storage.</li>
+        <li><strong>Function App created.</strong> <code>func-order-processing-dev</code> — Linux OS, Python 3.11 runtime, Azure Functions v4, Consumption/serverless plan. Application Insights and a Log Analytics Workspace were auto-created alongside it — a head start on Phase 7 monitoring.</li>
+        <li><strong>Virtual Network created.</strong> <code>vnet-order-processing-dev</code> — address space 10.0.0.0/16, default subnet 10.0.0.0/24.</li>
+        <li><strong>Key Vault created.</strong> <code>kv-orderproc-rahat</code> — Standard tier, soft-delete enabled (original planned name <code>kv-order-processing-dev</code> was globally taken). Empty shell at this stage — secrets added in Phase 6.</li>
+        <li><strong>Architecture overview page published.</strong> Added <code>architecture/project-architecture-overview.html</code> — full architecture documentation with embedded infrastructure diagrams, team information, resource inventory table, and a link to the living project roadmap.</li>
       </ul>
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 15, 2026</div>
+      <div class="log-date">Week of June 12, 2026 — Architecture Finalization and Professor Approval</div>
       <ul>
-        <li>Installed Azure CLI, Python 3.11, Azure Functions Core Tools (local environment ready)</li>
-        <li>Signed up for Azure for Students under GBC tenant, authenticated via <code>az login</code></li>
-        <li>Created Resource Group <code>rg-order-processing-dev</code> — succeeded</li>
-        <li>Storage Account creation in Canada Central and Canada East rejected by Azure policy (RequestDisallowedByAzure)</li>
-        <li>Created Storage Account <code>storderstoragedev</code> in East US — succeeded</li>
-        <li>Emailed Professor Ali Ziyaei to confirm region decision</li>
-        <li><strong>Resolution:</strong> Professor Ali approved proceeding with East US ("Fine with me"). Diagrams/docs to be updated to reflect East US.</li>
+        <li><strong>Region decision resolved.</strong> Storage Account creation in Canada Central and Canada East both rejected by Azure for Students subscription policy (RequestDisallowedByAzure). Emailed Professor Ali Ziyaei explaining the situation. He replied: "Fine with me." All subsequent resources provisioned in East US — confirmed as the permanent region for the entire project.</li>
+        <li><strong>Infrastructure diagram revised and approved.</strong> After initial professor feedback ("I could not find the Key Vault or some of the other mentioned resources in your diagram"), submitted a revised infrastructure diagram with a dedicated Security Layer clearly labelling Azure Key Vault. Professor Ali approved: "Looks better, I would recommend you all can start development."</li>
+        <li><strong>Documentation cleaned up.</strong> Removed academic framing and internal GBC references from all public-facing documentation. Renamed <code>professor-approval-summary.md</code> to <code>stakeholder-approval-summary.md</code> for professional presentation. Updated project status and architecture links throughout.</li>
+        <li><strong>Local environment set up.</strong> Installed Homebrew, Azure CLI (v2.87.0), Python 3.11, and Azure Functions Core Tools (v4.12.0). Signed up for Azure for Students using GBC student email and authenticated via <code>az login</code> under the George Brown College tenant.</li>
       </ul>
     </div>
 
-    <div class="empty-log">
-      Next weekly entry will track Phase 6 progress on Security &amp; Key Vault configuration.
+    <div class="log-entry">
+      <div class="log-date">Week of June 3, 2026 — Repository Setup and Architecture Design</div>
+      <ul>
+        <li><strong>Repository created and structured.</strong> Established the GitHub repository with all core folders: <code>architecture/</code>, <code>documentation/</code>, <code>frontend/</code>, <code>functions/</code>, <code>sample-data/</code>, <code>evidence/</code>, <code>screenshots/</code>. README, host.json, requirements.txt, and .gitignore committed at project start.</li>
+        <li><strong>Branching workflow established.</strong> Set up <code>main</code> and <code>rahat-dev</code> as primary branches. Pull request workflow tested end-to-end — all subsequent work committed to <code>rahat-dev</code> and merged to <code>main</code> via reviewed PRs.</li>
+        <li><strong>Architecture designed and submitted for review.</strong> Created and submitted the logical flow diagram and initial infrastructure diagram to Professor Ali Ziyaei for approval. Initial feedback was positive: "on the right track, the overall data flow makes sense."</li>
+        <li><strong>Frontend order form built.</strong> Created <code>frontend/index.html</code> — a working "Azure Serverless Laptop Store" order form collecting firstName, lastName, email, phone, deliveryAddress, laptop model, and quantity. Built but not yet connected to any backend at this stage.</li>
+        <li><strong>GitHub Issues created.</strong> Opened 8 issues — one per major project component — to structure development work and provide evidence of project planning for the WIL evaluation.</li>
+        <li><strong>Team structure documented.</strong> Established team roles: Hikmatullah Shinwari (Team Lead), Md Rahat Islam Anik (Repository Owner), Yatish Yashwant Vispute, Devansh Mehulkumar Bhatt, Ashdeep Singh Grewal, Puneet Singh (Team Members).</li>
+      </ul>
     </div>
-  </section>
+
+</section>
 
   <!-- ISSUES FACED AND PROBLEMS SOLVED -->
   <section class="card">
