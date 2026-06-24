@@ -1,34 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Azure Serverless Laptop Order Store</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoreTech — Canada's Electronics Destination</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--navy:#0a1a2f;--red:#d32f2f;--red-dk:#b71c1c;--gold:#f5c518;--text:#1a1a2e;--muted:#5f6368;--border:#dadce0;--bg:#f1f3f4;--card:#ffffff;--r:8px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+    nav{background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:2px solid var(--red);}
+    .n-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .n-icon{width:40px;height:40px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:800;}
+    .n-txt{font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-.5px;}
+    .n-txt span{color:var(--red);}
+    .n-links{display:flex;gap:24px;list-style:none;}
+    .n-links a{color:var(--navy);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;padding:4px 0;border-bottom:2px solid transparent;}
+    .n-links a:hover,.n-links a.active{color:var(--red);border-bottom-color:var(--red);}
+    .n-cta{background:var(--gold);color:var(--navy);padding:10px 28px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 2px 6px rgba(245,197,24,.3);cursor:pointer;border:none;}
+    .n-cta:hover{background:#e6b800;transform:scale(1.02);}
+    .promo{background:linear-gradient(90deg,var(--red),#b71c1c);text-align:center;padding:12px;color:#fff;font-size:13px;font-weight:500;}
+    .promo strong{font-weight:700;color:#ffd54f;}
+    .hero{background:linear-gradient(145deg,#0a1a2f 0%,#0d2847 100%);padding:60px 36px 52px;text-align:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(211,47,47,.12) 0%,transparent 70%);pointer-events:none;}
+    .h-pill{display:inline-block;background:rgba(255,215,0,.15);color:var(--gold);border:1px solid rgba(255,215,0,.25);padding:6px 24px;border-radius:30px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;}
+    .hero h1{font-size:48px;font-weight:800;color:#fff;line-height:1.1;letter-spacing:-.6px;margin-bottom:16px;}
+    .hero h1 span{color:var(--gold);}
+    .hero p{font-size:16px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto 28px;line-height:1.8;}
+    .h-stats{display:flex;justify-content:center;gap:50px;}
+    .h-stat .v{font-size:24px;font-weight:800;color:#fff;}
+    .h-stat .l{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
+    .pw{max-width:1100px;margin:0 auto;padding:44px 24px 64px;}
+    .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;border-bottom:2px solid var(--border);padding-bottom:12px;}
+    .sh h2{font-size:26px;font-weight:700;color:var(--navy);}
+    .sh h2 span{color:var(--red);}
+    .cp{background:#e8f0fe;color:var(--red);font-size:12px;font-weight:700;padding:4px 16px;border-radius:30px;}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:600px){.grid{grid-template-columns:1fr;}}
+    .card{background:var(--card);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden;transition:transform .25s,box-shadow .25s;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,.04);}
+    .card:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(0,0,0,.1);border-color:var(--red);}
+    .cb{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:4px 12px;border-radius:4px;margin:12px 0 0 12px;}
+    .badge-row{min-height:30px;}
+    .b-hot{background:#fee2e2;color:#b91c1c;}
+    .b-prem{background:#1e1b4b;color:#a5b4fc;}
+    .b-new{background:#d1fae5;color:#065f46;}
+    .sr{display:flex;flex-wrap:wrap;gap:4px;padding:10px 12px 0;}
+    .sp{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:#f1f3f4;color:var(--muted);}
+    .sc{background:#f5f3ff;color:#7c3aed;}
+    .su{background:#eff6ff;color:#1d4ed8;}
+    .sm{background:#f0fdf4;color:#15803d;}
+    .ss{background:#fff7ed;color:#c2410c;}
+    .lv-wrap{padding:20px 20px 8px;background:#fafafa;border-radius:4px;margin:0 10px;}
+    .laptop-img{width:100%;height:180px;object-fit:contain;padding:4px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,.06));}
+    .cb-body{padding:14px 16px 18px;flex:1;display:flex;flex-direction:column;gap:5px;}
+    .c-brand{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+    .c-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.3;}
+    .c-spec{font-size:12px;color:var(--muted);line-height:1.6;flex:1;}
+    .c-star{font-size:13px;color:var(--gold);}
+    .c-star span{font-size:10px;color:var(--muted);margin-left:3px;}
+    .c-price{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--navy);margin-top:4px;}
+    .c-price .was{font-size:13px;font-weight:400;color:var(--muted);text-decoration:line-through;margin-right:6px;}
+    .c-av{font-size:11px;font-weight:500;}
+    .av-y{color:#16a34a;}
+    .btn-buy{display:block;width:100%;padding:13px 14px;background:var(--gold);color:var(--navy);text-align:center;text-decoration:none;border-radius:6px;font-size:14px;font-weight:700;transition:all .2s;margin-top:10px;border:none;cursor:pointer;}
+    .btn-buy:hover{background:#e6b800;transform:scale(1.01);box-shadow:0 4px 12px rgba(245,197,24,.25);}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:16px;}
+    .modal-overlay.active{display:flex;}
+    .modal{background:#fff;border-radius:12px;width:100%;max-width:480px;padding:32px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,.2);}
+    .modal-close{position:absolute;top:16px;right:20px;font-size:22px;cursor:pointer;color:var(--muted);background:none;border:none;line-height:1;}
+    .modal-close:hover{color:var(--text);}
+    .modal-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+    .modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+    .modal-laptop{background:#f8faff;border:1px solid #dbeafe;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:13px;font-weight:600;color:var(--navy);}
+    .modal-laptop span{color:var(--red);}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+    .form-group label{font-size:12px;font-weight:600;color:var(--text);}
+    .form-group input,.form-group textarea{padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+    .form-group input:focus,.form-group textarea:focus{border-color:var(--navy);}
+    .form-group textarea{resize:vertical;min-height:70px;}
+    .qty-row{display:flex;align-items:center;gap:12px;}
+    .qty-row input{width:80px;text-align:center;}
+    .modal-submit{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:8px;}
+    .modal-submit:hover{background:#0d2847;}
+    .modal-submit:disabled{background:#aaa;cursor:not-allowed;}
+
+    /* SUCCESS / ERROR states */
+    .result-box{display:none;padding:16px;border-radius:8px;margin-top:16px;font-size:13px;font-weight:500;}
+    .result-box.success{display:block;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;}
+    .result-box.error{display:block;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;}
+
+    footer{background:#0a1a2f;color:rgba(255,255,255,.7);padding:48px 36px 24px;margin-top:24px;border-top:4px solid var(--gold);}
+    .fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1380px;margin:0 auto 40px;}
+    .fa .br{font-size:22px;font-weight:800;color:#fff;margin-bottom:12px;}
+    .fa .br span{color:var(--gold);}
+    .fa p{font-size:13px;line-height:1.8;max-width:280px;color:rgba(255,255,255,.5);}
+    .fc h4{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;}
+    .fc ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .fc ul a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+    .fc ul a:hover{color:var(--gold);}
+    .fb{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;text-align:center;font-size:12px;color:rgba(255,255,255,.3);max-width:1380px;margin:0 auto;}
+    .fbd{display:flex;justify-content:center;gap:16px;margin-bottom:10px;}
+    .fbdg{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:4px 14px;border-radius:30px;font-size:11px;}
+  </style>
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <h1>Azure Serverless Laptop Store</h1>
-      <p>Submit a laptop order and trigger an Azure event-driven workflow.</p>
-      <form id="orderForm">
-        <label>First Name<input type="text" id="firstName" required /></label>
-        <label>Last Name<input type="text" id="lastName" required /></label>
-        <label>Email<input type="email" id="email" required /></label>
-        <label>Phone<input type="tel" id="phone" required /></label>
-        <label>Delivery Address<textarea id="address" required></textarea></label>
-        <label>Laptop<select id="productId" required>
-          <option value="">Select a laptop</option>
-          <option value="NimbusBook Pro 14">NimbusBook Pro 14</option>
-          <option value="AzureBook Air 13">AzureBook Air 13</option>
-          <option value="CloudStation 15">CloudStation 15</option>
-        </select></label>
-        <label>Quantity<input type="number" id="quantity" min="1" value="1" required /></label>
-        <button type="submit">Place Order</button>
-      </form>
-      <div id="result"></div>
-    </section>
-  </main>
-  <script src="app.js"></script>
+
+<div class="promo">🔥 <strong>Summer Sale:</strong> Save up to $300 on select laptops — free shipping on all orders!</div>
+
+<nav>
+  <a href="index.html" class="n-logo">
+    <div class="n-icon">⚡</div>
+    <span class="n-txt">Core<span>Tech</span></span>
+  </a>
+  <ul class="n-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#laptops">Laptops</a></li>
+    <li><a href="#laptops">Deals</a></li>
+    <li><a href="#laptops">Support</a></li>
+  </ul>
+  <button class="n-cta" onclick="document.getElementById('laptops').scrollIntoView({behavior:'smooth'})">🛒 Shop Now</button>
+</nav>
+
+<div class="hero">
+  <div class="h-pill">✦ Canada's Trusted Tech Destination</div>
+  <h1>Find Your <span>Perfect Laptop</span></h1>
+  <p>Premium laptops with fast delivery across Canada — backed by a fully automated Azure serverless order processing system.</p>
+  <div class="h-stats">
+    <div class="h-stat"><div class="v">3</div><div class="l">Models</div></div>
+    <div class="h-stat"><div class="v">$899</div><div class="l">Starting At</div></div>
+    <div class="h-stat"><div class="v">2‑Day</div><div class="l">Delivery</div></div>
+    <div class="h-stat"><div class="v">1 Year</div><div class="l">Warranty</div></div>
+  </div>
+</div>
+
+<div class="pw" id="laptops">
+  <div class="sh">
+    <h2>Our <span>Laptops</span></h2>
+    <span class="cp">3 Models Available</span>
+  </div>
+  <div class="grid">
+
+    <!-- 1: NimbusBook Pro 14 -->
+    <div class="card">
+      <div class="badge-row"><div class="cb b-hot">🔥 Best Seller</div></div>
+      <div class="sr">
+        <span class="sp sc">14" Retina</span>
+        <span class="sp su">Core Ultra 7</span>
+        <span class="sp sm">16GB</span>
+        <span class="sp ss">1TB SSD</span>
+      </div>
+      <div class="lv-wrap">
+        <img src="https://cdn2.electronicscrazy.sg/Productimage/2022-08-0801-36-2446.webp" alt="NimbusBook Pro 14" class="laptop-img"/>
+      </div>
+      <div class="cb-body">
+        <div class="c-brand">NimbusBook</div>
+        <div class="c-name">NimbusBook Pro 14</div>
+        <div class="c-spec">Intel Core Ultra 7 · 16GB LPDDR5 · 1TB NVMe SSD · 14" Retina IPS · Win 11 Pro</div>
+        <div class="c-star">★★★★★ <span>(47 reviews)</span></div>
+        <div class="c-price"><span class="was">$1,499</span>$1,199.99</div>
+        <div class="c-av av-y">✓ In Stock</div>
+        <button class="btn-buy" onclick="openModal('NimbusBook Pro 14', '$1,199.99')">Buy Now →</button>
+      </div>
+    </div>
+
+    <!-- 2: AzureBook Air 13 -->
+    <div class="card">
+      <div class="badge-row"><div class="cb b-new">⭐ Most Popular</div></div>
+      <div class="sr">
+        <span class="sp sc">13" FHD</span>
+        <span class="sp su">Core i5</span>
+        <span class="sp sm">8GB</span>
+        <span class="sp ss">512GB SSD</span>
+      </div>
+      <div class="lv-wrap">
+        <img src="https://m.media-amazon.com/images/I/61GJTwv3WQL.jpg" alt="AzureBook Air 13" class="laptop-img"/>
+      </div>
+      <div class="cb-body">
+        <div class="c-brand">AzureBook</div>
+        <div class="c-name">AzureBook Air 13</div>
+        <div class="c-spec">Intel Core i5-1335U · 8GB DDR4 · 512GB NVMe SSD · 13" FHD IPS · Win 11 Home</div>
+        <div class="c-star">★★★★☆ <span>(31 reviews)</span></div>
+        <div class="c-price">$899.99</div>
+        <div class="c-av av-y">✓ In Stock</div>
+        <button class="btn-buy" onclick="openModal('AzureBook Air 13', '$899.99')">Buy Now →</button>
+      </div>
+    </div>
+
+    <!-- 3: CloudStation 15 -->
+    <div class="card">
+      <div class="badge-row"><div class="cb b-prem">💎 Premium</div></div>
+      <div class="sr">
+        <span class="sp sc">15.6" QHD</span>
+        <span class="sp su">Core i9</span>
+        <span class="sp sm">32GB</span>
+        <span class="sp ss">2TB SSD</span>
+      </div>
+      <div class="lv-wrap">
+        <img src="https://www.pc-canada.com/dd2/img/item/A-1500x1500/8749099.jpg" alt="CloudStation 15" class="laptop-img"/>
+      </div>
+      <div class="cb-body">
+        <div class="c-brand">CloudStation</div>
+        <div class="c-name">CloudStation 15</div>
+        <div class="c-spec">Intel Core i9-13900H · 32GB DDR5 · 2TB NVMe SSD · 15.6" QHD 165Hz · Win 11 Pro</div>
+        <div class="c-star">★★★★★ <span>(19 reviews)</span></div>
+        <div class="c-price"><span class="was">$2,199</span>$1,799.99</div>
+        <div class="c-av av-y">✓ In Stock</div>
+        <button class="btn-buy" onclick="openModal('CloudStation 15', '$1,799.99')">Buy Now →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Complete Your Order</div>
+    <div class="modal-sub">Fill in your details below to place your order.</div>
+
+    <div class="modal-laptop">
+      🛒 Ordering: <span id="modalLaptopName">—</span> &nbsp;·&nbsp; <span id="modalLaptopPrice">—</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name *</label>
+        <input type="text" id="firstName" placeholder="Rahat" required/>
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <input type="text" id="lastName" placeholder="Anik" required/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address *</label>
+      <input type="email" id="email" placeholder="you@example.com" required/>
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number *</label>
+      <input type="tel" id="phone" placeholder="416-555-1234" required/>
+    </div>
+
+    <div class="form-group">
+      <label>Delivery Address *</label>
+      <textarea id="deliveryAddress" placeholder="123 Main St, Toronto, ON M5V 1A1"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Quantity *</label>
+      <div class="qty-row">
+        <input type="number" id="quantity" value="1" min="1" max="10"/>
+        <span style="font-size:12px;color:var(--muted);">Max 10 per order</span>
+      </div>
+    </div>
+
+    <button class="modal-submit" id="submitBtn" onclick="submitOrder()">
+      Place Order →
+    </button>
+
+    <div class="result-box" id="resultBox"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="fg">
+    <div class="fa">
+      <div class="br">Core<span>Tech</span></div>
+      <p>Canada's trusted electronics destination. Powered by Microsoft Azure — fully serverless, event-driven order processing.</p>
+    </div>
+    <div class="fc"><h4>Products</h4><ul><li><a href="#laptops">NimbusBook Pro 14</a></li><li><a href="#laptops">AzureBook Air 13</a></li><li><a href="#laptops">CloudStation 15</a></li></ul></div>
+    <div class="fc"><h4>Support</h4><ul><li><a href="#">Track Order</a></li><li><a href="#">Returns Policy</a></li><li><a href="#">Warranty</a></li><li><a href="#">Contact Us</a></li></ul></div>
+    <div class="fc"><h4>Technology</h4><ul><li><a href="#">Azure Functions</a></li><li><a href="#">Storage Queues</a></li><li><a href="#">Table Storage</a></li><li><a href="#">Key Vault</a></li><li><a href="#">App Insights</a></li></ul></div>
+  </div>
+  <div class="fb">
+    <div class="fbd">
+      <span class="fbdg">🔒 Secure Checkout</span>
+      <span class="fbdg">🚚 2‑Day Delivery</span>
+      <span class="fbdg">🛡️ 1‑Year Warranty</span>
+      <span class="fbdg">⚡ Powered by Azure</span>
+    </div>
+    <p>© 2026 CoreTech Electronics. All rights reserved. | Powered by Azure Functions + Azure Serverless Architecture</p>
+  </div>
+</footer>
+
+<script>
+  const AZURE_ENDPOINT = 'https://func-order-processing-dev.azurewebsites.net/api/submit_order';
+
+  let currentLaptop = '';
+
+  function openModal(laptopName, price) {
+    currentLaptop = laptopName;
+    document.getElementById('modalLaptopName').textContent = laptopName;
+    document.getElementById('modalLaptopPrice').textContent = price;
+    document.getElementById('orderModal').classList.add('active');
+    document.getElementById('resultBox').className = 'result-box';
+    document.getElementById('resultBox').textContent = '';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'Place Order →';
+    // Clear form
+    ['firstName','lastName','email','phone','deliveryAddress'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('quantity').value = 1;
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').classList.remove('active');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('orderModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  async function submitOrder() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+    const quantity = parseInt(document.getElementById('quantity').value);
+
+    // Client-side validation
+    if (!firstName || !lastName || !email || !phone || !deliveryAddress) {
+      showResult('error', '⚠ Please fill in all required fields.');
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      showResult('error', '⚠ Please enter a valid email address.');
+      return;
+    }
+    if (quantity < 1 || quantity > 10) {
+      showResult('error', '⚠ Quantity must be between 1 and 10.');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Placing order...';
+
+    try {
+      const response = await fetch(AZURE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          deliveryAddress,
+          laptop: currentLaptop,
+          quantity
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'accepted') {
+        showResult('success',
+          `✅ Order placed successfully! Order ID: ${data.orderId}\n\nA confirmation email will be sent to ${email} shortly.`
+        );
+        btn.textContent = 'Order Placed ✓';
+      } else {
+        showResult('error', `⚠ ${data.message || 'Something went wrong. Please try again.'}`);
+        btn.disabled = false;
+        btn.textContent = 'Place Order →';
+      }
+    } catch (err) {
+      showResult('error', '⚠ Could not connect to the order system. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Place Order →';
+    }
+  }
+
+  function showResult(type, message) {
+    const box = document.getElementById('resultBox');
+    box.className = `result-box ${type}`;
+    box.textContent = message;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
 </body>
 </html>
