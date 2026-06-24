@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Gallery — Azure Event-Driven Serverless Order Processing System</title>
+<style>
+  :root {
+    --azure-blue: #0078D4;
+    --azure-dark: #1a3c6e;
+    --azure-light: #eef6fc;
+    --text-dark: #1f2933;
+    --text-muted: #5a6470;
+    --border-soft: #dbe7f3;
+    --bg-page: #f4f8fb;
+    --green: #1a7a3c;
+    --green-bg: #e6f4ea;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg-page); color: var(--text-dark); }
+
+  /* NAV */
+  nav { background: var(--azure-dark); padding: 14px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  nav a { color: #fff; text-decoration: none; font-size: 0.9rem; opacity: 0.85; transition: opacity 0.2s; }
+  nav a:hover { opacity: 1; }
+  nav .brand { font-weight: 700; font-size: 1rem; opacity: 1; margin-right: auto; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--azure-dark) 0%, var(--azure-blue) 100%); color: #fff; padding: 48px 32px 40px; text-align: center; }
+  .hero h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 10px; }
+  .hero p { font-size: 1rem; opacity: 0.88; max-width: 640px; margin: 0 auto 20px; }
+  .hero-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+  .hero-stats span { font-size: 0.95rem; background: rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; }
+
+  /* MAIN */
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* PHASE SECTION */
+  .phase-section { background: #fff; border: 1px solid var(--border-soft); border-radius: 12px; margin-bottom: 36px; overflow: hidden; box-shadow: 0 2px 12px rgba(13,71,161,0.06); }
+  .phase-header { background: var(--azure-light); border-bottom: 1px solid var(--border-soft); padding: 20px 28px; display: flex; align-items: flex-start; gap: 16px; }
+  .phase-badge { background: var(--azure-blue); color: #fff; font-weight: 700; font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; white-space: nowrap; margin-top: 2px; }
+  .phase-title { font-size: 1.15rem; font-weight: 700; color: var(--azure-dark); margin-bottom: 4px; }
+  .phase-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+  .phase-count { margin-left: auto; font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; padding-top: 4px; }
+
+  /* GRID */
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-soft); }
+  .photo-item { background: #fff; overflow: hidden; position: relative; aspect-ratio: 16/10; }
+  .photo-item a { display: block; width: 100%; height: 100%; }
+  .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; display: block; }
+  .photo-item:hover img { transform: scale(1.04); }
+  .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.72)); color: #fff; font-size: 0.72rem; padding: 20px 10px 8px; opacity: 0; transition: opacity 0.2s; line-height: 1.3; }
+  .photo-item:hover .photo-caption { opacity: 1; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 28px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border-soft); background: #fff; margin-top: 16px; }
+  footer a { color: var(--azure-blue); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 1.4rem; }
+  }
+  @media (max-width: 480px) {
+    .photo-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Azure Event-Driven Order Processing</span>
+  <a href="../index.html">🛒 Live Demo</a>
+  <a href="../architecture/architecture-diagrams-final.html">📊 Diagrams</a>
+  <a href="../roadmap/project-roadmap-build-plan.html">🗺️ Roadmap</a>
+  <a href="../architecture/project-architecture-overview.html">🏗️ Architecture</a>
+</nav>
+
+<div class="hero">
+  <h1>📁 Evidence Gallery</h1>
+  <p>Sanitized screenshots documenting every phase of the build — from environment setup through Phase 8 end-to-end testing. All evidence collected and verified during live Azure deployment.</p>
+  <div class="hero-stats">
+    <span>8 Phases</span>
+    <span>54 Screenshots</span>
+    <span>Live on Azure</span>
+    <span>George Brown College WIL 2026</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PHASE 1 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div>
+        <div class="phase-badge">Phase 1</div>
+      </div>
+      <div>
+        <div class="phase-title">Azure Infrastructure Provisioning</div>
+        <div class="phase-desc">All 8 core Azure resources provisioned in East US — Resource Group, Storage Account, 4 Storage Queues, Orders Table, Virtual Network, Function App, Key Vault, Application Insights, and Log Analytics Workspace. Includes Azure CLI setup and portal verification.</div>
+      </div>
+      <div class="phase-count">18 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase1/phase1-01-reference-architecture.png" target="_blank"><img src="phase1/phase1-01-reference-architecture.png" alt="Reference Architecture" loading="lazy"><div class="photo-caption">Reference Architecture</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-02-azure-cli-homebrew-install.png" target="_blank"><img src="phase1/phase1-02-azure-cli-homebrew-install.png" alt="Azure CLI Homebrew Install" loading="lazy"><div class="photo-caption">Azure CLI Homebrew Install</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-03-azure-cli-version-check.png" target="_blank"><img src="phase1/phase1-03-azure-cli-version-check.png" alt="Azure CLI Version Check" loading="lazy"><div class="photo-caption">Azure CLI Version Check</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-04-storage-provider-registration.png" target="_blank"><img src="phase1/phase1-04-storage-provider-registration.png" alt="Storage Provider Registration" loading="lazy"><div class="photo-caption">Storage Provider Registration</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-05-azure-cli-login-subscription-selection.png" target="_blank"><img src="phase1/phase1-05-azure-cli-login-subscription-selection.png" alt="Azure CLI Login" loading="lazy"><div class="photo-caption">Azure CLI Login & Subscription</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-06-azure-portal-sign-in.png" target="_blank"><img src="phase1/phase1-06-azure-portal-sign-in.png" alt="Azure Portal Sign In" loading="lazy"><div class="photo-caption">Azure Portal Sign In</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-07-storage-account-review-create.png" target="_blank"><img src="phase1/phase1-07-storage-account-review-create.png" alt="Storage Account Review & Create" loading="lazy"><div class="photo-caption">Storage Account Review & Create</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-08-storage-data-protection-settings.png" target="_blank"><img src="phase1/phase1-08-storage-data-protection-settings.png" alt="Storage Data Protection Settings" loading="lazy"><div class="photo-caption">Storage Data Protection Settings</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-09-storage-account-deployment-overview.png" target="_blank"><img src="phase1/phase1-09-storage-account-deployment-overview.png" alt="Storage Account Deployment Overview" loading="lazy"><div class="photo-caption">Storage Account Deployment Overview</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-10-storage-account-deployment-complete.png" target="_blank"><img src="phase1/phase1-10-storage-account-deployment-complete.png" alt="Storage Account Deployment Complete" loading="lazy"><div class="photo-caption">Storage Account Deployment Complete</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-11-storage-account-overview.png" target="_blank"><img src="phase1/phase1-11-storage-account-overview.png" alt="Storage Account Overview" loading="lazy"><div class="photo-caption">Storage Account Overview</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-12-storage-containers-private.png" target="_blank"><img src="phase1/phase1-12-storage-containers-private.png" alt="Storage Containers Private" loading="lazy"><div class="photo-caption">Storage Containers (Private)</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-13-storage-queues-created.png" target="_blank"><img src="phase1/phase1-13-storage-queues-created.png" alt="Storage Queues Created" loading="lazy"><div class="photo-caption">All 4 Storage Queues Created</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-14-storage-file-share-configuration.png" target="_blank"><img src="phase1/phase1-14-storage-file-share-configuration.png" alt="Storage File Share Configuration" loading="lazy"><div class="photo-caption">Storage File Share Configuration</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-15-key-vault-deployment-overview.png" target="_blank"><img src="phase1/phase1-15-key-vault-deployment-overview.png" alt="Key Vault Deployment Overview" loading="lazy"><div class="photo-caption">Key Vault Deployment Overview</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-16-key-vault-deployment-complete.png" target="_blank"><img src="phase1/phase1-16-key-vault-deployment-complete.png" alt="Key Vault Deployment Complete" loading="lazy"><div class="photo-caption">Key Vault Deployment Complete</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-17-key-vault-overview.png" target="_blank"><img src="phase1/phase1-17-key-vault-overview.png" alt="Key Vault Overview" loading="lazy"><div class="photo-caption">Key Vault Overview</div></a></div>
+      <div class="photo-item"><a href="phase1/phase1-18-resource-group-all-resources.png" target="_blank"><img src="phase1/phase1-18-resource-group-all-resources.png" alt="Resource Group All Resources" loading="lazy"><div class="photo-caption">Resource Group — All Resources Verified</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 2</div></div>
+      <div>
+        <div class="phase-title">Frontend Connection & submit_order Local Development</div>
+        <div class="phase-desc">Connected frontend/app.js to the live Azure Function endpoint. Local development environment setup, HTTP trigger function creation, API success response confirmed, and first queue message verified in Azure Storage.</div>
+      </div>
+      <div class="phase-count">8 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase2/phase2-01-function-code-local-development.png" target="_blank"><img src="phase2/phase2-01-function-code-local-development.png" alt="Function Code Local Development" loading="lazy"><div class="photo-caption">Function Code Local Development</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-02-function-app-package-install-and-local-run.png" target="_blank"><img src="phase2/phase2-02-function-app-package-install-and-local-run.png" alt="Package Install and Local Run" loading="lazy"><div class="photo-caption">Package Install & Local Run</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-03-function-app-local-runtime-running.png" target="_blank"><img src="phase2/phase2-03-function-app-local-runtime-running.png" alt="Function App Local Runtime" loading="lazy"><div class="photo-caption">Function App Local Runtime Running</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-04-submit-order-api-success-response.png" target="_blank"><img src="phase2/phase2-04-submit-order-api-success-response.png" alt="Submit Order API Success" loading="lazy"><div class="photo-caption">submit_order API Success Response</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-05-create-http-trigger-function.png" target="_blank"><img src="phase2/phase2-05-create-http-trigger-function.png" alt="Create HTTP Trigger Function" loading="lazy"><div class="photo-caption">Create HTTP Trigger Function</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-06-function-app-keys-overview.png" target="_blank"><img src="phase2/phase2-06-function-app-keys-overview.png" alt="Function App Keys Overview" loading="lazy"><div class="photo-caption">Function App Keys Overview</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-07-function-app-keys-validation.png" target="_blank"><img src="phase2/phase2-07-function-app-keys-validation.png" alt="Function App Keys Validation" loading="lazy"><div class="photo-caption">Function App Keys Validation</div></a></div>
+      <div class="photo-item"><a href="phase2/phase2-08-orders-incoming-queue-message.png" target="_blank"><img src="phase2/phase2-08-orders-incoming-queue-message.png" alt="Orders Incoming Queue Message" loading="lazy"><div class="photo-caption">orders-incoming Queue Message Confirmed</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 3</div></div>
+      <div>
+        <div class="phase-title">submit_order Function — Deployed and Verified Live</div>
+        <div class="phase-desc">submit_order deployed to Azure, live URL confirmed, remote build success. Frontend order form tested end-to-end — real order submitted through browser, HTTP 202 response received with order UUID.</div>
+      </div>
+      <div class="phase-count">7 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase3/phase3-01-remote-build-success.png" target="_blank"><img src="phase3/phase3-01-remote-build-success.png" alt="Remote Build Success" loading="lazy"><div class="photo-caption">Remote Build Success</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-02-function-url-derived.png" target="_blank"><img src="phase3/phase3-02-function-url-derived.png" alt="Function URL Derived" loading="lazy"><div class="photo-caption">Live Function URL Confirmed</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-03-function-app-log-stream-running-redacted.png" target="_blank"><img src="phase3/phase3-03-function-app-log-stream-running-redacted.png" alt="Function App Log Stream" loading="lazy"><div class="photo-caption">Function App Log Stream Running</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-04-frontend-order-received-redacted.png" target="_blank"><img src="phase3/phase3-04-frontend-order-received-redacted.png" alt="Frontend Order Received" loading="lazy"><div class="photo-caption">Frontend Order Received Confirmation</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-05-local-function-runtime-request-log.png" target="_blank"><img src="phase3/phase3-05-local-function-runtime-request-log.png" alt="Local Function Runtime Request Log" loading="lazy"><div class="photo-caption">Local Function Runtime Request Log</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-06-local-function-runtime-request-log-continuation.png" target="_blank"><img src="phase3/phase3-06-local-function-runtime-request-log-continuation.png" alt="Request Log Continuation" loading="lazy"><div class="photo-caption">Request Log Continuation</div></a></div>
+      <div class="photo-item"><a href="phase3/phase3-07-local-function-runtime-restart-log.png" target="_blank"><img src="phase3/phase3-07-local-function-runtime-restart-log.png" alt="Runtime Restart Log" loading="lazy"><div class="photo-caption">Runtime Restart Log</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 4</div></div>
+      <div>
+        <div class="phase-title">validate_order — Queue Trigger, Fan-Out, and the Base64 Bug</div>
+        <div class="phase-desc">validate_order deployed as a queue-triggered function. Documents the major debugging session: every message silently moved to poison queue until the root cause was found — Azure Functions queue trigger expected Base64, Storage SDK sent plain JSON. Fixed with messageEncoding: none in host.json.</div>
+      </div>
+      <div class="phase-count">4 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase4/phase4-01-validate-order-function-registered.png" target="_blank"><img src="phase4/phase4-01-validate-order-function-registered.png" alt="validate_order Function Registered" loading="lazy"><div class="photo-caption">validate_order Function Registered</div></a></div>
+      <div class="photo-item"><a href="phase4/phase4-02-queue-trigger-debugging-and-poison-queue.png" target="_blank"><img src="phase4/phase4-02-queue-trigger-debugging-and-poison-queue.png" alt="Queue Trigger Debugging and Poison Queue" loading="lazy"><div class="photo-caption">Queue Trigger Debugging — Poison Queue</div></a></div>
+      <div class="photo-item"><a href="phase4/phase4-03-message-encoding-debugging-context.png" target="_blank"><img src="phase4/phase4-03-message-encoding-debugging-context.png" alt="Message Encoding Debugging" loading="lazy"><div class="photo-caption">MessageEncoding Root Cause Found</div></a></div>
+      <div class="photo-item"><a href="phase4/phase4-04-queue-message-processing-after-fix.png" target="_blank"><img src="phase4/phase4-04-queue-message-processing-after-fix.png" alt="Queue Message Processing After Fix" loading="lazy"><div class="photo-caption">Queue Messages Processing After Fix</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 5</div></div>
+      <div>
+        <div class="phase-title">log_to_table + send_confirmation_email — Full Pipeline Live</div>
+        <div class="phase-desc">All parallel processing functions deployed. Orders logged to Azure Table Storage, confirmation emails delivered via Azure Communication Services. First real end-to-end order flow verified live — submitted, validated, logged, and email received in Gmail.</div>
+      </div>
+      <div class="phase-count">3 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase5/phase5-01-combined-function-deployment-success.png" target="_blank"><img src="phase5/phase5-01-combined-function-deployment-success.png" alt="Combined Function Deployment Success" loading="lazy"><div class="photo-caption">Combined Function Deployment Success</div></a></div>
+      <div class="photo-item"><a href="phase5/phase5-02-table-and-email-branch-runtime-output.png" target="_blank"><img src="phase5/phase5-02-table-and-email-branch-runtime-output.png" alt="Table and Email Branch Runtime Output" loading="lazy"><div class="photo-caption">Table & Email Branch Runtime Output</div></a></div>
+      <div class="photo-item"><a href="phase5/phase5-03-confirmation-email-received-redacted.png" target="_blank"><img src="phase5/phase5-03-confirmation-email-received-redacted.png" alt="Confirmation Email Received" loading="lazy"><div class="photo-caption">Confirmation Email Received in Gmail ✅</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 6</div></div>
+      <div>
+        <div class="phase-title">Security — Key Vault + Managed Identity</div>
+        <div class="phase-desc">All secrets migrated to Azure Key Vault. System-Assigned Managed Identity enabled on the Function App, granted read-only Key Vault Secrets User role. App Settings updated to use @Microsoft.KeyVault() reference syntax — no plain-text credentials anywhere.</div>
+      </div>
+      <div class="phase-count">3 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase6/phase6-01-key-vault-rbac-role-assignment.png" target="_blank"><img src="phase6/phase6-01-key-vault-rbac-role-assignment.png" alt="Key Vault RBAC Role Assignment" loading="lazy"><div class="photo-caption">Key Vault RBAC Role Assignment</div></a></div>
+      <div class="photo-item"><a href="phase6/phase6-02-key-vault-app-settings-references.png" target="_blank"><img src="phase6/phase6-02-key-vault-app-settings-references.png" alt="Key Vault App Settings References" loading="lazy"><div class="photo-caption">Key Vault Reference Syntax in App Settings</div></a></div>
+      <div class="photo-item"><a href="phase6/phase6-03-key-vault-runtime-email-validation.png" target="_blank"><img src="phase6/phase6-03-key-vault-runtime-email-validation.png" alt="Key Vault Runtime Email Validation" loading="lazy"><div class="photo-caption">Runtime Validation — Secrets Resolving from Key Vault</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 7 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 7</div></div>
+      <div>
+        <div class="phase-title">Monitoring & Observability</div>
+        <div class="phase-desc">Application Insights wired to all 5 functions. Live Metrics stream, performance breakdowns, and Log Analytics KQL queries confirmed. Azure Monitor alert rule configured for Http5xx errors with email notification via Action Group.</div>
+      </div>
+      <div class="phase-count">4 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase7/phase7-01-application-insights-overview.png" target="_blank"><img src="phase7/phase7-01-application-insights-overview.png" alt="Application Insights Overview" loading="lazy"><div class="photo-caption">Application Insights Overview</div></a></div>
+      <div class="photo-item"><a href="phase7/phase7-02-live-metrics-and-sample-telemetry.png" target="_blank"><img src="phase7/phase7-02-live-metrics-and-sample-telemetry.png" alt="Live Metrics and Sample Telemetry" loading="lazy"><div class="photo-caption">Live Metrics & Sample Telemetry</div></a></div>
+      <div class="photo-item"><a href="phase7/phase7-03-performance-operations-breakdown.png" target="_blank"><img src="phase7/phase7-03-performance-operations-breakdown.png" alt="Performance Operations Breakdown" loading="lazy"><div class="photo-caption">Performance Operations Breakdown</div></a></div>
+      <div class="photo-item"><a href="phase7/phase7-04-log-analytics-function-success-query.png" target="_blank"><img src="phase7/phase7-04-log-analytics-function-success-query.png" alt="Log Analytics Function Success Query" loading="lazy"><div class="photo-caption">Log Analytics KQL Query — Function Success</div></a></div>
+    </div>
+  </div>
+
+  <!-- PHASE 8 -->
+  <div class="phase-section">
+    <div class="phase-header">
+      <div><div class="phase-badge">Phase 8</div></div>
+      <div>
+        <div class="phase-title">End-to-End Testing — Six-Scenario Test Matrix</div>
+        <div class="phase-desc">Comprehensive test matrix covering all order scenarios: valid orders (confirmation email + table record), missing fields, invalid email format, zero quantity, insufficient stock (rejection email), and unknown laptop model. Quantity=0 bug found and fixed during this phase.</div>
+      </div>
+      <div class="phase-count">7 screenshots</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item"><a href="phase8/phase8-01-five-functions-deployed.png" target="_blank"><img src="phase8/phase8-01-five-functions-deployed.png" alt="Five Functions Deployed" loading="lazy"><div class="photo-caption">All 5 Functions Deployed & Registered</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-02-valid-order-confirmation-email.png" target="_blank"><img src="phase8/phase8-02-valid-order-confirmation-email.png" alt="Valid Order Confirmation Email" loading="lazy"><div class="photo-caption">Valid Order — Confirmation Email ✅</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-03-inventory-table-stock-tracking.png" target="_blank"><img src="phase8/phase8-03-inventory-table-stock-tracking.png" alt="Inventory Table Stock Tracking" loading="lazy"><div class="photo-caption">LaptopInventory Table — Stock Tracking</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-04-insufficient-stock-rejection-email.png" target="_blank"><img src="phase8/phase8-04-insufficient-stock-rejection-email.png" alt="Insufficient Stock Rejection Email" loading="lazy"><div class="photo-caption">Insufficient Stock — Rejection Email ✅</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-05-missing-field-validation-response.png" target="_blank"><img src="phase8/phase8-05-missing-field-validation-response.png" alt="Missing Field Validation Response" loading="lazy"><div class="photo-caption">Missing Field Validation Response</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-06-unknown-item-rejection-email.png" target="_blank"><img src="phase8/phase8-06-unknown-item-rejection-email.png" alt="Unknown Item Rejection Email" loading="lazy"><div class="photo-caption">Unknown Laptop Model — Rejection Email ✅</div></a></div>
+      <div class="photo-item"><a href="phase8/phase8-07-complete-test-matrix-summary.png" target="_blank"><img src="phase8/phase8-07-complete-test-matrix-summary.png" alt="Complete Test Matrix Summary" loading="lazy"><div class="photo-caption">Complete 6-Scenario Test Matrix Summary</div></a></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Azure Event-Driven Serverless Order Processing System — George Brown College WIL Project (May 2026 – August 2026)<br>
+  Repository Owner: Md Rahat Islam Anik &nbsp;·&nbsp;
+  <a href="../index.html">Live Demo</a> &nbsp;·&nbsp;
+  <a href="../roadmap/project-roadmap-build-plan.html">Project Roadmap</a> &nbsp;·&nbsp;
+  <a href="../architecture/architecture-diagrams-final.html">Architecture Diagrams</a>
+</footer>
+
+</body>
+</html>
