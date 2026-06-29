@@ -906,6 +906,88 @@
       and what's next — this is the accountability trail for the project.
     </p>
 
+    <div class="log-entry" style="background: var(--azure-light); border-left: 4px solid var(--azure-blue);">
+      <div class="log-date">📊 Project Hours Summary — Estimated Active Work Sessions</div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+        Hours are honest session estimates based on the complexity and volume of work completed per session
+        and corroborated by commit timestamps. Not tracked with a formal time tool — estimated to the nearest
+        half-hour. Includes development, debugging, testing, documentation, and review work.
+      </p>
+      <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+        <thead>
+          <tr style="background:var(--azure-blue); color:#fff;">
+            <th style="padding:8px 12px; text-align:left;">Date</th>
+            <th style="padding:8px 12px; text-align:left;">Session Activity</th>
+            <th style="padding:8px 12px; text-align:right;">Est. Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 3, 2026</td>
+            <td style="padding:8px 12px;">Repository scaffold, team structure, architecture design, initial frontend form</td>
+            <td style="padding:8px 12px; text-align:right;">2.5h</td>
+          </tr>
+          <tr style="background:#fafcfe; border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 12–15, 2026</td>
+            <td style="padding:8px 12px;">Documentation cleanup, professor approval coordination, architecture overview page published</td>
+            <td style="padding:8px 12px; text-align:right;">3.5h</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 19, 2026</td>
+            <td style="padding:8px 12px;">Phase 1 infrastructure provisioned, project roadmap published, Phase 1 &amp; 2 evidence pushed</td>
+            <td style="padding:8px 12px; text-align:right;">4.0h</td>
+          </tr>
+          <tr style="background:#fafcfe; border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 20, 2026</td>
+            <td style="padding:8px 12px;">Phase 2 frontend connected, Phase 3 submit_order deployed and verified live</td>
+            <td style="padding:8px 12px; text-align:right;">3.5h</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 21, 2026</td>
+            <td style="padding:8px 12px;">Phases 4, 5, 6 — validate_order, ACS email, log_to_table, Key Vault/Managed Identity. Included multi-hour Base64/messageEncoding debugging session and RBAC permissions resolution</td>
+            <td style="padding:8px 12px; text-align:right;">9.0h</td>
+          </tr>
+          <tr style="background:#fafcfe; border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 22, 2026</td>
+            <td style="padding:8px 12px;">Phase 7 monitoring, Phase 8 testing, evidence Phase 6–8, GitHub Pages deployment, Revision 4 diagrams, audit findings fixed, laptop code bug found and fixed</td>
+            <td style="padding:8px 12px; text-align:right;">7.0h</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 24, 2026</td>
+            <td style="padding:8px 12px;">CoreTech professional storefront built and deployed, evidence gallery HTML created, weekly log rewritten with accurate dates</td>
+            <td style="padding:8px 12px; text-align:right;">3.5h</td>
+          </tr>
+          <tr style="background:#fafcfe; border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">June 29, 2026</td>
+            <td style="padding:8px 12px;">Comprehensive documentation audit (3 independent passes), R4 Final diagram pushed, all pending wording removed, Issue #13 documented, Phase 9 added, hours log added, weekly log updated</td>
+            <td style="padding:8px 12px; text-align:right;">6.0h</td>
+          </tr>
+          <tr style="background:var(--azure-light); font-weight:700;">
+            <td style="padding:10px 12px;" colspan="2">Total Estimated Project Hours (to June 29, 2026)</td>
+            <td style="padding:10px 12px; text-align:right; color:var(--azure-blue);">~39h</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-top:10px;">
+        Additional hours expected: demo video recording, final evidence pass, and August 2026 WIL submission. 
+        Estimated project completion: ~45–50 hours total.
+      </p>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Week of June 29, 2026 — Phase 9: Documentation Audit, Issue Documentation, and Final Polish</div>
+      <ul>
+        <li><strong>Comprehensive documentation audit completed (3 passes).</strong> An independent Codex audit was run against the local repo, followed by a Claude cross-verification against the live GitHub main branch via API. A third manual pass was done interactively. The Codex audit had 5 of 6 findings invalidated (stale local clone — couldn't reach GitHub) and 1 genuine finding confirmed (README folder structure mismatch). All findings addressed.</li>
+        <li><strong>Issue #13 documented in Issues Faced.</strong> The laptop product code mismatch bug — where the frontend sent <code>LAPTOP-001/002/003</code> but the LaptopInventory RowKeys are actual model names — was formally documented as a significant integration testing failure. Root cause, diagnosis process, fix, and lesson learned all recorded.</li>
+        <li><strong>Phase 9 added to project roadmap.</strong> "System Validation, Documentation Polish &amp; Final Delivery Preparation (June 22 – August 2026)" formally added as the current active phase — covering live system validation, evidence organization, peer review, audit passes, and demo video recording.</li>
+        <li><strong>Session hours log added.</strong> A session-by-session hours estimate table added to the weekly log section — honest estimates based on session complexity and commit timestamps. Total: approximately 39 hours to date, with 45–50 hours estimated at full project completion.</li>
+        <li><strong>README final fixes applied.</strong> High-Level Architecture flow corrected ("Azure Static Web App" → "CoreTech Store (GitHub Pages)"), screenshot count corrected (54 → 53), GitHub Pages moved from "In Progress" to "Completed", In Progress now only lists the demo video as remaining.</li>
+        <li><strong>6 roadmap and architecture audit findings fixed.</strong> Broken Issues Faced #10 sentence cleaned up, June 22 log Phase 8 count corrected (7 → 6), Phase 7 function count corrected (4 → 5), Phase 2 component updated to GitHub Pages, Approved Flow updated to CoreTech Store, Figure 2 caption and Key Vault Visibility note rewritten to match the actual R4 diagram.</li>
+        <li><strong>Peer repo review conducted.</strong> Hikmatullah Shinwari's implementation reviewed for comparison. His repo has a demo video and a low-stock alert email. Key differentiators for this repo confirmed: 53 sanitized evidence screenshots, 3+ week documented commit history, infrastructure build scripts, self-contained architecture diagrams, professional CoreTech storefront, comprehensive debugging documentation.</li>
+        <li><strong>Project status as of June 29:</strong> All 9 phases (including Phase 9 validation) in progress. One remaining deliverable before August 2026 WIL submission: record the demo video. All code, infrastructure, documentation, evidence, and diagrams are complete and verified.</li>
+      </ul>
+    </div>
+
     <div class="log-entry">
       <div class="log-date">Week of June 28, 2026 — Portfolio Polish, Audit Fixes, Diagram Finalization</div>
       <ul>
@@ -925,7 +1007,7 @@
     </div>
 
     <div class="log-entry">
-      <div class="log-date">Week of June 23, 2026 — CoreTech Professional Storefront Launch</div>
+      <div class="log-date">Week of June 24, 2026 — CoreTech Professional Storefront Launch</div>
       <ul>
         <li><strong>CoreTech e-commerce storefront deployed.</strong> Replaced the plain white order form with a professional retail storefront — "CoreTech — Canada's Electronics Destination" — featuring a navy/red/gold colour scheme, sticky navigation, hero section, and individual product cards for each laptop model in the LaptopInventory table.</li>
         <li><strong>Product cards with Buy Now modals.</strong> Each product card (NimbusBook Pro 14 at $1,199.99, AzureBook Air 13 at $899.99, CloudStation 15 at $1,799.99) has a Buy Now button that opens a modal order form pre-filled with the laptop name — eliminating the earlier dropdown mismatch bug entirely by design.</li>
