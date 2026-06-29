@@ -521,8 +521,8 @@
       <h3>Components to Build</h3>
       <div class="component-grid">
         <div class="component-card">
-          <div class="comp-name">🖥️ Azure Static Web App</div>
-          <div class="comp-desc">Hosts <code>frontend/index.html</code> — free tier, global CDN.</div>
+          <div class="comp-name">🖥️ GitHub Pages</div>
+          <div class="comp-desc">Hosts the CoreTech Store frontend (<code>index.html</code>). Approved substitute for Azure Static Web Apps, which was blocked on all supported regions under the Azure for Students subscription. Approved by Professor Ali Ziyaei, June 22, 2026.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">🔗 fetch() Integration</div>
@@ -762,7 +762,7 @@
       <div class="component-grid">
         <div class="component-card">
           <div class="comp-name">📈 Application Insights</div>
-          <div class="comp-desc"><code>appi-order-processing-dev</code> — captures telemetry from all 4 functions.</div>
+          <div class="comp-desc"><code>appi-order-processing-dev</code> — captures telemetry from all 5 functions.</div>
         </div>
         <div class="component-card">
           <div class="comp-name">📊 Azure Monitor</div>
@@ -946,7 +946,7 @@
         <li><strong>Professor Feedback section removed.</strong> Cleaned up the architecture overview page to reflect the project's professional portfolio state rather than its academic review origin.</li>
         <li><strong>Frontend deployed to GitHub Pages.</strong> Copied index.html, app.js, and styles.css to repo root so GitHub Pages (serving from /main) can render the live order form at the public URL.</li>
         <li><strong>GitHub Pages approved by Professor Ali Ziyaei.</strong> Azure Static Web Apps was blocked on all 5 supported regions under the Azure for Students subscription (RequestDisallowedByAzure). Emailed Professor Ali explaining the situation; he replied "Good thinking and good workaround. Yes, it is accepted." All documentation updated to reflect this resolution.</li>
-        <li><strong>Phase 6, 7, and 8 evidence screenshots pushed.</strong> 14 sanitized screenshots added: 3 for Phase 6 (Key Vault RBAC, App Settings references, runtime validation), 4 for Phase 7 (App Insights overview, live metrics, performance breakdown, Log Analytics query), and 7 for Phase 8 (5 functions deployed, valid order confirmation, inventory table, insufficient stock rejection, missing field validation, unknown item rejection, complete test matrix summary).</li>
+        <li><strong>Phase 6, 7, and 8 evidence screenshots pushed.</strong> 14 sanitized screenshots added: 3 for Phase 6 (Key Vault RBAC, App Settings references, runtime validation), 4 for Phase 7 (App Insights overview, live metrics, performance breakdown, Log Analytics query), and 6 for Phase 8 (5 functions deployed, valid order confirmation, inventory table, insufficient stock rejection, missing field validation, and unknown item rejection).</li>
       </ul>
     </div>
 
@@ -1118,7 +1118,7 @@
         <li><strong>Problem:</strong> Static Web App creation failed with <code>RequestDisallowedByAzure</code> in every supported Azure Static Web Apps region tested: Central US, East US 2, West US 2, West Europe, and East Asia.</li>
         <li><strong>Diagnosis Process:</strong> Each supported region was tested individually through Azure CLI. Every attempt returned the same policy error.</li>
         <li><strong>Root Cause:</strong> Azure for Students appears to block Static Web Apps for this subscription, leaving no available supported region for this specific resource type.</li>
-        <li><strong>Resolution:</strong> Professor Ali Ziyaei approved GitHub Pages as the substitute. He replied: "Good thinking and good workaround. Yes, it is accepted." (June 22, 2026). Frontend is now live at the GitHub Pages URL hosting path, such as GitHub Pages, or pursue an Azure support ticket. Response is pending.</li>
+        <li><strong>Resolution:</strong> Professor Ali Ziyaei approved GitHub Pages as the substitute. He replied: "Good thinking and good workaround. Yes, it is accepted." (June 22, 2026). Frontend is now live at: <a href="https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/" target="_blank">https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/</a></li>
       </ul>
     </div>
 
