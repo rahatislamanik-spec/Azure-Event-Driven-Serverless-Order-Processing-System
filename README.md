@@ -197,11 +197,12 @@ Completed:
 * Phase 7 monitoring and observability configuration
 * Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
 * Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
+* Frontend hosted via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
 * Frontend hosted via GitHub Pages — Azure Static Web Apps blocked on all 5 supported regions, GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026)
 
 In Progress:
 
-* Frontend hosted via GitHub Pages — Azure Static Web Apps blocked on all 5 supported regions, GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026)
+* Demo video recording — remaining item before final August 2026 submission
 
 ---
 
