@@ -38,7 +38,7 @@ The solution leverages serverless computing, asynchronous messaging, queue-based
 
 | Service                      | Purpose                   |
 | ---------------------------- | ------------------------- |
-| Azure Static Web Apps        | Frontend hosting          |
+| GitHub Pages | Frontend hosting — approved substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription, approved by Professor Ali Ziyaei, June 22, 2026) |
 | Azure Functions              | Serverless compute        |
 | Azure Storage Queues         | Asynchronous processing   |
 | Azure Table Storage          | Order and inventory persistence |
@@ -178,7 +178,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 8 testing complete — frontend hosting decision pending
+Current Status: Phase 8 Complete — Live on Azure
 
 Completed:
 
@@ -227,7 +227,7 @@ Development is being completed in multiple phases, with the repository updated r
 
 ### Project Status
 
-**Current Phase:** Phase 8 Complete — Frontend Hosting Pending
+**Current Phase:** Phase 8 Complete — Live on Azure
 
 #### Progress Overview
 
