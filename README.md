@@ -6,7 +6,7 @@
 | | Link |
 |---|---|
 | 🛒 **Order Form** | [Launch Storefront](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/) |
-| 📁 **Evidence Gallery** | [View All 54 Screenshots](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/evidence/evidence-gallery.html) |
+| 📁 **Evidence Gallery** | [View All 53 Screenshots](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/evidence/evidence-gallery.html) |
 | 📊 **Architecture & Flow Diagrams** | [View Diagrams](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html) |
 | 🗺️ **Project Roadmap** | [View Roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html) |
 | 🏗️ **Architecture Overview** | [View Overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html) |
@@ -54,7 +54,7 @@ Customer
 
 ↓
 
-Azure Static Web App
+CoreTech Store (GitHub Pages)
 
 ↓
 
@@ -197,6 +197,7 @@ Completed:
 * Phase 7 monitoring and observability configuration
 * Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
 * Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
+* Frontend hosted via GitHub Pages — Azure Static Web Apps blocked on all 5 supported regions, GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026)
 
 In Progress:
 
