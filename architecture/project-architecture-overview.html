@@ -518,7 +518,7 @@
     </div>
     <h3>Approved Flow</h3>
     <p class="muted">
-      Customer → Azure Static Web App → <code>submit_order</code> Function →
+      Customer → CoreTech Store on GitHub Pages → <code>submit_order</code> Function →
       <code>orders-incoming</code> Queue → <code>validate_order</code> Function →
       <code>LaptopInventory</code> Table stock check
     </p>
@@ -567,22 +567,16 @@
     <div class="diagram-frame">
       <img src="infrastructure-diagram.png" alt="Event-Driven Serverless Order Processing System - Azure Infrastructure Diagram">
     </div>
-    <p class="diagram-caption">Figure 2 — Infrastructure diagram showing the
-      <code>rg-order-processing-dev</code> resource group in the <strong>East US</strong> region,
-      with all Azure resources, the Security Layer (Azure Key Vault), and the Observability Layer
-      explicitly placed and labeled.</p>
+    <p class="diagram-caption">Figure 2 — Revision 4 architecture diagram showing the complete order processing flow: CoreTech Store (GitHub Pages) → GitHub Repository → 5 Azure Functions (<code>submit_order</code>, <code>validate_order</code>, <code>send_confirmation_email</code>, <code>send_rejection_email</code>, <code>log_to_table</code>) → 4 Storage Queues → Azure Table Storage (Orders + LaptopInventory tables) + Azure Communication Services Email. Azure Key Vault accessed via Managed Identity. Application Insights, Azure Monitor, and Log Analytics Workspace for observability. Region: East US. Resource Group: <code>rg-order-processing-dev</code>. Student: Md Rahat Islam Anik, 101635860.</p>
     <div class="highlight-note">
-      🔑 <strong>Key Vault Visibility:</strong> Azure Key Vault is shown in its own clearly labeled
-      <strong>Security Layer</strong> on the right-hand side of the diagram, with dashed access/dependency
-      lines connecting it to the Function App, Storage Queues, Table Storage, and Communication Services —
-      directly resolving the professor's feedback about resource visibility.
+      🔑 <strong>Key Vault Visibility:</strong> Azure Key Vault is shown on the right-hand side of the diagram, connected to the Azure Function App via a gold Managed Identity line — reflecting the actual implementation where all 5 Azure Functions access Key Vault secrets at runtime through the Function App's System-Assigned Managed Identity, with no plain-text credentials anywhere in the codebase.
     </div>
     <h3>Infrastructure Includes</h3>
     <ul style="color: var(--text-muted); font-size: 0.92rem;">
       <li>Azure Region: <strong>East US</strong></li>
       <li>Resource Group: <code>rg-order-processing-dev</code></li>
       <li>Virtual Network (network boundary)</li>
-      <li>Azure Static Web App (Presentation Layer)</li>
+      <li>GitHub Pages (Presentation Layer) — CoreTech Store frontend</li>
       <li>Azure Function App with five functions (Application Layer)</li>
       <li>Azure Storage Account with four Storage Queues (Messaging Layer)</li>
       <li>Azure Table Storage — Orders and LaptopInventory tables (Data Layer)</li>
@@ -603,7 +597,7 @@
         <tr><td>Resource Group</td><td><code>rg-order-processing-dev</code></td><td>Container for all Azure resources</td></tr>
         <tr><td>Region</td><td>East US</td><td>Primary deployment region</td></tr>
         <tr><td>Virtual Network</td><td><code>vnet-order-processing-dev</code></td><td>Network boundary</td></tr>
-        <tr><td>Static Web App</td><td><code>st-order-store-dev</code></td><td>Customer order frontend</td></tr>
+        <tr><td>GitHub Pages</td><td><code>rahatislamanik-spec.github.io</code></td><td>CoreTech Store frontend (approved substitute — Azure Static Web Apps blocked on all supported regions, approved by Professor Ali Ziyaei, June 22, 2026)</td></tr>
         <tr><td>Function App</td><td><code>func-order-processing-dev</code></td><td>Serverless backend functions</td></tr>
         <tr><td>Storage Account</td><td><code>storderstoragedev</code></td><td>Hosts queues and table storage</td></tr>
         <tr><td>Queue</td><td><code>orders-incoming</code></td><td>Holds incoming order messages</td></tr>
@@ -639,7 +633,7 @@
     <h3>Scope discipline</h3>
     <p class="muted">
       The project intentionally uses only the Azure services required to demonstrate these principles:
-      Azure Static Web Apps, Azure Functions, Azure Storage Account (Queues &amp; Table Storage),
+      GitHub Pages, Azure Functions, Azure Storage Account (Queues &amp; Table Storage),
       Azure Communication Services Email, Azure Key Vault, Application Insights, Azure Monitor, Log
       Analytics Workspace, Virtual Network, and a single Resource Group in East US. Additional
       enterprise services (such as AKS, API Management, Service Bus, Front Door, Sentinel, or Defender for
