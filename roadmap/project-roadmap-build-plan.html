@@ -1224,6 +1224,18 @@
         <li><strong>Fix:</strong> The required-field logic was updated to allow <code>0</code> through the missing-field check so the quantity-specific validation can return the correct error message. The full six-case test matrix was re-run successfully after the fix.</li>
       </ul>
     </div>
+
+    <div class="log-entry">
+      <div class="log-date">13. Laptop Product Code Mismatch — Phase 8 / Live Testing</div>
+      <ul>
+        <li><strong>Problem:</strong> Every order submitted through the live CoreTech frontend was being rejected with "Insufficient stock for 'LAPTOP-003'. Requested 1, only 0 available." — even for laptops with 50 units in stock. Valid orders were silently failing end-to-end with no obvious indication of the real cause.</li>
+        <li><strong>Diagnosis Process:</strong> Initial suspicion was an Azure Table Storage issue or a validate_order logic error. The LaptopInventory table was inspected directly via Azure Portal and confirmed to have correct stock counts (50 units each). Function logs showed validate_order was running and performing the stock lookup — but returning zero stock every time. Root cause was traced by comparing the exact JSON payload the frontend was sending against the exact RowKey values in the LaptopInventory table. The mismatch became immediately obvious once both were seen side by side.</li>
+        <li><strong>Root Cause:</strong> The frontend HTML dropdowns used internal product codes as the <code>value</code> attribute (<code>LAPTOP-001</code>, <code>LAPTOP-002</code>, <code>LAPTOP-003</code>) for development convenience. The LaptopInventory table uses the actual laptop model names as RowKeys (<code>NimbusBook Pro 14</code>, <code>AzureBook Air 13</code>, <code>CloudStation 15</code>). Both sides were individually correct and internally consistent — but they never matched each other. When <code>validate_order</code> queried the table for <code>LAPTOP-001</code>, no record existed, so it returned 0 stock and triggered the rejection path every time. A classic integration mismatch — only catchable when the full live system is tested end-to-end with real data flowing through every component.</li>
+        <li><strong>Fix:</strong> Updated the <code>value</code> attribute of all laptop <code>&lt;option&gt;</code> elements in both <code>index.html</code> (repo root, serves GitHub Pages) and <code>frontend/index.html</code> to exactly match the RowKey strings in the LaptopInventory table. Both files updated in the same commit. After the fix, a real test order was submitted through the live CoreTech storefront — confirmation email received in Gmail, stock decremented correctly, order logged to Azure Table Storage, full pipeline verified end-to-end.</li>
+        <li><strong>Lesson:</strong> Integration points between frontend field values and backend data store keys must be explicitly verified during live end-to-end testing, not assumed to match. This bug would not have appeared in unit tests or local testing — it required a real order flowing through the entire live system to surface.</li>
+      </ul>
+    </div>
+
   </section>
 
 </main>
