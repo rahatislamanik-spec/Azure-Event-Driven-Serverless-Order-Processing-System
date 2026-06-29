@@ -108,11 +108,11 @@ Application Insights
 │   └── team-planning/
 ├── frontend/
 ├── functions/
-│   ├── submit_order/
-│   ├── validate_order/
-│   ├── send_confirmation_email/
-│   ├── send_rejection_email/
-│   └── log_to_table/
+│   ├── submit_order/          ← combined function_app.py (all 5 functions, Python V2 model)
+│   ├── validate_order/        ← README only, implementation in submit_order/function_app.py
+│   ├── send_confirmation_email/ ← README only, implementation in submit_order/function_app.py
+│   ├── send_rejection_email/  ← README only, implementation in submit_order/function_app.py
+│   └── log_to_table/          ← README only, implementation in submit_order/function_app.py
 ├── sample-data/
 ├── evidence/
 ├── screenshots/
