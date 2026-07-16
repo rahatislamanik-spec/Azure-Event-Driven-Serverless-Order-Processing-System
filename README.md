@@ -1,6 +1,17 @@
 # Azure Event-Driven Serverless Order Processing System
-> **Status:** Architecture Complete
-> **Last Updated:** June 2026
+> **Status:** Phase 8 Complete — Live on Azure  |  Last Updated: June 2026
+
+## 🚀 Live Demo
+
+| | Link |
+|---|---|
+| 🛒 **Order Form** | [Launch Storefront](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/) |
+| 📁 **Evidence Gallery** | [View All 53 Screenshots](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/evidence/evidence-gallery.html) |
+| 📊 **Architecture & Flow Diagrams** | [View Diagrams](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html) |
+| 🗺️ **Project Roadmap** | [View Roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html) |
+| 🏗️ **Architecture Overview** | [View Overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html) |
+
+---
 
 ## Overview
 
@@ -27,7 +38,7 @@ The solution leverages serverless computing, asynchronous messaging, queue-based
 
 | Service                      | Purpose                   |
 | ---------------------------- | ------------------------- |
-| Azure Static Web Apps        | Frontend hosting          |
+| GitHub Pages | Frontend hosting — approved substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription, approved by Professor Ali Ziyaei, June 22, 2026) |
 | Azure Functions              | Serverless compute        |
 | Azure Storage Queues         | Asynchronous processing   |
 | Azure Table Storage          | Order and inventory persistence |
@@ -43,7 +54,7 @@ Customer
 
 ↓
 
-Azure Static Web App
+CoreTech Store (GitHub Pages)
 
 ↓
 
@@ -97,11 +108,11 @@ Application Insights
 │   └── team-planning/
 ├── frontend/
 ├── functions/
-│   ├── submit_order/
-│   ├── validate_order/
-│   ├── send_confirmation_email/
-│   ├── send_rejection_email/
-│   └── log_to_table/
+│   ├── submit_order/          ← combined function_app.py (all 5 functions, Python V2 model)
+│   ├── validate_order/        ← README only, implementation in submit_order/function_app.py
+│   ├── send_confirmation_email/ ← README only, implementation in submit_order/function_app.py
+│   ├── send_rejection_email/  ← README only, implementation in submit_order/function_app.py
+│   └── log_to_table/          ← README only, implementation in submit_order/function_app.py
 ├── sample-data/
 ├── evidence/
 ├── screenshots/
@@ -167,7 +178,7 @@ All architecture, code, documentation, testing, and deployment activities are pe
 
 ## Project Status
 
-Current Status: Phase 8 testing complete — frontend hosting decision pending
+Current Status: Phase 8 Complete — Live on Azure
 
 Completed:
 
@@ -186,10 +197,11 @@ Completed:
 * Phase 7 monitoring and observability configuration
 * Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
 * Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
+* Frontend hosted via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
 
 In Progress:
 
-* Frontend hosted via GitHub Pages — Azure Static Web Apps blocked on all 5 supported regions, GitHub Pages approved as substitute by Professor Ali Ziyaei (June 22, 2026)
+* Demo video recording — remaining item before final August 2026 submission
 
 ---
 
@@ -216,7 +228,7 @@ Development is being completed in multiple phases, with the repository updated r
 
 ### Project Status
 
-**Current Phase:** Phase 8 Complete — Frontend Hosting Pending
+**Current Phase:** Phase 8 Complete — Live on Azure
 
 #### Progress Overview
 
