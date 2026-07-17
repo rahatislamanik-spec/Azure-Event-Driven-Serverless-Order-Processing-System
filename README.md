@@ -1,6 +1,8 @@
 # Azure Event-Driven Serverless Order Processing System
 > **Status:** Phase 8 Complete — Live on Azure  |  Last Updated: June 2026
 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-rahatislamanik-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/rahatislamanik) [![GitHub](https://img.shields.io/badge/GitHub-rahatislamanik--spec-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/rahatislamanik-spec)
+
 ## 🚀 Live Demo
 
 | | Link |
