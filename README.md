@@ -10,6 +10,7 @@
 | 📊 **Architecture & Flow Diagrams** | [View Diagrams](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html) |
 | 🗺️ **Project Roadmap** | [View Roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html) |
 | 🏗️ **Architecture Overview** | [View Overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html) |
+| 🎬 **Demo Video** | [Watch Demo](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd) |
 
 ---
 
@@ -201,7 +202,7 @@ Completed:
 
 In Progress:
 
-* Demo video recording — remaining item before final August 2026 submission
+* ✅ Demo video complete — 14 min 4 sec, recorded July 16, 2026 — [Watch on Loom](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd)
 
 ---
 
