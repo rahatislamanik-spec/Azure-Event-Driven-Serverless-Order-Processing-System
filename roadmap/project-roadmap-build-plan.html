@@ -358,7 +358,7 @@
       exactly what was built, when, and how.
     </p>
     <div class="current-status-banner">
-      <h3>We Are Here: Phase 8 Complete — GitHub Pages Approved, Project Finalising</h3>
+      <h3>We Are Here: Project Complete — Demo Video Recorded July 16, 2026 — Ready for August 9 Submission</h3>
       <p class="muted">
         The full event-driven order pipeline is now deployed and verified live. Orders can be submitted
         through the HTTP endpoint, validated by a queue-triggered function, checked against live
@@ -963,9 +963,24 @@
             <td style="padding:8px 12px;">Comprehensive documentation audit (3 independent passes), R4 Final diagram pushed, all pending wording removed, Issue #13 documented, Phase 9 added, hours log added, weekly log updated</td>
             <td style="padding:8px 12px; text-align:right;">6.0h</td>
           </tr>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">July 11, 2026</td>
+            <td style="padding:8px 12px;">Full portfolio audit (Tier 1 repos), AD-Identity 404 links fixed, status badges added across 4 repos</td>
+            <td style="padding:8px 12px; text-align:right;">4.5h</td>
+          </tr>
+          <tr style="background:#fafcfe; border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">July 15, 2026</td>
+            <td style="padding:8px 12px;">Full 17-repo portfolio sweep, Meridian Institute landing page built, Microsoft-365-Identity fully rebuilt (5 scripts, runbook, index.html), status badges added to 9 repos</td>
+            <td style="padding:8px 12px; text-align:right;">7.0h</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:8px 12px;">July 16–17, 2026</td>
+            <td style="padding:8px 12px;">Demo video recorded and edited (14 min 4 sec), quantity cap bug fixed, Jekyll Pages build failure diagnosed and resolved (.nojekyll), README updated with demo video link</td>
+            <td style="padding:8px 12px; text-align:right;">5.0h</td>
+          </tr>
           <tr style="background:var(--azure-light); font-weight:700;">
-            <td style="padding:10px 12px;" colspan="2">Total Estimated Project Hours (to June 29, 2026)</td>
-            <td style="padding:10px 12px; text-align:right; color:var(--azure-blue);">~39h</td>
+            <td style="padding:10px 12px;" colspan="2">Total Estimated Project Hours (to July 17, 2026)</td>
+            <td style="padding:10px 12px; text-align:right; color:var(--azure-blue);">~55.5h</td>
           </tr>
         </tbody>
       </table>
@@ -973,6 +988,19 @@
         Additional hours expected: demo video recording, final evidence pass, and August 2026 WIL submission. 
         Estimated project completion: ~45–50 hours total.
       </p>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Week of July 16, 2026 — Demo Video Recording &amp; Final Submission</div>
+      <ul>
+        <li><strong>Full project demonstration video recorded.</strong> 14 minutes 4 seconds of original screen recording with own voice narration — no AI voice, no pre-recorded content. Recorded using macOS built-in screen recording.</li>
+        <li><strong>Video content covers end-to-end:</strong> CoreTech storefront walkthrough, Revision 4 architecture diagram explanation, live order placement with real confirmation email received in Gmail, rejection path demo (9999 units — insufficient stock rejection email), Azure Portal tour (all 5 functions, Table Storage orders, Key Vault secrets, Application Insights — 96 real requests, 0 failed), Zero Trust security architecture and business significance explanation, full Base64/messageEncoding debugging story, and weekly roadmap walkthrough.</li>
+        <li><strong>Video edited and published.</strong> All clips edited in CapCut — stitched, trimmed, and polished into one final MP4. Uploaded to Loom: <a href="https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd" target="_blank">https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd</a></li>
+        <li><strong>Quantity validation cap fixed.</strong> Frontend JavaScript was blocking quantities over 10 — needed 9999 to demonstrate the insufficient stock rejection path during recording. Fixed all three blocking points in both <code>index.html</code> files. See Issue #14 for full diagnosis.</li>
+        <li><strong>Jekyll GitHub Pages build failure resolved.</strong> Pages builds #45 and #46 failed silently after the quantity fix was pushed — the live site was serving stale content. Root cause: missing <code>.nojekyll</code> file. Fixed by adding <code>.nojekyll</code> to repo root. Build #47 succeeded immediately. See Issue #15 for full diagnosis.</li>
+        <li><strong>Demo video link added to README.</strong> Added 🎬 Demo Video row to the Live Demo table in README, linking to the Loom recording. In Progress section updated to reflect demo video complete.</li>
+        <li><strong>Project fully complete as of July 17, 2026.</strong> All 9 phases complete, all 5 Azure Functions live, 53 sanitized evidence screenshots, CoreTech storefront live on GitHub Pages, R4 Final architecture diagram, 15 documented issues, complete weekly log spanning June 3 – July 17, and the 14-minute demo video. Ready for August 9 WIL submission deadline.</li>
+      </ul>
     </div>
 
     <div class="log-entry">
@@ -1233,6 +1261,29 @@
         <li><strong>Root Cause:</strong> The frontend HTML dropdowns used internal product codes as the <code>value</code> attribute (<code>LAPTOP-001</code>, <code>LAPTOP-002</code>, <code>LAPTOP-003</code>) for development convenience. The LaptopInventory table uses the actual laptop model names as RowKeys (<code>NimbusBook Pro 14</code>, <code>AzureBook Air 13</code>, <code>CloudStation 15</code>). Both sides were individually correct and internally consistent — but they never matched each other. When <code>validate_order</code> queried the table for <code>LAPTOP-001</code>, no record existed, so it returned 0 stock and triggered the rejection path every time. A classic integration mismatch — only catchable when the full live system is tested end-to-end with real data flowing through every component.</li>
         <li><strong>Fix:</strong> Updated the <code>value</code> attribute of all laptop <code>&lt;option&gt;</code> elements in both <code>index.html</code> (repo root, serves GitHub Pages) and <code>frontend/index.html</code> to exactly match the RowKey strings in the LaptopInventory table. Both files updated in the same commit. After the fix, a real test order was submitted through the live CoreTech storefront — confirmation email received in Gmail, stock decremented correctly, order logged to Azure Table Storage, full pipeline verified end-to-end.</li>
         <li><strong>Lesson:</strong> Integration points between frontend field values and backend data store keys must be explicitly verified during live end-to-end testing, not assumed to match. This bug would not have appeared in unit tests or local testing — it required a real order flowing through the entire live system to surface.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">14. Quantity Cap Blocking Demo Recording — Phase 9 / Demo Preparation</div>
+      <ul>
+        <li><strong>Problem:</strong> During video recording of the rejection path demo, the CoreTech frontend JavaScript validation blocked any quantity over 10 units. The demo required submitting 9999 units to trigger the "Insufficient stock" rejection email from Azure — but the frontend silently capped the value and showed "Quantity must be between 1 and 10."</li>
+        <li><strong>Diagnosis Process:</strong> Inspected both <code>index.html</code> (repo root) and <code>frontend/index.html</code> and found three separate places enforcing the cap: (1) HTML input attribute <code>max="10"</code>, (2) JavaScript condition <code>if (quantity &gt; 10)</code>, and (3) display text "Max 10 per order". All three required updating in both files.</li>
+        <li><strong>Fix:</strong> Used terminal <code>sed</code> commands to replace all instances across both files: <code>sed -i '' 's/max="10"/max="9999"/g'</code>, <code>sed -i '' 's/quantity &gt; 10/quantity &gt; 9999/g'</code>, <code>sed -i '' 's/between 1 and 10/between 1 and 9999/g'</code>. Hit a merge conflict on push — resolved using <code>git checkout --theirs</code> for both HTML files, then <code>git commit --no-edit</code> and <code>git push origin main</code>.</li>
+        <li><strong>Resolution:</strong> Both files updated and pushed successfully. 9999 units now accepted by frontend, correctly triggering the insufficient stock rejection email from Azure backend. Verified live — rejection email received: "Insufficient stock for CloudStation 15. Requested 9999, only 40 available."</li>
+        <li><strong>Lesson:</strong> Demo constraints should be considered during development. Frontend validation limits that make sense for production can block demo scenarios. Document the override process or keep a demo mode for testing and recording purposes.</li>
+      </ul>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">15. Jekyll Build Interfering with GitHub Pages Deployment — Phase 9 / Demo Preparation</div>
+      <ul>
+        <li><strong>Problem:</strong> After pushing the quantity fix (commit 8960809), GitHub Pages was serving stale content despite commits showing as pushed to main. Runs #45 and #46 both showed "pages build and deployment — failure" in GitHub Actions. The "Quantity must be between 1 and 10" error persisted on the live site even after the fix was confirmed correct in the repo.</li>
+        <li><strong>Diagnosis Process:</strong> Checked GitHub Actions tab and confirmed the Pages build was failing at the "Build with Jekyll" step — not a cache issue, an actual build failure. Inspected the repo root and found no <code>.nojekyll</code> file. GitHub Pages defaults to running Jekyll over the entire repository, which was failing on the Python scripts, shell scripts, and HTML subfolder structure.</li>
+        <li><strong>Root Cause:</strong> Missing <code>.nojekyll</code> file. Without it, GitHub Pages attempts to process the repository through Jekyll. Jekyll failed on the non-Jekyll content (Python, shell scripts, complex HTML) and the build error meant no new content was ever deployed — the live site was frozen at the last successful build.</li>
+        <li><strong>Fix:</strong> Added a <code>.nojekyll</code> file (zero bytes) to the repo root — commit <code>ebc967ab</code>. This tells GitHub Pages to skip Jekyll entirely and serve all files directly as static content.</li>
+        <li><strong>Resolution:</strong> Build #47 succeeded immediately after the <code>.nojekyll</code> commit. The quantity validation fix (max="9999") went live within 2 minutes. Verified on the live site — quantity field now shows "Max 9999 per order" and correctly accepts values up to 9999.</li>
+        <li><strong>Lesson:</strong> Any GitHub Pages deployment using plain HTML/CSS/JS (not a Jekyll site) should include <code>.nojekyll</code> at the repo root from day one. This is a one-file fix that prevents unexpected build interference and deployment delays. All future repos should include this as part of the initial scaffold.</li>
       </ul>
     </div>
 
