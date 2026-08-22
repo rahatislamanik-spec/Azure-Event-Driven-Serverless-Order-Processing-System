@@ -286,3 +286,6 @@ This repository is hosted under the GitHub account of Md Rahat Islam Anik (`raha
 All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
 
 
+## Academic Context
+
+This project began as a team assignment for the Work-Integrated Learning capstone in George Brown College's Cloud Computing and Network Administration program (T465), under the supervision of Program Director Ali Ziyaei. As the project progressed, the scope and implementation were carried through individually — the architecture, the five Azure Functions, security hardening, monitoring, and testing evidence in this repo are my own work, completed and submitted for evaluation under Professor Ziyaei's direction.
