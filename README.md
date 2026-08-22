@@ -201,10 +201,7 @@ Completed:
 * Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
 * Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
 * Frontend hosted via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
-
-In Progress:
-
-* ✅ Demo video complete — 14 min 4 sec, recorded July 16, 2026 — [Watch on Loom](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd)
+* Demo video — 14 min 4 sec, recorded July 16, 2026 — [Watch on Loom](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd)
 
 ---
 
