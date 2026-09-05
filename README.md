@@ -28,29 +28,29 @@ The architecture, all five functions, security hardening, monitoring, and the fu
 
 ## Architecture
 
-\`\`\`
+```
 Customer
-   |
-   v
+   │
+   ▼
 Storefront (static frontend)
-   |  HTTP POST /api/submit_order
-   v
-submit_order  --->  orders-incoming  (queue)
-                        |
-                        v
-                   validate_order  --->  LaptopInventory (Table Storage)
-                        |                 stock check + decrement
-                        |
-          +-------------+--------------+
-          v             v              v
+   │  HTTP POST /api/submit_order
+   ▼
+submit_order  ──▶  orders-incoming  (queue)
+                        │
+                        ▼
+                   validate_order  ──▶  LaptopInventory (Table Storage)
+                        │                 stock check + decrement
+                        │
+          ┌─────────────┼──────────────┐
+          ▼             ▼              ▼
    orders-to-email  orders-to-log  orders-invalid
-          |             |              |
-          v             v              v
+          │             │              │
+          ▼             ▼              ▼
    send_confirmation  log_to_table  send_rejection
    (ACS email)        (Table)       (ACS email)
 
-  All stages ---> Application Insights (traces, metrics, alerts)
-\`\`\`
+  All stages ──▶ Application Insights (traces, metrics, alerts)
+```
 
 ### Azure services
 
@@ -58,32 +58,32 @@ submit_order  --->  orders-incoming  (queue)
 |---|---|
 | **Azure Functions** (Python 3.11, v2) | Serverless compute — all five pipeline stages |
 | **Azure Storage Queues** | Asynchronous, decoupled message passing between stages |
-| **Azure Table Storage** | Order persistence and \`LaptopInventory\` stock tracking |
+| **Azure Table Storage** | Order persistence and `LaptopInventory` stock tracking |
 | **Azure Communication Services** | Transactional confirmation and rejection email |
 | **Azure Key Vault** | Secret storage, resolved at runtime — no secrets in source |
 | **Managed Identity** | Passwordless auth from Functions to Key Vault and Storage |
 | **Application Insights / Azure Monitor** | Distributed tracing, metrics, and alerting |
-| **GitHub Pages** | Frontend hosting (documented substitute for Static Web Apps) |
+| **GitHub Pages** | Frontend hosting (documented substitute for Static Web Apps — see note below) |
 
-> **Hosting note:** Azure Static Web Apps was unavailable in all supported regions under the Azure for Students subscription, so the static frontend is served from GitHub Pages. The serverless backend runs entirely on Azure.
+> **Hosting note:** Azure Static Web Apps was unavailable in all supported regions under the Azure for Students subscription, so the static frontend is served from GitHub Pages. The serverless backend runs entirely on Azure. This was an approved substitution during the capstone.
 
 ---
 
 ## Functions
 
-All five functions are implemented in a single [\`functions/submit_order/function_app.py\`](./functions/submit_order/function_app.py), registered as separate triggers under the Azure Functions Python v2 programming model (multiple triggers, one function app):
+All five functions are implemented in a single [`functions/submit_order/function_app.py`](./functions/submit_order/function_app.py), registered as separate triggers under the Azure Functions Python v2 programming model (multiple triggers, one function app):
 
 | Function | Trigger | Responsibility |
 |---|---|---|
-| \`submit_order\` | HTTP | Accept and enqueue the order |
-| \`validate_order\` | Queue (\`orders-incoming\`) | Validate fields, check + decrement inventory, fan out |
-| \`send_confirmation_email\` | Queue (\`orders-to-email\`) | Send confirmation via ACS |
-| \`send_rejection_email\` | Queue (\`orders-invalid\`) | Send rejection via ACS |
-| \`log_to_table\` | Queue (\`orders-to-log\`) | Persist the order record |
+| `submit_order` | HTTP | Accept and enqueue the order |
+| `validate_order` | Queue (`orders-incoming`) | Validate fields, check + decrement inventory, fan out |
+| `send_confirmation_email` | Queue (`orders-to-email`) | Send confirmation via ACS |
+| `send_rejection_email` | Queue (`orders-invalid`) | Send rejection via ACS |
+| `log_to_table` | Queue (`orders-to-log`) | Persist the order record |
 
-> The \`validate_order/\`, \`send_confirmation_email/\`, and \`log_to_table/\` folders
+> The `validate_order/`, `send_confirmation_email/`, and `log_to_table/` folders
 > contain per-function README notes; the runnable code for all five triggers lives
-> in \`submit_order/function_app.py\`, per the v2 single-app model.
+> in `submit_order/function_app.py`, per the v2 single-app model.
 
 ---
 
@@ -91,13 +91,13 @@ All five functions are implemented in a single [\`functions/submit_order/functio
 
 ### Prerequisites
 - Python 3.11
-- Azure Functions Core Tools v4
-- Azurite (local storage emulator)
+- [Azure Functions Core Tools v4](https://learn.microsoft.com/azure/azure-functions/functions-run-local)
+- [Azurite](https://learn.microsoft.com/azure/storage/common/storage-use-azurite) (local storage emulator)
 - An Azure Communication Services connection string for email
 
 ### Setup
-\`\`\`bash
-git clone git@github.com:rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System.git
+```bash
+git clone https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System.git
 cd Azure-Event-Driven-Serverless-Order-Processing-System/functions/submit_order
 
 python -m venv .venv
@@ -106,21 +106,21 @@ pip install -r requirements.txt
 
 cp local.settings.example.json local.settings.json
 # Fill in AzureWebJobsStorage and the ACS connection string
-\`\`\`
+```
 
 ### Run
-\`\`\`bash
+```bash
 azurite            # terminal 1 — local storage emulator
 func start         # terminal 2 — Functions host
-\`\`\`
-The intake endpoint is available at \`http://localhost:7071/api/submit_order\`.
+```
+The intake endpoint is available at `http://localhost:7071/api/submit_order`.
 
 ### Test the pipeline
-\`\`\`bash
+```bash
 curl -X POST http://localhost:7071/api/submit_order \
   -H "Content-Type: application/json" \
   -d '{"customer_email":"test@example.com","laptop_model":"CoreTech Pro","quantity":1}'
-\`\`\`
+```
 
 ---
 
@@ -130,11 +130,11 @@ Code is validated locally, deployed to a non-production Azure environment for en
 
 | Stage | Environment | Purpose |
 |---|---|---|
-| **Local** | Azurite + \`func start\` | Develop and test against emulated storage — zero cloud cost |
+| **Local** | Azurite + `func start` | Develop and test against emulated storage — zero cloud cost |
 | **Validation** | Azure (non-prod resource group) | Run the full test matrix against live Azure services before promoting |
 | **Production** | Azure (prod resource group) | Live deployment — Key Vault-backed config, Managed Identity, Application Insights alerting |
 
-Secrets never live in source: production resolves them from Key Vault via Managed Identity; local development uses an untracked \`local.settings.json\`.
+Secrets never live in source: production resolves them from Key Vault via Managed Identity; local development uses an untracked `local.settings.json`.
 
 ---
 
@@ -155,12 +155,12 @@ End-to-end test matrix run against live Azure services in the validation environ
 
 ## Evidence
 
-Selected proof the deployed system works end to end. Full curated evidence set in [\`evidence/\`](./evidence).
+Selected proof the deployed system works end to end. Full curated evidence set in [`evidence/`](./evidence).
 
 **All five functions deployed and running in Azure**
 ![Five functions deployed](evidence/phase8/phase8-01-five-functions-deployed.png)
 
-**Valid order -> confirmation email received**
+**Valid order → confirmation email received**
 ![Confirmation email](evidence/phase8/phase8-02-valid-order-confirmation-email.png)
 
 **Inventory tracked in Table Storage**
