@@ -1,288 +1,193 @@
 # Azure Event-Driven Serverless Order Processing System
-> **Status:** Phase 8 Complete — Live on Azure  |  Last Updated: June 2026
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-rahatislamanik-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/rahatislamanik) [![GitHub](https://img.shields.io/badge/GitHub-rahatislamanik--spec-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/rahatislamanik-spec)
+**Production-deployed on Azure** · Python 3.11 (Azure Functions v2) · Storage Queues · Table Storage · Communication Services · Application Insights
 
-## 🚀 Live Demo
+An event-driven order-processing pipeline built on Azure Functions. Orders are accepted over HTTP, validated asynchronously through a queue, checked against live inventory, and fanned out to independent queues for email notification, logging, and rejection handling — with transactional email via Azure Communication Services and end-to-end telemetry in Application Insights.
 
-| | Link |
-|---|---|
-| 🛒 **Order Form** | [Launch Storefront](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/) |
-| 📁 **Evidence Gallery** | [View All 53 Screenshots](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/evidence/evidence-gallery.html) |
-| 📊 **Architecture & Flow Diagrams** | [View Diagrams](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/architecture-diagrams-final.html) |
-| 🗺️ **Project Roadmap** | [View Roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html) |
-| 🏗️ **Architecture Overview** | [View Overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html) |
-| 🎬 **Demo Video** | [Watch Demo](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd) |
+Designed, built, tested, and deployed solo by **Md Rahat Islam Anik**.
+
+[**Live storefront**](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/) · [Architecture](#architecture) · [Run locally](#running-locally) · [Environments](#environments--promotion-path) · [Evidence](#evidence)
+
+---
+
+## Where the engineering is
+
+The system runs on **Python 3.11 using the Azure Functions v2 programming model**. Five triggers are registered in a single `function_app.py` — the idiomatic v2 layout — covering HTTP intake, queue-triggered validation, inventory checks, fan-out routing, table logging, and transactional email.
+
+GitHub may report this repository as majority-HTML: the storefront and evidence pages are static HTML, flagged as documentation via `.gitattributes`. That's presentation, not application code. **The runtime is Python** — see [`functions/`](./functions).
 
 ---
 
 ## Overview
 
-This project demonstrates the design and implementation of a cloud-native, event-driven order processing platform using Microsoft Azure — built collaboratively by a 5-person development team, with Md Rahat Islam Anik serving as repository owner.
+A customer order is accepted by an HTTP-triggered function, placed on a queue, and validated asynchronously against live inventory. Valid orders fan out to separate queues for confirmation email, table logging, and (on failure) rejection email. Every stage emits telemetry to Application Insights, and all secrets are resolved at runtime from Key Vault via Managed Identity.
 
-The solution leverages serverless computing, asynchronous messaging, queue-based workflows, automated email notifications, centralized logging, and cloud observability to simulate a production-oriented order processing environment.
-
----
-
-## Project Objectives
-
-* Build a cloud-native order processing application
-* Implement event-driven architecture patterns
-* Utilize Azure Functions for serverless processing
-* Implement asynchronous messaging using Azure Storage Queues
-* Store order data in Azure Table Storage
-* Send automated customer confirmation and rejection emails
-* Monitor application health using Azure Monitor and Application Insights
-* Demonstrate collaborative GitHub development workflows
+The architecture, all five functions, security hardening, monitoring, and the full test matrix are my own work. The project originated as a group assignment in George Brown College's Cloud Computing capstone (T465); requirements and logical architecture were planned collaboratively, but the entire implementation and deployment documented here was designed and delivered individually.
 
 ---
 
-## Azure Services Used
+## Architecture
 
-| Service                      | Purpose                   |
-| ---------------------------- | ------------------------- |
-| GitHub Pages | Frontend hosting — approved substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription, approved by Professor Ali Ziyaei, June 22, 2026) |
-| Azure Functions              | Serverless compute        |
-| Azure Storage Queues         | Asynchronous processing   |
-| Azure Table Storage          | Order and inventory persistence |
-| Azure Communication Services | Confirmation and rejection email notifications |
-| Azure Monitor                | Monitoring and alerting   |
-| Application Insights         | Logging and observability |
-
----
-
-## High-Level Architecture
-
+\`\`\`
 Customer
+   |
+   v
+Storefront (static frontend)
+   |  HTTP POST /api/submit_order
+   v
+submit_order  --->  orders-incoming  (queue)
+                        |
+                        v
+                   validate_order  --->  LaptopInventory (Table Storage)
+                        |                 stock check + decrement
+                        |
+          +-------------+--------------+
+          v             v              v
+   orders-to-email  orders-to-log  orders-invalid
+          |             |              |
+          v             v              v
+   send_confirmation  log_to_table  send_rejection
+   (ACS email)        (Table)       (ACS email)
 
-↓
+  All stages ---> Application Insights (traces, metrics, alerts)
+\`\`\`
 
-CoreTech Store (GitHub Pages)
+### Azure services
 
-↓
+| Service | Role |
+|---|---|
+| **Azure Functions** (Python 3.11, v2) | Serverless compute — all five pipeline stages |
+| **Azure Storage Queues** | Asynchronous, decoupled message passing between stages |
+| **Azure Table Storage** | Order persistence and \`LaptopInventory\` stock tracking |
+| **Azure Communication Services** | Transactional confirmation and rejection email |
+| **Azure Key Vault** | Secret storage, resolved at runtime — no secrets in source |
+| **Managed Identity** | Passwordless auth from Functions to Key Vault and Storage |
+| **Application Insights / Azure Monitor** | Distributed tracing, metrics, and alerting |
+| **GitHub Pages** | Frontend hosting (documented substitute for Static Web Apps) |
 
-submit_order Function
-
-↓
-
-orders-incoming Queue
-
-↓
-
-validate_order Function
-
-↓
-
-LaptopInventory Table
-
-↓
-
-Fan-Out Processing
-
-├── orders-to-email Queue
-
-├── orders-to-log Queue
-
-└── orders-invalid Queue
-
-↓
-
-Azure Communication Services Email
-
-↓
-
-Azure Table Storage
-
-↓
-
-Application Insights
+> **Hosting note:** Azure Static Web Apps was unavailable in all supported regions under the Azure for Students subscription, so the static frontend is served from GitHub Pages. The serverless backend runs entirely on Azure.
 
 ---
 
-## Repository Structure
+## Functions
 
-```text
-.
-├── architecture/
-├── documentation/
-│   ├── deployment-guide.md
-│   ├── stakeholder-approval-summary.md
-│   ├── meeting-notes/
-│   └── team-planning/
-├── frontend/
-├── functions/
-│   ├── submit_order/          ← combined function_app.py (all 5 functions, Python V2 model)
-│   ├── validate_order/        ← README only, implementation in submit_order/function_app.py
-│   ├── send_confirmation_email/ ← README only, implementation in submit_order/function_app.py
-│   ├── send_rejection_email/  ← README only, implementation in submit_order/function_app.py
-│   └── log_to_table/          ← README only, implementation in submit_order/function_app.py
-├── sample-data/
-├── evidence/
-├── screenshots/
-├── host.json
-├── requirements.txt
-└── README.md
-```
+All five functions are implemented in a single [\`functions/submit_order/function_app.py\`](./functions/submit_order/function_app.py), registered as separate triggers under the Azure Functions Python v2 programming model (multiple triggers, one function app):
+
+| Function | Trigger | Responsibility |
+|---|---|---|
+| \`submit_order\` | HTTP | Accept and enqueue the order |
+| \`validate_order\` | Queue (\`orders-incoming\`) | Validate fields, check + decrement inventory, fan out |
+| \`send_confirmation_email\` | Queue (\`orders-to-email\`) | Send confirmation via ACS |
+| \`send_rejection_email\` | Queue (\`orders-invalid\`) | Send rejection via ACS |
+| \`log_to_table\` | Queue (\`orders-to-log\`) | Persist the order record |
+
+> The \`validate_order/\`, \`send_confirmation_email/\`, and \`log_to_table/\` folders
+> contain per-function README notes; the runnable code for all five triggers lives
+> in \`submit_order/function_app.py\`, per the v2 single-app model.
 
 ---
 
-## Development Workflow
+## Running locally
 
-This project follows a collaborative GitHub workflow:
+### Prerequisites
+- Python 3.11
+- Azure Functions Core Tools v4
+- Azurite (local storage emulator)
+- An Azure Communication Services connection string for email
 
-```text
-Issue
-↓
-Development Branch
-↓
-Commit
-↓
-Push
-↓
-Pull Request
-↓
-Review
-↓
-Merge into Main
-```
+### Setup
+\`\`\`bash
+git clone git@github.com:rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System.git
+cd Azure-Event-Driven-Serverless-Order-Processing-System/functions/submit_order
 
-Primary branches:
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-* main
-* rahat-dev
+cp local.settings.example.json local.settings.json
+# Fill in AzureWebJobsStorage and the ACS connection string
+\`\`\`
 
-Additional team branches will be created as development progresses.
+### Run
+\`\`\`bash
+azurite            # terminal 1 — local storage emulator
+func start         # terminal 2 — Functions host
+\`\`\`
+The intake endpoint is available at \`http://localhost:7071/api/submit_order\`.
 
----
-
-## Project Team
-
-### Team Lead
-
-* Hikmat
-
-### Team Members
-
-* Md Rahat Islam Anik (Repository Owner)
-* Yatish
-* Devansh
-* Puneet
-* Ashdeep
+### Test the pipeline
+\`\`\`bash
+curl -X POST http://localhost:7071/api/submit_order \
+  -H "Content-Type: application/json" \
+  -d '{"customer_email":"test@example.com","laptop_model":"CoreTech Pro","quantity":1}'
+\`\`\`
 
 ---
 
-## Repository Ownership
+## Environments & promotion path
 
-This repository is hosted and maintained under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for project coordination, source control management, pull request reviews, and collaborative development.
+Code is validated locally, deployed to a non-production Azure environment for end-to-end testing against live services, then promoted to production.
 
-All architecture, code, documentation, testing, and deployment activities are performed collaboratively by the project team.
+| Stage | Environment | Purpose |
+|---|---|---|
+| **Local** | Azurite + \`func start\` | Develop and test against emulated storage — zero cloud cost |
+| **Validation** | Azure (non-prod resource group) | Run the full test matrix against live Azure services before promoting |
+| **Production** | Azure (prod resource group) | Live deployment — Key Vault-backed config, Managed Identity, Application Insights alerting |
 
----
-
-## Project Status
-
-Current Status: Phase 8 Complete — Live on Azure
-
-Completed:
-
-* Repository creation
-* Architecture design
-* Documentation structure
-* Team planning
-* GitHub Issues creation
-* Branching strategy implementation
-* Phase 1 Azure infrastructure provisioning
-* Phase 2 frontend connection to live Function App endpoint
-* Phase 3 `submit_order` Function App deployment and browser/curl validation
-* Phase 4 `validate_order` queue-triggered validation and fan-out
-* Phase 5 `log_to_table`, `send_confirmation_email`, and `send_rejection_email` processing functions
-* Phase 6 security hardening with Key Vault-backed settings and Managed Identity
-* Phase 7 monitoring and observability configuration
-* Revision 4 scope expansion: `LaptopInventory` stock tracking with validation-time stock checks and decrement logic
-* Phase 8 test matrix covering valid orders, missing fields, invalid email, zero quantity, insufficient stock, and unknown laptop models
-* Frontend hosted via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
-* Demo video — 14 min 4 sec, recorded July 16, 2026 — [Watch on Loom](https://www.loom.com/share/c2da3619857e4f21a6335306e6eaeacd)
+Secrets never live in source: production resolves them from Key Vault via Managed Identity; local development uses an untracked \`local.settings.json\`.
 
 ---
 
-## GitHub Repository
+## Testing
 
-Repository:
-https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System
+End-to-end test matrix run against live Azure services in the validation environment before production promotion:
 
-Repository Owner:
-Md Rahat Islam Anik
+| Scenario | Expected result |
+|---|---|
+| Valid order, in stock | Confirmation email, inventory decremented, order logged |
+| Missing required fields | Rejected, rejection email |
+| Invalid email format | Rejected, rejection email |
+| Quantity of zero | Rejected |
+| Insufficient stock | Rejected, rejection email |
+| Unknown laptop model | Rejected, rejection email |
 
+---
 
-## Project Team
+## Evidence
 
-This project was developed collaboratively, focused on Azure serverless computing, event-driven architecture, cloud-native application development, and observability.
+Selected proof the deployed system works end to end. Full curated evidence set in [\`evidence/\`](./evidence).
 
-### Project Timeline
+**All five functions deployed and running in Azure**
+![Five functions deployed](evidence/phase8/phase8-01-five-functions-deployed.png)
 
-**Project Duration:** May 2026 – August 2026
+**Valid order -> confirmation email received**
+![Confirmation email](evidence/phase8/phase8-02-valid-order-confirmation-email.png)
 
-The project has completed infrastructure provisioning, frontend connection, the live `submit_order` endpoint, queue-triggered validation, inventory stock checks, fan-out processing, Azure Table Storage logging, Azure Communication Services confirmation and rejection emails, Key Vault-backed secret handling, Managed Identity access, monitoring configuration, and Phase 8 end-to-end testing. Frontend is hosted via GitHub Pages — Azure Static Web Apps was blocked on all 5 supported regions under the Azure for Students subscription; GitHub Pages was approved as a substitute by Professor Ali Ziyaei (June 22, 2026).
+**Inventory tracked in Table Storage**
+![Table Storage stock tracking](evidence/phase8/phase8-03-inventory-table-stock-tracking.png)
 
-Development is being completed in multiple phases, with the repository updated regularly to reflect architecture, implementation progress, testing evidence, and deployment artifacts.
+**Live telemetry in Application Insights**
+![Application Insights overview](evidence/phase7/phase7-01-application-insights-overview.png)
 
-### Project Status
+---
 
-**Current Phase:** Phase 8 Complete — Live on Azure
+## Tech stack
 
-#### Progress Overview
+**Language:** Python 3.11
+**Compute:** Azure Functions (v2 programming model)
+**Messaging:** Azure Storage Queues
+**Storage:** Azure Table Storage
+**Email:** Azure Communication Services
+**Security:** Azure Key Vault, Managed Identity
+**Observability:** Application Insights, Azure Monitor
+**CI/CD & hosting:** GitHub Actions, GitHub Pages
 
-* ✅ Project proposal approved
-* ✅ Logical architecture completed
-* ✅ Initial GitHub repository established
-* ✅ Team collaboration workflow established
-* ✅ Initial planning documentation completed
-* ✅ Infrastructure architecture design
-* ✅ Azure resource deployment
-* ✅ Frontend implementation connected to live Function App endpoint
-* ✅ `submit_order` Azure Function implemented and verified
-* ✅ `validate_order` queue-triggered function implemented and verified
-* ✅ `LaptopInventory` table integrated for stock checks and decrement logic
-* ✅ `log_to_table` table logging function implemented and verified
-* ✅ `send_confirmation_email` Azure Communication Services function implemented and verified
-* ✅ `send_rejection_email` Azure Communication Services function implemented and verified
-* ✅ Key Vault and Managed Identity security hardening completed
-* ✅ Monitoring and observability configuration completed
-* ✅ Phase 8 test matrix completed across six order scenarios
-* ✅ Frontend hosting via GitHub Pages — approved by Professor Ali Ziyaei (June 22, 2026) as substitute for Azure Static Web Apps (blocked on all supported regions under Azure for Students subscription)
+---
 
-### Live Project Pages
+## Acknowledgements
 
-* [Project roadmap](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/roadmap/project-roadmap-build-plan.html)
-* [Architecture overview](https://rahatislamanik-spec.github.io/Azure-Event-Driven-Serverless-Order-Processing-System/architecture/project-architecture-overview.html)
+Originated as a team assignment for the T465 Work-Integrated Learning capstone at George Brown College, under Program Director Ali Ziyaei. Early planning (requirements and logical architecture) was collaborative; the implementation, deployment, testing, and documentation in this repository are solo work.
 
-### Team Lead
+## License
 
-* Hikmatullah Shinwari — Team Lead
-* Md Rahat Islam Anik — GitHub Repository Owner & Team Member
-
-### Team Members
-
-* Md Rahat Islam Anik — GitHub Repository Owner & Team Member
-* Yatish Yashwant Vispute — Team Member
-* Devansh Mehulkumar Bhatt — Team Member
-* Ashdeep Singh Grewal — Team Member
-* Puneet Singh — Team Member
-
-
-### Team Collaboration
-
-The project is being developed collaboratively using GitHub Issues, feature branches, pull requests, code reviews, and shared documentation. Team members are responsible for different project components and contribute incrementally throughout the project lifecycle.
-
-All major updates, architecture changes, implementation milestones, testing evidence, and project documentation will be maintained within this repository.
-
-### Repository Ownership
-
-This repository is hosted under the GitHub account of Md Rahat Islam Anik (`rahatislamanik-spec`) for source control, documentation management, pull request reviews, and team collaboration purposes.
-
-All architecture, documentation, implementation, testing, and project deliverables are developed collaboratively by the project team.
-
-
-## Academic Context
-
-This project began as a team assignment for the Work-Integrated Learning capstone in George Brown College's Cloud Computing and Network Administration program (T465), under the supervision of Program Director Ali Ziyaei. As the project progressed, the scope and implementation were carried through individually — the architecture, the five Azure Functions, security hardening, monitoring, and testing evidence in this repo are my own work, completed and submitted for evaluation under Professor Ziyaei's direction.
+[MIT](./LICENSE)

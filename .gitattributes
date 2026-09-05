@@ -1,0 +1,14 @@
+# Flag presentation/evidence assets as documentation so GitHub Linguist
+# reports the language bar based on application code (Python), not static HTML.
+evidence/**        linguist-documentation
+architecture/**    linguist-documentation
+roadmap/**         linguist-documentation
+documentation/**   linguist-documentation
+frontend/**        linguist-documentation
+*.html             linguist-documentation
+*.css              linguist-documentation
+
+# The root storefront files are presentation, not application code:
+index.html         linguist-documentation
+app.js             linguist-documentation
+styles.css         linguist-documentation
