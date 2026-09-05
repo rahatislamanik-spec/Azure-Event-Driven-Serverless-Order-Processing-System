@@ -182,7 +182,7 @@ Selected proof the deployed system works end to end. Full curated evidence set i
 **Email:** Azure Communication Services
 **Security:** Azure Key Vault, Managed Identity
 **Observability:** Application Insights, Azure Monitor
-**CI/CD & hosting:** GitHub Actions, GitHub Pages
+**CI & hosting:** GitHub Actions, GitHub Pages
 
 ---
 
