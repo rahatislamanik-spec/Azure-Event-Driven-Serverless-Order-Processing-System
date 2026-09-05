@@ -1,0 +1,19 @@
+# Ruff configuration — sensible baseline for an Azure Functions app.
+# Selects real correctness checks; skips opinionated style rules that
+# fight normal serverless patterns (broad exception handling, root logger).
+
+target-version = "py311"
+line-length = 120
+
+[lint]
+# pyflakes (F) = real errors: unused imports, undefined names, etc.
+# pycodestyle errors (E) = genuine syntax/style errors.
+# isort (I) = import ordering.
+# pyupgrade (UP), bugbear (B) = common real bugs.
+select = ["F", "E", "I", "UP", "B"]
+
+# Skip rules that flag normal, correct serverless patterns:
+ignore = [
+  "E501",   # line length handled by line-length above, don't double-flag
+  "B008",   # function calls in defaults — common in Azure bindings
+]

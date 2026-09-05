@@ -1,13 +1,14 @@
-import azure.functions as func
 import json
 import logging
 import os
 import re
 import uuid
-from datetime import datetime, timezone
-from azure.storage.queue import QueueClient
-from azure.data.tables import TableServiceClient
+from datetime import UTC, datetime
+
+import azure.functions as func
 from azure.communication.email import EmailClient
+from azure.data.tables import TableServiceClient
+from azure.storage.queue import QueueClient
 
 app = func.FunctionApp()
 
@@ -104,7 +105,7 @@ def submit_order(req: func.HttpRequest) -> func.HttpResponse:
         "laptop": product,
         "quantity": quantity,
         "status": "submitted",
-        "submittedAt": datetime.now(timezone.utc).isoformat()
+        "submittedAt": datetime.now(UTC).isoformat()
     }
 
     # ---- Connect to Azure Storage Queue ----
