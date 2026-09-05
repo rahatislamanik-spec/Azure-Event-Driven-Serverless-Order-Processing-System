@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-compile:
+    name: Lint & compile (Python 3.11)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lint tooling
+        run: pip install ruff
+
+      - name: Ruff lint
+        run: ruff check functions/
+
+      - name: Compile check (syntax + imports resolvable at parse time)
+        run: python -m compileall -q functions/
