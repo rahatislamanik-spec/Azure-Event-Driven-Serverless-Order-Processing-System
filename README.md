@@ -1,5 +1,7 @@
 # Azure Event-Driven Serverless Order Processing System
 
+[![CI](https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System/actions/workflows/ci.yml/badge.svg)](https://github.com/rahatislamanik-spec/Azure-Event-Driven-Serverless-Order-Processing-System/actions/workflows/ci.yml)
+
 **Production-deployed on Azure** · Python 3.11 (Azure Functions v2) · Storage Queues · Table Storage · Communication Services · Application Insights
 
 An event-driven order-processing pipeline built on Azure Functions. Orders are accepted over HTTP, validated asynchronously through a queue, checked against live inventory, and fanned out to independent queues for email notification, logging, and rejection handling — with transactional email via Azure Communication Services and end-to-end telemetry in Application Insights.
